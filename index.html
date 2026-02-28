@@ -1228,4 +1228,30 @@
             <!-- Main Content -->
             <div class="main-content">
                 <!-- Archive Notice -->
-                <div id="archiveNotice" style="display: none; background: #fed7d7; color: #c53030; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between
+                <div id="archiveNotice" style="display: none; background: #fed7d7; color: #c53030; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;"></div>
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="statusFilter" onchange="filterWorkOrders()">
+                            <option value="all">All Statuses</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Tech:</label>
+                        <select id="techFilter" onchange="filterWorkOrders()">
+                            <option value="all">All Techs</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort:</label>
+                        <select id="sortFilter" onchange="filterWorkOrders()">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="wo-asc">WO # Asc</option>
+                            <option value="wo-desc">WO # Desc</option>
+                        </select>
+                    </div>
+                    <div class="search-box">
+                        <input type="
