@@ -272,6 +272,26 @@
             font-size: 12px;
         }
 
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .file-count {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: #4a5568;
+        }
+
+        .file-name {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
         .import-preview {
             max-height: 200px;
             overflow-y: auto;
@@ -305,6 +325,40 @@
             border-radius: 5px;
             margin: 10px 0;
             font-size: 12px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 15px 0;
+            background: #edf2f7;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 30px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1a202c;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .parts-stats {
@@ -1429,13 +1483,31 @@
                         <div class="csv-import-section">
                             <h4>Hot Tubs Parts</h4>
                             <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
-                            <h4 style="margin-top:10px;">Water Systems Parts</h4>
+                            <div class="file-info">
+                                <span class="file-name" id="hotTubsFileName">No file selected</span>
+                                <span class="file-count" id="hotTubsFileCount">0 parts</span>
+                            </div>
+                            
+                            <h4 style="margin-top:15px;">Water Systems Parts</h4>
                             <input type="file" id="waterFile" accept=".csv" onchange="previewPartsCSV('water')">
+                            <div class="file-info">
+                                <span class="file-name" id="waterFileName">No file selected</span>
+                                <span class="file-count" id="waterFileCount">0 parts</span>
+                            </div>
+                            
                             <div id="partsPreview" class="import-preview" style="display: none;"></div>
                             <div id="partsDuplicateWarning" class="duplicate-warning" style="display: none;"></div>
+                            
+                            <!-- Progress Bar -->
+                            <div class="progress-container" id="importProgress" style="display: none;">
+                                <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+                                <div class="progress-text" id="progressText">0 / 0 parts imported</div>
+                            </div>
+                            
                             <div class="parts-stats">
                                 <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
                                 <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
+                                <span class="parts-stat" id="totalPartsStat">Total: 0</span>
                             </div>
                             <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
                         </div>
@@ -2156,12 +2228,19 @@
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS (FIXED FOR YOUR FORMAT)
+        // CSV IMPORT FUNCTIONS - PARTS (FIXED WITH PROGRESS BAR)
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
             const file = document.getElementById(fileId).files[0];
             if (!file) return;
+
+            // Update file name display
+            if (type === 'hotTubs') {
+                document.getElementById('hotTubsFileName').textContent = file.name;
+            } else {
+                document.getElementById('waterFileName').textContent = file.name;
+            }
 
             Papa.parse(file, {
                 header: true,
@@ -2172,21 +2251,17 @@
                     console.log(`Processing ${type} parts file with ${results.data.length} rows`);
                     console.log("Headers found:", results.meta.fields);
                     
-                    // Process ALL parts - your file has exactly two columns: part_number and description
+                    // Process ALL parts
                     const processedParts = results.data
                         .filter(row => {
                             // Filter out completely empty rows
                             return row && Object.keys(row).length > 0;
                         })
                         .map((row, index) => {
-                            // For your specific file format: 
-                            // - Column 1: part_number (may have various names)
-                            // - Column 2: description (may have various names)
-                            
                             let partNumber = '';
                             let description = '';
                             
-                            // Try to find part number - check for common column names
+                            // Try to find part number
                             if (row['part_number']) {
                                 partNumber = row['part_number'].toString().trim();
                             } else if (row['part number']) {
@@ -2245,14 +2320,21 @@
                                 partNumber: partNumber,
                                 description: description,
                                 category: category,
-                                quantity: 1, // Default quantity
-                                price: 0, // Default price
+                                quantity: 1,
+                                price: 0,
                                 location: 'Main',
                                 notes: ''
                             };
                         });
 
                     partsPreviewData[type] = processedParts;
+                    
+                    // Update file count display
+                    if (type === 'hotTubs') {
+                        document.getElementById('hotTubsFileCount').textContent = `${processedParts.length} parts`;
+                    } else {
+                        document.getElementById('waterFileCount').textContent = `${processedParts.length} parts`;
+                    }
                     
                     console.log(`Processed ${processedParts.length} parts for ${type}`);
                     
@@ -2273,7 +2355,7 @@
                 return;
             }
 
-            // Show first 20 parts for preview (since you have 6000+ parts)
+            // Show first 20 parts for preview
             const previewRows = allParts.slice(0, 20);
             let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length}</strong></div>`;
             html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th></tr>';
@@ -2297,11 +2379,7 @@
             html += '</table>';
             previewDiv.innerHTML = html;
             
-            // Update the category counts in real-time
-            const hotTubsCount = partsPreviewData.hotTubs?.length || 0;
-            const waterCount = partsPreviewData.water?.length || 0;
-            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
-            document.getElementById('partsCat2').textContent = `Water Systems: ${waterCount}`;
+            updatePartsStats();
         }
 
         function checkPartsDuplicates() {
@@ -2329,12 +2407,45 @@
                 return;
             }
 
-            showLoading();
+            // Show progress bar
+            const progressContainer = document.getElementById('importProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            progressText.textContent = `0 / ${allParts.length} parts imported`;
 
             const existingPartNumbers = new Set(parts.map(p => p.partNumber));
-            const newParts = allParts.filter(p => !existingPartNumbers.has(p.partNumber));
-            const duplicates = allParts.length - newParts.length;
+            const newParts = [];
+            const duplicates = [];
 
+            // Process in batches to show progress
+            const batchSize = 100;
+            for (let i = 0; i < allParts.length; i += batchSize) {
+                const batch = allParts.slice(i, i + batchSize);
+                
+                for (const part of batch) {
+                    if (existingPartNumbers.has(part.partNumber)) {
+                        duplicates.push(part);
+                    } else {
+                        newParts.push(part);
+                        existingPartNumbers.add(part.partNumber);
+                    }
+                }
+
+                // Update progress
+                const percent = Math.round(((i + batch.length) / allParts.length) * 100);
+                progressBar.style.width = percent + '%';
+                progressBar.textContent = percent + '%';
+                progressText.textContent = `${i + batch.length} / ${allParts.length} parts processed`;
+
+                // Small delay to allow UI to update
+                await new Promise(resolve => setTimeout(resolve, 10));
+            }
+
+            // Add all new parts at once
             parts = [...parts, ...newParts];
             
             // Save to Firestore
@@ -2349,12 +2460,18 @@
             };
             document.getElementById('hotTubsFile').value = '';
             document.getElementById('waterFile').value = '';
+            document.getElementById('hotTubsFileName').textContent = 'No file selected';
+            document.getElementById('waterFileName').textContent = 'No file selected';
+            document.getElementById('hotTubsFileCount').textContent = '0 parts';
+            document.getElementById('waterFileCount').textContent = '0 parts';
             document.getElementById('partsPreview').style.display = 'none';
             document.getElementById('partsDuplicateWarning').style.display = 'none';
+            
+            // Hide progress bar
+            progressContainer.style.display = 'none';
 
-            hideLoading();
             updatePartsStats();
-            alert(`Import complete!\nNew parts: ${newParts.length}\nDuplicates skipped: ${duplicates}`);
+            alert(`Import complete!\nNew parts: ${newParts.length}\nDuplicates skipped: ${duplicates.length}`);
         }
 
         // ============================================
@@ -2384,9 +2501,11 @@
         function updatePartsStats() {
             const hotTubsCount = parts.filter(p => p.category === 'Hot Tubs').length;
             const waterSystemsCount = parts.filter(p => p.category === 'Water Systems').length;
+            const totalCount = parts.length;
             
             document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
             document.getElementById('partsCat2').textContent = `Water Systems: ${waterSystemsCount}`;
+            document.getElementById('totalPartsStat').textContent = `Total: ${totalCount}`;
         }
 
         function renderTechList() {
@@ -2428,7 +2547,7 @@
             const manualTech = document.getElementById('manual-tech');
             const techOptions = technicians
                 .filter(t => t.active)
-                .map(t => `<option value="${t.id}">${t.name}</option>`)
+                .map(t => `<option value="${t.id}">${t.name</option>`)
                 .join('');
             manualTech.innerHTML = '<option value="">Select Technician</option>' + techOptions;
         }
