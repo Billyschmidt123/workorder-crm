@@ -98,6 +98,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .header h1 {
@@ -152,6 +153,132 @@
         }
 
         .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Floating Action Button */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+
+        .fab:hover {
+            background: #5a67d8;
+            transform: scale(1.1);
+        }
+
+        .fab.secondary {
+            background: #48bb78;
+        }
+
+        .fab.secondary:hover {
+            background: #38a169;
+        }
+
+        .fab-label {
+            position: absolute;
+            right: 70px;
+            background: white;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .fab-container:hover .fab-label {
+            display: block;
+        }
+
+        /* Quick Pick Ticket Modal */
+        .quick-pick-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quick-pick-modal.active {
+            display: flex;
+        }
+
+        .quick-pick-container {
+            background: white;
+            border-radius: 15px;
+            width: 500px;
+            max-width: 95%;
+            padding: 25px;
+        }
+
+        .quick-pick-container h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .quick-pick-container input,
+        .quick-pick-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .quick-pick-search {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .quick-pick-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .quick-pick-item:hover {
+            background: #f0f4ff;
+        }
+
+        .quick-pick-item .part-num {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .quick-pick-item .part-desc {
             font-size: 12px;
             color: #666;
         }
@@ -582,6 +709,29 @@
             color: #667eea;
         }
 
+        .pick-ticket-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .print-btn {
+            background: #ed8936;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .print-btn:hover {
+            background: #dd6b20;
+        }
+
         .pick-ticket-content {
             flex: 1;
             display: grid;
@@ -787,6 +937,12 @@
             color: #666;
         }
 
+        .picked-part-serial {
+            font-size: 11px;
+            color: #48bb78;
+            margin-top: 2px;
+        }
+
         .picked-part-quantity {
             grid-column: 2;
             display: flex;
@@ -814,6 +970,15 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 11px;
+        }
+
+        .btn-serial {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-serial:hover {
+            background: #38a169;
         }
 
         .btn-remove {
@@ -874,6 +1039,29 @@
         .detail-header h2 {
             font-size: 18px;
             color: #333;
+        }
+
+        .detail-header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reminder-btn {
+            background: #fbbf24;
+            color: #333;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reminder-btn:hover {
+            background: #f59e0b;
         }
 
         .close-btn {
@@ -1159,6 +1347,61 @@
                 display: none;
             }
         }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .printable-ticket, .printable-ticket * {
+                visibility: visible;
+            }
+            .printable-ticket {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .printable-ticket {
+            background: white;
+            padding: 20px;
+            font-family: monospace;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .printable-ticket h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .printable-ticket h2 {
+            font-size: 18px;
+            margin: 15px 0 5px;
+        }
+
+        .printable-ticket table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .printable-ticket th,
+        .printable-ticket td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .printable-ticket th {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -1215,6 +1458,30 @@
                 <div class="stat-card">
                     <div class="number" id="pendingReminders">0</div>
                     <div class="label">Reminders</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <div class="fab-container">
+            <div class="fab secondary" onclick="openQuickPickTicket()" title="Quick Pick Ticket">
+                <span>📋</span>
+                <span class="fab-label">Quick Pick Ticket</span>
+            </div>
+        </div>
+
+        <!-- Quick Pick Ticket Modal -->
+        <div class="quick-pick-modal" id="quickPickModal">
+            <div class="quick-pick-container">
+                <h3>Quick Pick Ticket</h3>
+                <select id="quickPickWO" onchange="quickPickSelectWO()">
+                    <option value="">Select Work Order</option>
+                </select>
+                <div id="quickPickCustomer" style="margin-bottom: 15px; font-size: 14px; color: #666;"></div>
+                <input type="text" id="quickPickSearch" placeholder="Search part number or description..." onkeyup="quickPickSearch()">
+                <div id="quickPickResults" class="quick-pick-search"></div>
+                <div class="modal-buttons">
+                    <button class="btn" onclick="closeQuickPickModal()">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1388,7 +1655,12 @@
         <div class="pick-ticket-container">
             <div class="pick-ticket-header">
                 <h2>Pick Ticket - <span id="pickWOInfo">Work Order</span></h2>
-                <button class="close-btn" onclick="closePickTicket()">&times;</button>
+                <div class="pick-ticket-actions">
+                    <button class="print-btn" onclick="printPickTicket()">
+                        🖨️ Print Pick Ticket
+                    </button>
+                    <button class="close-btn" onclick="closePickTicket()">&times;</button>
+                </div>
             </div>
             <div class="pick-ticket-content">
                 <!-- Parts Search Panel -->
@@ -1446,11 +1718,19 @@
         </div>
     </div>
 
+    <!-- Printable Pick Ticket (hidden) -->
+    <div id="printableTicket" style="display: none;"></div>
+
     <!-- Detail Panel -->
     <div class="detail-panel" id="detailPanel">
         <div class="detail-header">
             <h2>Work Order Details</h2>
-            <button class="close-btn" onclick="closeDetailPanel()">&times;</button>
+            <div class="detail-header-buttons">
+                <button class="reminder-btn" onclick="addReminderFromDetail()">
+                    ⏰ Add Reminder
+                </button>
+                <button class="close-btn" onclick="closeDetailPanel()">&times;</button>
+            </div>
         </div>
         <div id="detailContent"></div>
     </div>
@@ -1576,6 +1856,7 @@
         let selectedWO = null;
         let currentPickWO = null;
         let pickedParts = [];
+        let quickPickSelectedWO = null;
         
         // CSV preview data - Work Orders
         let workOrderPreviewData = {
@@ -2320,6 +2601,9 @@
             }
         }
 
+        // ============================================
+        // DETAIL PANEL WITH REMINDER BUTTON
+        // ============================================
         function selectWorkOrder(id) {
             selectedWO = id;
             const wo = workOrders.find(w => w.id === id);
@@ -2343,7 +2627,7 @@
             const partsItems = (wo.pickedParts || []).map(p => `
                 <div style="padding:5px 0; border-bottom:1px solid #f0f0f0; font-size:12px;">
                     <strong>${p.partNumber}</strong> - ${p.description}<br>
-                    Qty: ${p.quantity} | Status: ${p.status}
+                    Qty: ${p.quantity} | Status: ${p.status} ${p.serialNumber ? `| SN: ${p.serialNumber}` : ''}
                 </div>
             `).join('');
 
@@ -2519,12 +2803,171 @@
             }
         }
 
+        // ============================================
+        // REMINDER FROM DETAIL
+        // ============================================
+        function addReminderFromDetail() {
+            if (!selectedWO) {
+                alert('No work order selected');
+                return;
+            }
+            
+            const wo = workOrders.find(w => w.id === selectedWO);
+            if (!wo) return;
+            
+            // Pre-fill the reminder modal with this work order
+            document.getElementById('reminderTitle').value = `Follow up: ${wo.woNumber}`;
+            
+            // Set the work order in dropdown
+            const woSelect = document.getElementById('reminderWO');
+            woSelect.innerHTML = '<option value="">Select Work Order</option>' + 
+                workOrders.filter(wo => !wo.archived).map(wo => `<option value="${wo.id}" ${wo.id === selectedWO ? 'selected' : ''}>${wo.woNumber} - ${wo.customerName}</option>`).join('');
+            
+            // Set default time to 1 hour from now
+            const defaultTime = new Date(Date.now() + 60*60*1000);
+            document.getElementById('reminderTime').value = defaultTime.toISOString().slice(0,16);
+            
+            document.getElementById('addReminderModal').classList.add('active');
+        }
+
+        // ============================================
+        // QUICK PICK TICKET FUNCTIONS
+        // ============================================
+        function openQuickPickTicket() {
+            // Populate work order dropdown
+            const woSelect = document.getElementById('quickPickWO');
+            woSelect.innerHTML = '<option value="">Select Work Order</option>' + 
+                workOrders.filter(wo => !wo.archived).map(wo => `<option value="${wo.id}">${wo.woNumber} - ${wo.customerName}</option>`).join('');
+            
+            document.getElementById('quickPickCustomer').innerHTML = '';
+            document.getElementById('quickPickSearch').value = '';
+            document.getElementById('quickPickResults').innerHTML = '';
+            quickPickSelectedWO = null;
+            
+            document.getElementById('quickPickModal').classList.add('active');
+        }
+
+        function closeQuickPickModal() {
+            document.getElementById('quickPickModal').classList.remove('active');
+        }
+
+        function quickPickSelectWO() {
+            const woId = document.getElementById('quickPickWO').value;
+            if (!woId) {
+                document.getElementById('quickPickCustomer').innerHTML = '';
+                quickPickSelectedWO = null;
+                return;
+            }
+            
+            const wo = workOrders.find(w => w.id === woId);
+            if (wo) {
+                document.getElementById('quickPickCustomer').innerHTML = `<strong>Customer:</strong> ${wo.customerName} | ${wo.phone || 'No phone'}`;
+                quickPickSelectedWO = wo;
+            }
+        }
+
+        function quickPickSearch() {
+            const searchTerm = document.getElementById('quickPickSearch').value.toLowerCase();
+            if (!searchTerm || searchTerm.length < 2) {
+                document.getElementById('quickPickResults').innerHTML = '';
+                return;
+            }
+
+            let filteredParts = parts.filter(p => p && p.partNumber && p.description);
+
+            filteredParts = filteredParts.filter(p => 
+                (p.partNumber && p.partNumber.toLowerCase().includes(searchTerm)) ||
+                (p.description && p.description.toLowerCase().includes(searchTerm))
+            );
+
+            filteredParts = filteredParts.slice(0, 20);
+            
+            if (filteredParts.length === 0) {
+                document.getElementById('quickPickResults').innerHTML = '<div style="padding:10px; text-align:center; color:#999;">No parts found</div>';
+                return;
+            }
+
+            document.getElementById('quickPickResults').innerHTML = filteredParts.map(part => `
+                <div class="quick-pick-item" onclick="quickPickAddPart('${part.id}')">
+                    <div class="part-num">${part.partNumber}</div>
+                    <div class="part-desc">${part.description}</div>
+                    <div style="font-size:10px; color:#999;">${part.category} | Qty: ${part.quantity}</div>
+                </div>
+            `).join('');
+        }
+
+        function quickPickAddPart(partId) {
+            if (!quickPickSelectedWO) {
+                alert('Please select a work order first');
+                return;
+            }
+
+            const part = parts.find(p => p.id === partId);
+            if (!part) return;
+
+            // Ask for quantity
+            const quantity = prompt(`Enter quantity for ${part.partNumber}:`, '1');
+            if (!quantity) return;
+            
+            const qty = parseInt(quantity);
+            if (isNaN(qty) || qty < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            // Ask for serial number (optional)
+            const serialNumber = prompt(`Enter serial number for ${part.partNumber} (optional):`, '');
+
+            // Add to work order's picked parts
+            const wo = workOrders.find(w => w.id === quickPickSelectedWO.id);
+            if (!wo) return;
+
+            if (!wo.pickedParts) wo.pickedParts = [];
+
+            const existingPart = wo.pickedParts.find(p => p.partId === partId);
+            if (existingPart) {
+                existingPart.quantity += qty;
+                if (serialNumber) {
+                    existingPart.serialNumber = existingPart.serialNumber ? 
+                        existingPart.serialNumber + ', ' + serialNumber : serialNumber;
+                }
+            } else {
+                wo.pickedParts.push({
+                    partId: part.id,
+                    partNumber: part.partNumber,
+                    description: part.description,
+                    category: part.category,
+                    quantity: qty,
+                    price: part.price,
+                    status: 'Pending',
+                    serialNumber: serialNumber || '',
+                    notes: ''
+                });
+            }
+
+            // Add to history
+            if (!wo.history) wo.history = [];
+            wo.history.unshift({
+                time: new Date().toLocaleString(),
+                note: `Added ${qty}x ${part.partNumber} via Quick Pick${serialNumber ? ` (SN: ${serialNumber})` : ''}`
+            });
+
+            saveWorkOrderToFirestore(wo).then(() => {
+                alert(`Added ${qty}x ${part.partNumber} to work order ${wo.woNumber}`);
+                renderAll();
+                closeQuickPickModal();
+            });
+        }
+
+        // ============================================
+        // PICK TICKET FUNCTIONS
+        // ============================================
         function openPickTicket(woId) {
             const wo = workOrders.find(w => w.id === woId);
             if (!wo) return;
 
             currentPickWO = wo;
-            pickedParts = wo.pickedParts || [];
+            pickedParts = wo.pickedParts ? JSON.parse(JSON.stringify(wo.pickedParts)) : [];
             document.getElementById('pickWOInfo').textContent = `${wo.woNumber} - ${wo.customerName}`;
             document.getElementById('pickTicketModal').classList.add('active');
             searchParts();
@@ -2541,8 +2984,7 @@
             const category = document.getElementById('partCategory').value;
             const sortBy = document.getElementById('partSort').value;
 
-            // Only search in parts array, not work orders
-            let filteredParts = parts.filter(p => p && p.partNumber && p.description); // Ensure valid parts
+            let filteredParts = parts.filter(p => p && p.partNumber && p.description);
 
             if (category !== 'all') {
                 filteredParts = filteredParts.filter(p => p.category === category);
@@ -2592,19 +3034,37 @@
             const part = parts.find(p => p.id === partId);
             if (!part) return;
 
+            // Ask for quantity
+            const quantity = prompt(`Enter quantity for ${part.partNumber}:`, '1');
+            if (!quantity) return;
+            
+            const qty = parseInt(quantity);
+            if (isNaN(qty) || qty < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            // Ask for serial number (optional)
+            const serialNumber = prompt(`Enter serial number for ${part.partNumber} (optional):`, '');
+
             const existingPart = pickedParts.find(p => p.partId === partId);
             
             if (existingPart) {
-                existingPart.quantity += 1;
+                existingPart.quantity += qty;
+                if (serialNumber) {
+                    existingPart.serialNumber = existingPart.serialNumber ? 
+                        existingPart.serialNumber + ', ' + serialNumber : serialNumber;
+                }
             } else {
                 pickedParts.push({
                     partId: part.id,
                     partNumber: part.partNumber,
                     description: part.description,
                     category: part.category,
-                    quantity: 1,
+                    quantity: qty,
                     price: part.price,
                     status: 'Pending',
+                    serialNumber: serialNumber || '',
                     notes: ''
                 });
             }
@@ -2634,7 +3094,7 @@
                 partNumber: finalPartNumber,
                 description: description,
                 category: category,
-                quantity: 999, // High quantity for custom parts
+                quantity: 999,
                 price: price,
                 location: 'Custom',
                 notes: 'Custom added part',
@@ -2647,10 +3107,16 @@
                 parts: parts
             });
 
-            // Add to current pick list
+            // Add to current pick list with serial number prompt
+            const serialNumber = prompt(`Enter serial number for ${description} (optional):`, '');
+
             const existingPart = pickedParts.find(p => p.partId === newPart.id);
             if (existingPart) {
                 existingPart.quantity += quantity;
+                if (serialNumber) {
+                    existingPart.serialNumber = existingPart.serialNumber ? 
+                        existingPart.serialNumber + ', ' + serialNumber : serialNumber;
+                }
             } else {
                 pickedParts.push({
                     partId: newPart.id,
@@ -2660,6 +3126,7 @@
                     quantity: quantity,
                     price: newPart.price,
                     status: 'Pending',
+                    serialNumber: serialNumber || '',
                     notes: '',
                     isCustom: true
                 });
@@ -2695,6 +3162,7 @@
                     <div class="picked-part-info">
                         <div class="picked-part-number">${part.partNumber || 'N/A'}</div>
                         <div class="picked-part-description">${part.description || 'No description'}</div>
+                        ${part.serialNumber ? `<div class="picked-part-serial">SN: ${part.serialNumber}</div>` : ''}
                         <div style="font-size: 11px; color: #999;">${part.category || 'Uncategorized'} ${part.isCustom ? '✨ Custom' : ''}</div>
                     </div>
                     <div class="picked-part-quantity">
@@ -2703,11 +3171,20 @@
                         <button onclick="updatePartQuantity(${index}, 1)">+</button>
                     </div>
                     <div class="picked-part-actions">
+                        <button class="btn-serial" onclick="addSerialNumber(${index})">SN</button>
                         <button class="btn-status" onclick="updatePartStatus(${index})">${part.status || 'Pending'}</button>
                         <button class="btn-remove" onclick="removePart(${index})">Remove</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function addSerialNumber(index) {
+            const serialNumber = prompt('Enter serial number:', pickedParts[index].serialNumber || '');
+            if (serialNumber !== null) {
+                pickedParts[index].serialNumber = serialNumber;
+                renderPickedParts();
+            }
         }
 
         function updatePartQuantity(index, change) {
@@ -2762,6 +3239,73 @@
                 renderAll();
                 alert('Parts saved to work order!');
             }
+        }
+
+        // ============================================
+        // PRINT PICK TICKET
+        // ============================================
+        function printPickTicket() {
+            if (!currentPickWO || pickedParts.length === 0) {
+                alert('No parts to print');
+                return;
+            }
+
+            const wo = currentPickWO;
+            const date = new Date().toLocaleString();
+
+            let html = `
+                <div class="printable-ticket">
+                    <h1>PICK TICKET</h1>
+                    <p><strong>Work Order:</strong> ${wo.woNumber}</p>
+                    <p><strong>Customer:</strong> ${wo.customerName}</p>
+                    <p><strong>Phone:</strong> ${wo.phone || 'N/A'}</p>
+                    <p><strong>Date:</strong> ${date}</p>
+                    
+                    <h2>Parts to Pick:</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Part #</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Serial #</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            pickedParts.forEach(part => {
+                html += `
+                    <tr>
+                        <td>${part.partNumber}</td>
+                        <td>${part.description}</td>
+                        <td>${part.quantity}</td>
+                        <td>${part.serialNumber || ''}</td>
+                        <td>${part.status || 'Pending'}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                    <p><em>Printed on ${date}</em></p>
+                </div>
+            `;
+
+            // Create a temporary div for printing
+            const printDiv = document.getElementById('printableTicket');
+            printDiv.innerHTML = html;
+            printDiv.style.display = 'block';
+
+            // Print
+            window.print();
+
+            // Hide after printing
+            setTimeout(() => {
+                printDiv.style.display = 'none';
+            }, 1000);
         }
 
         // ============================================
