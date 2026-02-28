@@ -1539,45 +1539,45 @@
         }
 
         // Initialize user data
-        async function initializeUserData() {
-            const user = auth.currentUser;
-            
-            const defaultTechs = [
-                { id: `tech-${Date.now()}-1`, name: 'John Smith', email: 'john@example.com', active: true },
-                { id: `tech-${Date.now()}-2`, name: 'Sarah Johnson', email: 'sarah@example.com', active: true },
-                { id: `tech-${Date.now()}-3`, name: 'Mike Wilson', email: 'mike@example.com', active: true }
-            ];
+      async function initializeUserData() {
+    const user = auth.currentUser;
+    
+    const defaultTechs = [
+        { id: `tech-${Date.now()}-1`, name: 'John Smith', email: 'john@example.com', active: true },
+        { id: `tech-${Date.now()}-2`, name: 'Sarah Johnson', email: 'sarah@example.com', active: true },
+        { id: `tech-${Date.now()}-3`, name: 'Mike Wilson', email: 'mike@example.com', active: true }
+    ];
 
-            const defaultStatuses = [
-                { id: '1', name: 'Open', color: '#e3f2fd' },
-                { id: '2', name: 'In Progress', color: '#fff3e0' },
-                { id: '3', name: 'Completed', color: '#e8f5e8' },
-                { id: '4', name: 'On Hold', color: '#ffebee' },
-                { id: '5', name: 'Waiting Parts', color: '#f3e5f5' },
-                { id: '6', name: 'Scheduled', color: '#e0f2f1' }
-            ];
+    const defaultStatuses = [
+        { id: '1', name: 'Open', color: '#e3f2fd' },
+        { id: '2', name: 'In Progress', color: '#fff3e0' },
+        { id: '3', name: 'Completed', color: '#e8f5e8' },
+        { id: '4', name: 'On Hold', color: '#ffebee' },
+        { id: '5', name: 'Waiting Parts', color: '#f3e5f5' },
+        { id: '6', name: 'Scheduled', color: '#e0f2f1' }
+    ];
 
-            try {
-                await db.collection('users').doc(user.uid).set({
-                    technicians: defaultTechs,
-                    statuses: defaultStatuses,
-                    parts: [],
-                    createdAt: new Date().toISOString()
-                });
+    try {
+        await db.collection('users').doc(user.uid).set({
+            technicians: defaultTechs,
+            statuses: defaultStatuses,
+            parts: [],
+            createdAt: new Date().toISOString()
+        });
 
-                technicians = defaultTechs;
-                statuses = defaultStatuses;
-                workOrders = [];
-                reminders = [];
-                parts = [];
-                
-                hideLoading();
-                renderAll();
-            } catch (error) {
-                hideLoading();
-                alert('Error initializing data: ' + error.message);
-            }
-        }
+        technicians = defaultTechs;
+        statuses = defaultStatuses;
+        workOrders = [];
+        reminders = [];
+        parts = [];
+        
+        hideLoading();
+        renderAll();
+    } catch (error) {
+        hideLoading();
+        alert('Error initializing data: ' + error.message);
+    }
+}
 
         // Load user data from Firestore
         async function loadUserData() {
@@ -2832,3 +2832,4 @@
 </body>
 
 </html>
+
