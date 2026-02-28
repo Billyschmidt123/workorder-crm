@@ -12,6 +12,7 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
+        /* Copy all the CSS from the previous message - it's the same */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Login Page */
         #login-page {
             display: flex;
             justify-content: center;
@@ -87,7 +87,6 @@
             display: none;
         }
 
-        /* Header */
         .header {
             background: white;
             border-radius: 15px;
@@ -156,7 +155,6 @@
             color: #666;
         }
 
-        /* View Toggle */
         .view-toggle {
             display: flex;
             gap: 10px;
@@ -183,14 +181,12 @@
             color: #333;
         }
 
-        /* Main Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 350px 1fr 300px;
             gap: 20px;
         }
 
-        /* Sidebar */
         .sidebar {
             background: white;
             border-radius: 15px;
@@ -215,7 +211,6 @@
             align-items: center;
         }
 
-        /* CSV Import Sections */
         .csv-import-section {
             background: #f8f9fa;
             border-radius: 8px;
@@ -274,15 +269,6 @@
             font-size: 12px;
         }
 
-        .success-message {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-size: 12px;
-        }
-
         .parts-stats {
             display: flex;
             gap: 10px;
@@ -296,6 +282,29 @@
             padding: 5px 10px;
             border-radius: 15px;
             border: 1px solid #e2e8f0;
+        }
+
+        .manual-wo-form {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .manual-wo-form input,
+        .manual-wo-form select,
+        .manual-wo-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .manual-wo-form textarea {
+            min-height: 60px;
+            resize: vertical;
         }
 
         .tech-list {
@@ -349,7 +358,6 @@
             color: #667eea;
         }
 
-        /* Status Tags */
         .status-tag {
             padding: 4px 8px;
             border-radius: 20px;
@@ -365,7 +373,6 @@
         .status-Waiting-Parts { background: #f3e5f5; color: #7b1fa2; }
         .status-Scheduled { background: #e0f2f1; color: #00796b; }
 
-        /* Archive badge */
         .archive-badge {
             background: #cbd5e0;
             color: #4a5568;
@@ -380,7 +387,6 @@
             background: #f7fafc;
         }
 
-        /* Reminders Panel */
         .reminders-panel {
             background: white;
             border-radius: 15px;
@@ -419,7 +425,6 @@
             color: #666;
         }
 
-        /* Main Content */
         .main-content {
             background: white;
             border-radius: 15px;
@@ -427,7 +432,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Filters */
         .filters {
             display: flex;
             gap: 15px;
@@ -480,7 +484,6 @@
             color: #999;
         }
 
-        /* Work Orders Table */
         .workorders-table {
             width: 100%;
             border-collapse: collapse;
@@ -515,7 +518,6 @@
             background: #e3f2fd;
         }
 
-        /* Pick Ticket Modal */
         .pick-ticket-modal {
             display: none;
             position: fixed;
@@ -564,7 +566,6 @@
             overflow: hidden;
         }
 
-        /* Parts Search Panel */
         .parts-search-panel {
             border-right: 2px solid #f0f0f0;
             padding: 20px;
@@ -642,7 +643,6 @@
             border-radius: 4px;
         }
 
-        /* Picked Parts Panel */
         .picked-parts-panel {
             padding: 20px;
             overflow-y: auto;
@@ -756,7 +756,6 @@
             gap: 10px;
         }
 
-        /* Detail Panel */
         .detail-panel {
             position: fixed;
             right: 0;
@@ -1253,5 +1252,4 @@
                             <option value="wo-desc">WO # Desc</option>
                         </select>
                     </div>
-                    <div class="search-box">
-                        <input type="
+                    <div class="
