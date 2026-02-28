@@ -1456,6 +1456,7 @@
 
   // Your web app's Firebase configuration
 // Firebase Configuration
+// Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIZaSyDPixmCwxOMkBpBFh34GgZr-qBK3TCvaLg",
     authDomain: "workordercrm.firebaseapp.com",
@@ -1464,6 +1465,12 @@ const firebaseConfig = {
     messagingSenderId: "84507857386",
     appId: "1:84507857386:web:99ba6ab325669db88f6293"
 };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -2833,5 +2840,6 @@ const firebaseConfig = {
 </body>
 
 </html>
+
 
 
