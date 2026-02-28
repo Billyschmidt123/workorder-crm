@@ -624,8 +624,9 @@
         }
 
         .parts-list {
-            height: calc(100% - 120px);
+            height: calc(100% - 200px);
             overflow-y: auto;
+            margin-bottom: 15px;
         }
 
         .part-item {
@@ -665,6 +666,66 @@
             background: #e2e8f0;
             padding: 2px 6px;
             border-radius: 4px;
+        }
+
+        /* Custom Part Section */
+        .custom-part-section {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .custom-part-section h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .custom-part-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .custom-part-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .custom-part-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .add-custom-btn {
+            width: 100%;
+            padding: 10px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .add-custom-btn:hover {
+            background: #38a169;
+        }
+
+        .save-to-db-note {
+            font-size: 11px;
+            color: #718096;
+            text-align: center;
+            margin-top: 5px;
         }
 
         /* Picked Parts Panel */
@@ -1347,6 +1408,26 @@
                         </div>
                     </div>
                     <div class="parts-list" id="partsList"></div>
+                    
+                    <!-- Custom Part Section -->
+                    <div class="custom-part-section">
+                        <h4>Add Custom Part</h4>
+                        <div class="custom-part-row">
+                            <input type="text" id="customPartNumber" placeholder="Part # (Optional)">
+                            <input type="text" id="customPartDescription" placeholder="Part Description *">
+                        </div>
+                        <div class="custom-part-row">
+                            <input type="number" id="customPartQty" placeholder="Quantity" value="1" min="1" style="width: 80px;">
+                            <input type="number" id="customPartPrice" placeholder="Price (Optional)" step="0.01" min="0" style="flex: 1;">
+                        </div>
+                        <select id="customPartCategory" style="width:100%; padding:8px; margin-bottom:8px; border:1px solid #ddd; border-radius:5px;">
+                            <option value="Hot Tubs">Hot Tubs</option>
+                            <option value="Water Systems">Water Systems</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                        </select>
+                        <button class="add-custom-btn" onclick="addCustomPart()">Add Custom Part to Pick List</button>
+                        <div class="save-to-db-note">This part will be added to your parts database for future use</div>
+                    </div>
                 </div>
                 <!-- Picked Parts Panel -->
                 <div class="picked-parts-panel">
@@ -2460,7 +2541,8 @@
             const category = document.getElementById('partCategory').value;
             const sortBy = document.getElementById('partSort').value;
 
-            let filteredParts = parts;
+            // Only search in parts array, not work orders
+            let filteredParts = parts.filter(p => p && p.partNumber && p.description); // Ensure valid parts
 
             if (category !== 'all') {
                 filteredParts = filteredParts.filter(p => p.category === category);
@@ -2530,6 +2612,73 @@
             renderPickedParts();
         }
 
+        // Custom Part Function
+        async function addCustomPart() {
+            const partNumber = document.getElementById('customPartNumber').value.trim();
+            const description = document.getElementById('customPartDescription').value.trim();
+            const quantity = parseInt(document.getElementById('customPartQty').value) || 1;
+            const price = parseFloat(document.getElementById('customPartPrice').value) || 0;
+            const category = document.getElementById('customPartCategory').value;
+
+            if (!description) {
+                alert('Please enter a part description');
+                return;
+            }
+
+            // Create unique part number if not provided
+            const finalPartNumber = partNumber || `CUSTOM-${Date.now()}`;
+
+            // Create new part object
+            const newPart = {
+                id: `part-${Date.now()}-${Math.random()}`,
+                partNumber: finalPartNumber,
+                description: description,
+                category: category,
+                quantity: 999, // High quantity for custom parts
+                price: price,
+                location: 'Custom',
+                notes: 'Custom added part',
+                isCustom: true
+            };
+
+            // Add to parts database
+            parts.push(newPart);
+            await db.collection('users').doc(currentUser.uid).update({
+                parts: parts
+            });
+
+            // Add to current pick list
+            const existingPart = pickedParts.find(p => p.partId === newPart.id);
+            if (existingPart) {
+                existingPart.quantity += quantity;
+            } else {
+                pickedParts.push({
+                    partId: newPart.id,
+                    partNumber: newPart.partNumber,
+                    description: newPart.description,
+                    category: newPart.category,
+                    quantity: quantity,
+                    price: newPart.price,
+                    status: 'Pending',
+                    notes: '',
+                    isCustom: true
+                });
+            }
+
+            // Clear form
+            document.getElementById('customPartNumber').value = '';
+            document.getElementById('customPartDescription').value = '';
+            document.getElementById('customPartQty').value = '1';
+            document.getElementById('customPartPrice').value = '';
+
+            // Refresh parts list and picked parts
+            searchParts();
+            renderPickedParts();
+            updatePartsStats();
+
+            alert(`Custom part "${description}" added to database and pick list!`);
+        }
+
         function renderPickedParts() {
             const pickedPartsList = document.getElementById('pickedPartsList');
             const count = document.getElementById('pickedPartsCount');
@@ -2546,7 +2695,7 @@
                     <div class="picked-part-info">
                         <div class="picked-part-number">${part.partNumber || 'N/A'}</div>
                         <div class="picked-part-description">${part.description || 'No description'}</div>
-                        <div style="font-size: 11px; color: #999;">${part.category || 'Uncategorized'}</div>
+                        <div style="font-size: 11px; color: #999;">${part.category || 'Uncategorized'} ${part.isCustom ? '✨ Custom' : ''}</div>
                     </div>
                     <div class="picked-part-quantity">
                         <button onclick="updatePartQuantity(${index}, -1)">-</button>
