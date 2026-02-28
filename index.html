@@ -12,7 +12,6 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* Copy all your existing CSS here - it looks fine */
         * {
             margin: 0;
             padding: 0;
@@ -25,6 +24,7 @@
             min-height: 100vh;
         }
 
+        /* Login Page */
         #login-page {
             display: flex;
             justify-content: center;
@@ -87,6 +87,7 @@
             display: none;
         }
 
+        /* Header */
         .header {
             background: white;
             border-radius: 15px;
@@ -155,6 +156,7 @@
             color: #666;
         }
 
+        /* View Toggle */
         .view-toggle {
             display: flex;
             gap: 10px;
@@ -181,12 +183,14 @@
             color: #333;
         }
 
+        /* Main Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 350px 1fr 300px;
             gap: 20px;
         }
 
+        /* Sidebar */
         .sidebar {
             background: white;
             border-radius: 15px;
@@ -209,6 +213,713 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        /* Manual Work Order Form */
+        .manual-wo-form {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .manual-wo-form input,
+        .manual-wo-form select,
+        .manual-wo-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .manual-wo-form textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        /* Parts Import Section */
+        .parts-import {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .parts-import h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .parts-import input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            font-size: 12px;
+        }
+
+        .parts-stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .parts-stat {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tech-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tech-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tech-avatar {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tech-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .tech-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            padding: 2px 5px;
+        }
+
+        .tech-actions button:hover {
+            color: #667eea;
+        }
+
+        /* Status Tags */
+        .status-tag {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .status-Open { background: #e3f2fd; color: #1976d2; }
+        .status-In-Progress { background: #fff3e0; color: #f57c00; }
+        .status-Completed { background: #e8f5e8; color: #388e3c; }
+        .status-On-Hold { background: #ffebee; color: #d32f2f; }
+        .status-Waiting-Parts { background: #f3e5f5; color: #7b1fa2; }
+        .status-Scheduled { background: #e0f2f1; color: #00796b; }
+
+        /* Archive badge */
+        .archive-badge {
+            background: #cbd5e0;
+            color: #4a5568;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        .archived-row {
+            opacity: 0.7;
+            background: #f7fafc;
+        }
+
+        /* Reminders Panel */
+        .reminders-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .reminder-item {
+            background: #fff9c4;
+            border-left: 4px solid #fbc02d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .reminder-item:hover {
+            transform: translateX(-5px);
+        }
+
+        .reminder-time {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .reminder-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .reminder-customer {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 12px;
+            min-width: 150px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px 8px 35px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .search-box:before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Work Orders Table */
+        .workorders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .workorders-table th {
+            text-align: left;
+            padding: 12px;
+            background: #f8f9fa;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .workorders-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .workorders-table tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .workorders-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .workorders-table tr.selected {
+            background: #e3f2fd;
+        }
+
+        /* Pick Ticket Modal */
+        .pick-ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pick-ticket-modal.active {
+            display: flex;
+        }
+
+        .pick-ticket-container {
+            background: white;
+            border-radius: 15px;
+            width: 1400px;
+            max-width: 95%;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pick-ticket-header {
+            padding: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pick-ticket-header h2 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .wo-info {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .wo-info strong {
+            color: #667eea;
+        }
+
+        .pick-ticket-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            overflow: hidden;
+        }
+
+        /* Parts Search Panel */
+        .parts-search-panel {
+            border-right: 2px solid #f0f0f0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .parts-search-header {
+            margin-bottom: 20px;
+        }
+
+        .parts-search-header input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .parts-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .parts-filters select {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .parts-list {
+            height: calc(100% - 120px);
+            overflow-y: auto;
+        }
+
+        .part-item {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .part-item:hover {
+            background: #ebf4ff;
+            border-color: #667eea;
+        }
+
+        .part-number {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .part-description {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .part-details {
+            display: flex;
+            gap: 10px;
+            font-size: 11px;
+            color: #999;
+        }
+
+        .part-category {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Picked Parts Panel */
+        .picked-parts-panel {
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .picked-parts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .picked-parts-header h3 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .picked-parts-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .picked-parts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .picked-part-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .picked-part-info {
+            grid-column: 1;
+        }
+
+        .picked-part-number {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .picked-part-description {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .picked-part-quantity {
+            grid-column: 2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .picked-part-quantity input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .picked-part-actions {
+            grid-column: 3;
+            display: flex;
+            gap: 5px;
+        }
+
+        .picked-part-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .btn-remove {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .btn-remove:hover {
+            background: #feb2b2;
+        }
+
+        .btn-status {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-status:hover {
+            background: #cbd5e0;
+        }
+
+        .pick-ticket-footer {
+            padding: 20px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Detail Panel */
+        .detail-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 500px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .detail-panel.open {
+            transform: translateX(0);
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .pick-ticket-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .pick-ticket-btn:hover {
+            background: #38a169;
+        }
+
+        .detail-field {
+            margin-bottom: 20px;
+        }
+
+        .detail-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .detail-field input, .detail-field select, .detail-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .detail-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .archive-btn {
+            background: #cbd5e0;
+            color: #4a5568;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .archive-btn:hover {
+            background: #a0aec0;
+        }
+
+        .archive-btn.archived {
+            background: #48bb78;
+            color: white;
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-time {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .history-note {
+            color: #666;
+        }
+
+        .add-note {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-note input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .add-note button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .add-note button:hover {
+            background: #5a67d8;
         }
 
         .btn {
@@ -248,6 +959,15 @@
             background: #e53e3e;
         }
 
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -275,6 +995,51 @@
             overflow-y: auto;
         }
 
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input, .modal-content select, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .task-assignment {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .task-assignment h4 {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .task-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .task-form input, .task-form select {
+            flex: 1;
+            min-width: 150px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
         .spinner {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #667eea;
@@ -288,6 +1053,16 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar, .reminders-panel {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -318,17 +1093,313 @@
 
     <!-- Main App Container -->
     <div class="app-container" id="app-container">
+        <!-- Header -->
         <div class="header">
             <div>
-                <h1>Work Order CRM System</h1>
+                <h1>Work Order CRM System
+                    <span>Complete Work Order Management</span>
+                </h1>
             </div>
             <div class="user-info">
                 <span class="user-email" id="user-email"></span>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number" id="totalWO">0</div>
+                    <div class="label">Work Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="totalParts">0</div>
+                    <div class="label">Parts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="activeWO">0</div>
+                    <div class="label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="pendingReminders">0</div>
+                    <div class="label">Reminders</div>
+                </div>
+            </div>
         </div>
-        <div id="main-content">
-            <p>Loading...</p>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button class="view-btn active" id="viewActiveBtn" onclick="switchView('active')">Active Work Orders</button>
+            <button class="view-btn" id="viewArchiveBtn" onclick="switchView('archive')">Archive</button>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">
+                        Parts Inventory
+                        <span class="parts-stat" id="partsCount">0 parts</span>
+                    </div>
+                    <div class="parts-import">
+                        <h4>Import Parts from CSV</h4>
+                        <input type="file" id="partsFile1" accept=".csv" onchange="previewPartsCSV(1)">
+                        <input type="file" id="partsFile2" accept=".csv" onchange="previewPartsCSV(2)">
+                        <div class="parts-stats">
+                            <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
+                            <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
+                        </div>
+                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">
+                        Manual Work Order
+                    </div>
+                    <div class="manual-wo-form">
+                        <input type="text" id="manual-wo-number" placeholder="WO Number">
+                        <input type="text" id="manual-customer" placeholder="Customer Name">
+                        <input type="text" id="manual-phone" placeholder="Phone">
+                        <input type="email" id="manual-email" placeholder="Email">
+                        <input type="text" id="manual-location" placeholder="Location">
+                        <textarea id="manual-complaint" placeholder="Complaint/Issue"></textarea>
+                        <select id="manual-status">
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On Hold">On Hold</option>
+                            <option value="Waiting Parts">Waiting Parts</option>
+                            <option value="Scheduled">Scheduled</option>
+                        </select>
+                        <select id="manual-tech">
+                            <option value="">Select Technician</option>
+                        </select>
+                        <button class="btn btn-success" style="width:100%;" onclick="createManualWorkOrder()">Create Work Order</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">
+                        Backup & Restore
+                        <button class="btn btn-primary" onclick="showBackupModal()">Manage</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">
+                        Technicians
+                        <button class="btn btn-primary" onclick="showAddTechModal()">+ Add</button>
+                    </div>
+                    <div class="tech-list" id="techList"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">
+                        Statuses
+                        <button class="btn btn-primary" onclick="showAddStatusModal()">+ Add</button>
+                    </div>
+                    <div class="tech-list" id="statusList"></div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Archive Notice -->
+                <div id="archiveNotice" style="display: none; background: #fed7d7; color: #c53030; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;"></div>
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="statusFilter" onchange="filterWorkOrders()">
+                            <option value="all">All Statuses</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Tech:</label>
+                        <select id="techFilter" onchange="filterWorkOrders()">
+                            <option value="all">All Techs</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort:</label>
+                        <select id="sortFilter" onchange="filterWorkOrders()">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="wo-asc">WO # Asc</option>
+                            <option value="wo-desc">WO # Desc</option>
+                        </select>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search WO#, customer, phone..." onkeyup="filterWorkOrders()">
+                    </div>
+                </div>
+
+                <!-- Work Orders Table -->
+                <table class="workorders-table">
+                    <thead>
+                        <tr>
+                            <th>WO #</th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Complaint</th>
+                            <th>Status</th>
+                            <th>Tech</th>
+                            <th>Date</th>
+                            <th>Parts</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="workordersList"></tbody>
+                </table>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="reminders-panel">
+                <div class="sidebar-title">
+                    Reminders
+                    <button class="btn btn-primary" onclick="showAddReminderModal()">+ Add</button>
+                </div>
+                <div id="remindersList"></div>
+                <a href="#" onclick="showAllReminders()" style="display:block; text-align:center; margin-top:15px; color:#667eea; text-decoration:none;">
+                    View All Reminders →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pick Ticket Modal -->
+    <div class="pick-ticket-modal" id="pickTicketModal">
+        <div class="pick-ticket-container">
+            <div class="pick-ticket-header">
+                <h2>Pick Ticket - <span id="pickWOInfo">Work Order</span></h2>
+                <button class="close-btn" onclick="closePickTicket()">&times;</button>
+            </div>
+            <div class="pick-ticket-content">
+                <!-- Parts Search Panel -->
+                <div class="parts-search-panel">
+                    <div class="parts-search-header">
+                        <input type="text" id="partSearch" placeholder="Search by part number or description..." onkeyup="searchParts()">
+                        <div class="parts-filters">
+                            <select id="partCategory" onchange="searchParts()">
+                                <option value="all">All Categories</option>
+                                <option value="Hot Tubs">Hot Tubs</option>
+                                <option value="Water Systems">Water Systems</option>
+                            </select>
+                            <select id="partSort" onchange="searchParts()">
+                                <option value="number">Part #</option>
+                                <option value="description">Description</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="parts-list" id="partsList"></div>
+                </div>
+                <!-- Picked Parts Panel -->
+                <div class="picked-parts-panel">
+                    <div class="picked-parts-header">
+                        <h3>Picked Parts</h3>
+                        <span class="picked-parts-count" id="pickedPartsCount">0</span>
+                    </div>
+                    <div class="picked-parts-list" id="pickedPartsList"></div>
+                </div>
+            </div>
+            <div class="pick-ticket-footer">
+                <button class="btn btn-danger" onclick="clearPickedParts()">Clear All</button>
+                <button class="btn btn-success" onclick="savePickedParts()">Save to Work Order</button>
+                <button class="btn btn-primary" onclick="closePickTicket()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <div class="detail-header">
+            <h2>Work Order Details</h2>
+            <button class="close-btn" onclick="closeDetailPanel()">&times;</button>
+        </div>
+        <div id="detailContent"></div>
+    </div>
+
+    <!-- Add Tech Modal -->
+    <div class="modal" id="addTechModal">
+        <div class="modal-content">
+            <h3>Add Technician</h3>
+            <input type="text" id="techName" placeholder="Technician Name">
+            <input type="email" id="techEmail" placeholder="Email Address">
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addTechModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTech()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Status Modal -->
+    <div class="modal" id="addStatusModal">
+        <div class="modal-content">
+            <h3>Add Status</h3>
+            <input type="text" id="statusName" placeholder="Status Name">
+            <select id="statusColor">
+                <option value="#e3f2fd">Blue</option>
+                <option value="#fff3e0">Orange</option>
+                <option value="#e8f5e8">Green</option>
+                <option value="#ffebee">Red</option>
+                <option value="#f3e5f5">Purple</option>
+                <option value="#e0f2f1">Teal</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addStatusModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveStatus()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Reminder Modal -->
+    <div class="modal" id="addReminderModal">
+        <div class="modal-content">
+            <h3>Add Reminder</h3>
+            <input type="text" id="reminderTitle" placeholder="Reminder Title">
+            <select id="reminderWO">
+                <option value="">Select Work Order</option>
+            </select>
+            <input type="datetime-local" id="reminderTime">
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addReminderModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveReminder()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Reminders Modal -->
+    <div class="modal" id="allRemindersModal">
+        <div class="modal-content" style="width: 800px; max-width: 95%; max-height: 80vh; overflow-y: auto;">
+            <div class="detail-header">
+                <h2>All Reminders</h2>
+                <button class="close-btn" onclick="closeModal('allRemindersModal')">&times;</button>
+            </div>
+            <div id="allRemindersList"></div>
+        </div>
+    </div>
+
+    <!-- Backup Modal -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content" style="width: 600px;">
+            <h3>Backup & Restore</h3>
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" style="width:100%; margin-bottom:10px;" onclick="createBackup()">Create New Backup</button>
+                <button class="btn btn-success" style="width:100%;" onclick="downloadBackup()">Download Backup File</button>
+            </div>
+            <div>
+                <h4>Restore from Backup</h4>
+                <input type="file" id="backupFile" accept=".json" onchange="previewBackup()">
+                <div id="backupPreview" style="margin-top:10px; padding:10px; background:#f8f9fa; border-radius:5px; display:none;"></div>
+                <button class="btn btn-warning" style="width:100%; margin-top:10px;" onclick="restoreFromBackup()">Restore Selected Backup</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <h4>Previous Backups</h4>
+                <div id="backupList" class="backup-list"></div>
+            </div>
+            <div class="modal-buttons" style="margin-top:20px;">
+                <button class="btn" onclick="closeModal('backupModal')">Close</button>
+            </div>
         </div>
     </div>
 
@@ -339,19 +1410,16 @@
 
     <script>
         // ============================================
-        // FIREBASE CONFIGURATION - REPLACE WITH YOURS!
+        // FIREBASE CONFIGURATION - USE YOUR EXACT CONFIG
         // ============================================
- // ============================================
-// FIREBASE CONFIGURATION
-// ============================================
-const firebaseConfig = {
-  apiKey: "AIzaSyDPixmCwxOMkBPBFh34GgZr-qBK3TCvaLg",
-  authDomain: "workordercrm.firebaseapp.com",
-  projectId: "workordercrm",
-  storageBucket: "workordercrm.firebasestorage.app",
-  messagingSenderId: "84507857386",
-  appId: "1:84507857386:web:99ba6ab325669db88f6293"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPixmCwxOMkBPBFh34GgZr-qBK3TCvaLg",
+            authDomain: "workordercrm.firebaseapp.com",
+            projectId: "workordercrm",
+            storageBucket: "workordercrm.firebasestorage.app",
+            messagingSenderId: "84507857386",
+            appId: "1:84507857386:web:99ba6ab325669db88f6293"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -363,13 +1431,22 @@ const firebaseConfig = {
         // GLOBAL VARIABLES
         // ============================================
         let currentUser = null;
+        let workOrders = [];
+        let technicians = [];
+        let statuses = [];
+        let reminders = [];
+        let parts = [];
+        let currentView = 'active';
+        let selectedWO = null;
+        let currentPickWO = null;
+        let pickedParts = [];
+        let partsPreviewData = [];
 
         // ============================================
         // AUTH STATE OBSERVER
         // ============================================
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // User is logged in
                 currentUser = user;
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('register-page').style.display = 'none';
@@ -377,7 +1454,6 @@ const firebaseConfig = {
                 document.getElementById('user-email').textContent = user.email;
                 loadUserData();
             } else {
-                // User is logged out
                 document.getElementById('login-page').style.display = 'flex';
                 document.getElementById('register-page').style.display = 'none';
                 document.getElementById('app-container').style.display = 'none';
@@ -433,7 +1509,6 @@ const firebaseConfig = {
             showLoading();
             auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // User created successfully, now initialize their data
                     return initializeUserData(userCredential.user);
                 })
                 .then(() => {
@@ -469,8 +1544,14 @@ const firebaseConfig = {
                     technicians: defaultTechs,
                     statuses: defaultStatuses,
                     parts: [],
+                    workOrders: [],
+                    reminders: [],
                     createdAt: new Date().toISOString()
                 });
+                
+                technicians = defaultTechs;
+                statuses = defaultStatuses;
+                renderAll();
             } catch (error) {
                 console.error('Error initializing user data:', error);
                 throw error;
@@ -485,11 +1566,20 @@ const firebaseConfig = {
             try {
                 const doc = await db.collection('users').doc(currentUser.uid).get();
                 if (doc.exists) {
-                    console.log('User data loaded:', doc.data());
-                    document.getElementById('main-content').innerHTML = '<p>Welcome! Your CRM is ready.</p>';
-                } else {
-                    // This shouldn't happen, but just in case
-                    await initializeUserData(currentUser);
+                    const data = doc.data();
+                    technicians = data.technicians || [];
+                    statuses = data.statuses || [];
+                    parts = data.parts || [];
+                    
+                    // Load work orders subcollection
+                    const woSnapshot = await db.collection('users').doc(currentUser.uid).collection('workOrders').get();
+                    workOrders = woSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    
+                    // Load reminders subcollection
+                    const remSnapshot = await db.collection('users').doc(currentUser.uid).collection('reminders').get();
+                    reminders = remSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    
+                    renderAll();
                 }
                 hideLoading();
             } catch (error) {
@@ -500,7 +1590,1044 @@ const firebaseConfig = {
         }
 
         // ============================================
-        // UI HELPER FUNCTIONS
+        // RENDER FUNCTIONS
+        // ============================================
+        function renderAll() {
+            renderStats();
+            renderTechList();
+            renderStatusList();
+            updateTechDropdowns();
+            filterWorkOrders();
+            renderReminders();
+            updateFilters();
+            updatePartsStats();
+        }
+
+        function renderStats() {
+            const total = workOrders.length;
+            const active = workOrders.filter(wo => !wo.archived).length;
+            
+            document.getElementById('totalWO').textContent = total;
+            document.getElementById('activeWO').textContent = active;
+            document.getElementById('pendingReminders').textContent = reminders.filter(r => !r.completed).length;
+            document.getElementById('totalParts').textContent = parts.length;
+        }
+
+        function renderTechList() {
+            const techList = document.getElementById('techList');
+            techList.innerHTML = technicians.map(tech => `
+                <div class="tech-item">
+                    <div class="tech-info">
+                        <div class="tech-avatar">${tech.name.charAt(0)}</div>
+                        <div>
+                            <div class="tech-name">${tech.name}</div>
+                            <div style="font-size: 10px; color: #999;">${tech.email}</div>
+                        </div>
+                    </div>
+                    <div class="tech-actions">
+                        <button onclick="editTech('${tech.id}')">✏️</button>
+                        <button onclick="deleteTech('${tech.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStatusList() {
+            const statusList = document.getElementById('statusList');
+            statusList.innerHTML = statuses.map(status => `
+                <div class="tech-item">
+                    <div class="tech-info">
+                        <div style="width: 20px; height: 20px; background: ${status.color}; border-radius: 4px;"></div>
+                        <span class="tech-name">${status.name}</span>
+                    </div>
+                    <div class="tech-actions">
+                        <button onclick="editStatus('${status.id}')">✏️</button>
+                        <button onclick="deleteStatus('${status.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTechDropdowns() {
+            const manualTech = document.getElementById('manual-tech');
+            const techFilter = document.getElementById('techFilter');
+            
+            const techOptions = technicians
+                .filter(t => t.active)
+                .map(t => `<option value="${t.id}">${t.name}</option>`)
+                .join('');
+
+            manualTech.innerHTML = '<option value="">Select Technician</option>' + techOptions;
+        }
+
+        function updateFilters() {
+            const statusFilter = document.getElementById('statusFilter');
+            const techFilter = document.getElementById('techFilter');
+
+            statusFilter.innerHTML = '<option value="all">All Statuses</option>' + 
+                statuses.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+
+            techFilter.innerHTML = '<option value="all">All Techs</option>' + 
+                technicians.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        }
+
+        function updatePartsStats() {
+            const hotTubsCount = parts.filter(p => p.category === 'Hot Tubs').length;
+            const waterSystemsCount = parts.filter(p => p.category === 'Water Systems').length;
+            
+            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
+            document.getElementById('partsCat2').textContent = `Water Systems: ${waterSystemsCount}`;
+            document.getElementById('partsCount').textContent = `${parts.length} parts`;
+        }
+
+        function filterWorkOrders() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const techFilter = document.getElementById('techFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            let filtered = workOrders.filter(wo => {
+                if (currentView === 'active') return !wo.archived;
+                else return wo.archived;
+            });
+
+            filtered = filtered.filter(wo => {
+                if (statusFilter !== 'all' && wo.status !== statusFilter) return false;
+                if (techFilter !== 'all' && wo.techId !== techFilter) return false;
+                if (searchQuery) {
+                    return wo.woNumber?.toLowerCase().includes(searchQuery) ||
+                           wo.customerName?.toLowerCase().includes(searchQuery) ||
+                           wo.phone?.includes(searchQuery);
+                }
+                return true;
+            });
+
+            filtered.sort((a, b) => {
+                switch(sortFilter) {
+                    case 'date-desc': return new Date(b.date) - new Date(a.date);
+                    case 'date-asc': return new Date(a.date) - new Date(b.date);
+                    case 'wo-asc': return (a.woNumber || '').localeCompare(b.woNumber || '');
+                    case 'wo-desc': return (b.woNumber || '').localeCompare(a.woNumber || '');
+                    default: return 0;
+                }
+            });
+
+            renderWorkOrdersList(filtered);
+        }
+
+        function renderWorkOrdersList(orders) {
+            const tbody = document.getElementById('workordersList');
+            tbody.innerHTML = orders.map(wo => {
+                const tech = technicians.find(t => t.id === wo.techId);
+                const statusClass = `status-${wo.status?.replace(/\s+/g, '-')}`;
+                const partsCount = wo.pickedParts?.reduce((sum, p) => sum + p.quantity, 0) || 0;
+                
+                return `
+                    <tr onclick="selectWorkOrder('${wo.id}')" class="${wo.id === selectedWO ? 'selected' : ''} ${wo.archived ? 'archived-row' : ''}">
+                        <td><strong>${wo.woNumber || 'N/A'}</strong></td>
+                        <td>${wo.customerName || 'N/A'}</td>
+                        <td>${wo.phone || 'N/A'}</td>
+                        <td>${(wo.complaint || '').substring(0, 30)}${wo.complaint?.length > 30 ? '...' : ''}</td>
+                        <td>
+                            <span class="status-tag ${statusClass}">${wo.status || 'Open'}</span>
+                            ${wo.archived ? '<span class="archive-badge">Archived</span>' : ''}
+                        </td>
+                        <td>${tech ? tech.name : 'Unassigned'}</td>
+                        <td>${wo.date || 'N/A'}</td>
+                        <td>${partsCount > 0 ? `📦 ${partsCount}` : '-'}</td>
+                        <td>
+                            ${!wo.archived ? 
+                                `<button class="archive-btn" onclick="event.stopPropagation(); archiveWorkOrder('${wo.id}')">Archive</button>` : 
+                                `<button class="archive-btn archived" onclick="event.stopPropagation(); unarchiveWorkOrder('${wo.id}')">Unarchive</button>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:#999;">
+                    No ${currentView === 'active' ? 'active' : 'archived'} work orders found
+                </td></tr>`;
+            }
+        }
+
+        function renderReminders() {
+            const remindersList = document.getElementById('remindersList');
+            const now = new Date();
+            const upcoming = reminders.filter(r => !r.completed && new Date(r.time) > now).slice(0, 5);
+            
+            remindersList.innerHTML = upcoming.map(r => {
+                const wo = workOrders.find(w => w.id === r.woId);
+                return `
+                    <div class="reminder-item" onclick="completeReminder('${r.id}')">
+                        <div class="reminder-time">${new Date(r.time).toLocaleString()}</div>
+                        <div class="reminder-title">${r.title}</div>
+                        <div class="reminder-customer">${wo ? wo.customerName : 'General'}</div>
+                    </div>
+                `;
+            }).join('');
+
+            if (upcoming.length === 0) {
+                remindersList.innerHTML = '<div style="text-align:center; color:#999; padding:20px;">No upcoming reminders</div>';
+            }
+        }
+
+        // ============================================
+        // WORK ORDER FUNCTIONS
+        // ============================================
+        function switchView(view) {
+            currentView = view;
+            document.getElementById('viewActiveBtn').classList.toggle('active', view === 'active');
+            document.getElementById('viewArchiveBtn').classList.toggle('active', view === 'archive');
+            filterWorkOrders();
+        }
+
+        async function createManualWorkOrder() {
+            const woNumber = document.getElementById('manual-wo-number').value;
+            const customer = document.getElementById('manual-customer').value;
+            
+            if (!woNumber || !customer) {
+                alert('WO Number and Customer Name are required');
+                return;
+            }
+
+            if (workOrders.some(wo => wo.woNumber === woNumber)) {
+                alert('Work order number already exists!');
+                return;
+            }
+
+            const newWO = {
+                id: `wo-${Date.now()}-${Math.random()}`,
+                woNumber: woNumber,
+                customerName: customer,
+                phone: document.getElementById('manual-phone').value,
+                email: document.getElementById('manual-email').value,
+                location: document.getElementById('manual-location').value,
+                complaint: document.getElementById('manual-complaint').value,
+                status: document.getElementById('manual-status').value,
+                techId: document.getElementById('manual-tech').value || null,
+                date: new Date().toISOString().split('T')[0],
+                archived: false,
+                pickedParts: [],
+                history: [{
+                    time: new Date().toLocaleString(),
+                    note: 'Work order created manually'
+                }]
+            };
+
+            workOrders.push(newWO);
+            await saveWorkOrderToFirestore(newWO);
+            
+            document.getElementById('manual-wo-number').value = '';
+            document.getElementById('manual-customer').value = '';
+            document.getElementById('manual-phone').value = '';
+            document.getElementById('manual-email').value = '';
+            document.getElementById('manual-location').value = '';
+            document.getElementById('manual-complaint').value = '';
+            
+            renderAll();
+            alert('Work order created successfully!');
+        }
+
+        async function saveWorkOrderToFirestore(wo) {
+            if (!currentUser) return;
+            try {
+                await db.collection('users').doc(currentUser.uid).collection('workOrders').doc(wo.id).set(wo);
+            } catch (error) {
+                console.error('Error saving work order:', error);
+            }
+        }
+
+        async function archiveWorkOrder(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && confirm(`Archive work order ${wo.woNumber}?`)) {
+                wo.archived = true;
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: 'Work order archived'
+                });
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        async function unarchiveWorkOrder(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && confirm(`Unarchive work order ${wo.woNumber}?`)) {
+                wo.archived = false;
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: 'Work order unarchived'
+                });
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        function selectWorkOrder(id) {
+            selectedWO = id;
+            const wo = workOrders.find(w => w.id === id);
+            if (!wo) return;
+
+            const techs = technicians.filter(t => t.active);
+            const statusOptions = statuses.map(s => 
+                `<option value="${s.name}" ${wo.status === s.name ? 'selected' : ''}>${s.name}</option>`
+            ).join('');
+
+            const techOptions = `<option value="">Unassigned</option>` + 
+                techs.map(t => `<option value="${t.id}" ${wo.techId === t.id ? 'selected' : ''}>${t.name}</option>`).join('');
+
+            const historyItems = (wo.history || []).map(h => `
+                <div class="history-item">
+                    <div class="history-time">${h.time}</div>
+                    <div class="history-note">${h.note}</div>
+                </div>
+            `).join('');
+
+            const partsItems = (wo.pickedParts || []).map(p => `
+                <div style="padding:5px 0; border-bottom:1px solid #f0f0f0; font-size:12px;">
+                    <strong>${p.partNumber}</strong> - ${p.description}<br>
+                    Qty: ${p.quantity} | Status: ${p.status}
+                </div>
+            `).join('');
+
+            document.getElementById('detailContent').innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; font-weight: 600; color: ${wo.archived ? '#c53030' : '#48bb78'}">
+                        ${wo.archived ? '📦 Archived' : '✓ Active'}
+                    </div>
+                    ${!wo.archived ? 
+                        `<button class="archive-btn" onclick="archiveWorkOrder('${wo.id}')">Archive Work Order</button>` :
+                        `<button class="archive-btn archived" onclick="unarchiveWorkOrder('${wo.id}')">Unarchive Work Order</button>`
+                    }
+                </div>
+
+                <button class="pick-ticket-btn" onclick="openPickTicket('${wo.id}')">
+                    📋 Open Pick Ticket (${(wo.pickedParts || []).reduce((sum, p) => sum + p.quantity, 0)} parts)
+                </button>
+
+                <div class="detail-field">
+                    <label>Work Order #</label>
+                    <input type="text" value="${wo.woNumber || ''}" onchange="updateWO('${wo.id}', 'woNumber', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Customer Name</label>
+                    <input type="text" value="${wo.customerName || ''}" onchange="updateWO('${wo.id}', 'customerName', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Phone</label>
+                    <input type="text" value="${wo.phone || ''}" onchange="updateWO('${wo.id}', 'phone', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Email</label>
+                    <input type="email" value="${wo.email || ''}" onchange="updateWO('${wo.id}', 'email', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Location</label>
+                    <input type="text" value="${wo.location || ''}" onchange="updateWO('${wo.id}', 'location', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Status</label>
+                    <select onchange="updateWO('${wo.id}', 'status', this.value)" ${wo.archived ? 'disabled' : ''}>
+                        ${statusOptions}
+                    </select>
+                </div>
+                <div class="detail-field">
+                    <label>Assigned Tech</label>
+                    <select onchange="updateWO('${wo.id}', 'techId', this.value)" ${wo.archived ? 'disabled' : ''}>
+                        ${techOptions}
+                    </select>
+                </div>
+                <div class="detail-field">
+                    <label>Complaint / Issue</label>
+                    <textarea onchange="updateWO('${wo.id}', 'complaint', this.value)" ${wo.archived ? 'disabled' : ''}>${wo.complaint || ''}</textarea>
+                </div>
+
+                <div class="detail-field">
+                    <label>Picked Parts</label>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                        ${partsItems || '<div style="text-align:center; color:#999;">No parts picked yet</div>'}
+                    </div>
+                </div>
+
+                ${!wo.archived ? `
+                <div class="task-assignment">
+                    <h4>Assign Task</h4>
+                    <div class="task-form">
+                        <input type="text" id="taskDesc" placeholder="Task description">
+                        <select id="taskTech">
+                            ${techs.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                        </select>
+                        <button class="btn btn-primary" onclick="assignTask('${wo.id}')">Assign</button>
+                    </div>
+                </div>
+                ` : ''}
+
+                <div class="history-section">
+                    <div class="history-title">
+                        History
+                        ${!wo.archived ? `<button class="btn btn-primary" onclick="addNote('${wo.id}')">Add Note</button>` : ''}
+                    </div>
+                    <div class="history-list">
+                        ${historyItems || '<div style="text-align:center; color:#999; padding:20px;">No history yet</div>'}
+                    </div>
+                    ${!wo.archived ? `
+                    <div class="add-note">
+                        <input type="text" id="newNote" placeholder="Add quick note...">
+                        <button onclick="addQuickNote('${wo.id}')">Add</button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('detailPanel').classList.add('open');
+        }
+
+        function closeDetailPanel() {
+            document.getElementById('detailPanel').classList.remove('open');
+            selectedWO = null;
+        }
+
+        async function updateWO(id, field, value) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                const oldValue = wo[field];
+                wo[field] = value;
+                
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Updated ${field} from "${oldValue}" to "${value}"`
+                });
+
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        async function addQuickNote(id) {
+            const note = document.getElementById('newNote').value;
+            if (!note.trim()) return;
+
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: note
+                });
+
+                document.getElementById('newNote').value = '';
+                await saveWorkOrderToFirestore(wo);
+                selectWorkOrder(id);
+            }
+        }
+
+        async function addNote(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                const note = prompt('Enter note:');
+                if (note) {
+                    if (!wo.history) wo.history = [];
+                    wo.history.unshift({
+                        time: new Date().toLocaleString(),
+                        note: note
+                    });
+                    await saveWorkOrderToFirestore(wo);
+                    selectWorkOrder(id);
+                }
+            }
+        }
+
+        async function assignTask(woId) {
+            const desc = document.getElementById('taskDesc').value;
+            const techId = document.getElementById('taskTech').value;
+            if (!desc || !techId) return;
+
+            const wo = workOrders.find(w => w.id === woId);
+            const tech = technicians.find(t => t.id === techId);
+            
+            if (wo && tech && !wo.archived) {
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Task assigned to ${tech.name}: ${desc}`
+                });
+
+                alert(`Task assigned to ${tech.name} (${tech.email})\nTask: ${desc}`);
+
+                document.getElementById('taskDesc').value = '';
+                await saveWorkOrderToFirestore(wo);
+                selectWorkOrder(woId);
+            }
+        }
+
+        // ============================================
+        // PARTS FUNCTIONS
+        // ============================================
+        function previewPartsCSV(fileNum) {
+            const fileInput = document.getElementById(`partsFile${fileNum}`);
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            Papa.parse(file, {
+                header: true,
+                complete: (results) => {
+                    const category = fileNum === 1 ? 'Hot Tubs' : 'Water Systems';
+                    const processedParts = results.data.map((row, index) => ({
+                        id: `part-${Date.now()}-${index}-${Math.random()}`,
+                        partNumber: row.Num || row['Part #'] || row.number || `P-${index}`,
+                        description: row.Name || row.Description || row.Memo || row['Part Description'] || 'Unknown',
+                        category: category,
+                        quantity: parseInt(row.Qty) || 1,
+                        price: parseFloat(row.Amount) || 0,
+                        location: row.Location || 'Main',
+                        notes: row.Memo || ''
+                    })).filter(p => p.partNumber && p.description);
+
+                    partsPreviewData = [...partsPreviewData, ...processedParts];
+                    updatePartsStats();
+                }
+            });
+        }
+
+        async function importParts() {
+            if (partsPreviewData.length === 0) {
+                alert('Please select CSV files first');
+                return;
+            }
+
+            showLoading();
+
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
+            const newParts = partsPreviewData.filter(p => !existingPartNumbers.has(p.partNumber));
+            const duplicates = partsPreviewData.length - newParts.length;
+
+            parts = [...parts, ...newParts];
+            
+            // Save to Firestore
+            await db.collection('users').doc(currentUser.uid).update({
+                parts: parts
+            });
+
+            partsPreviewData = [];
+            document.getElementById('partsFile1').value = '';
+            document.getElementById('partsFile2').value = '';
+
+            hideLoading();
+            updatePartsStats();
+            alert(`Import complete!\nNew parts: ${newParts.length}\nDuplicates skipped: ${duplicates}`);
+        }
+
+        // ============================================
+        // PICK TICKET FUNCTIONS
+        // ============================================
+        function openPickTicket(woId) {
+            const wo = workOrders.find(w => w.id === woId);
+            if (!wo) return;
+
+            currentPickWO = wo;
+            pickedParts = wo.pickedParts || [];
+            document.getElementById('pickWOInfo').textContent = `${wo.woNumber} - ${wo.customerName}`;
+            document.getElementById('pickTicketModal').classList.add('active');
+            searchParts();
+            renderPickedParts();
+        }
+
+        function closePickTicket() {
+            document.getElementById('pickTicketModal').classList.remove('active');
+            currentPickWO = null;
+        }
+
+        function searchParts() {
+            const searchTerm = document.getElementById('partSearch').value.toLowerCase();
+            const category = document.getElementById('partCategory').value;
+            const sortBy = document.getElementById('partSort').value;
+
+            let filteredParts = parts;
+
+            if (category !== 'all') {
+                filteredParts = filteredParts.filter(p => p.category === category);
+            }
+
+            if (searchTerm) {
+                filteredParts = filteredParts.filter(p => 
+                    p.partNumber.toLowerCase().includes(searchTerm) ||
+                    p.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            filteredParts.sort((a, b) => {
+                if (sortBy === 'number') {
+                    return a.partNumber.localeCompare(b.partNumber);
+                } else {
+                    return a.description.localeCompare(b.description);
+                }
+            });
+
+            filteredParts = filteredParts.slice(0, 200);
+            renderPartsList(filteredParts);
+        }
+
+        function renderPartsList(partsToRender) {
+            const partsList = document.getElementById('partsList');
+            
+            if (partsToRender.length === 0) {
+                partsList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">No parts found</div>';
+                return;
+            }
+
+            partsList.innerHTML = partsToRender.map(part => `
+                <div class="part-item" onclick="addPartToPick('${part.id}')">
+                    <div class="part-number">${part.partNumber}</div>
+                    <div class="part-description">${part.description}</div>
+                    <div class="part-details">
+                        <span class="part-category">${part.category}</span>
+                        <span>Qty: ${part.quantity}</span>
+                        ${part.price ? `<span>$${part.price.toFixed(2)}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addPartToPick(partId) {
+            const part = parts.find(p => p.id === partId);
+            if (!part) return;
+
+            const existingPart = pickedParts.find(p => p.partId === partId);
+            
+            if (existingPart) {
+                existingPart.quantity += 1;
+            } else {
+                pickedParts.push({
+                    partId: part.id,
+                    partNumber: part.partNumber,
+                    description: part.description,
+                    category: part.category,
+                    quantity: 1,
+                    price: part.price,
+                    status: 'Pending',
+                    notes: ''
+                });
+            }
+
+            renderPickedParts();
+        }
+
+        function renderPickedParts() {
+            const pickedPartsList = document.getElementById('pickedPartsList');
+            const count = document.getElementById('pickedPartsCount');
+
+            count.textContent = pickedParts.reduce((sum, p) => sum + p.quantity, 0);
+
+            if (pickedParts.length === 0) {
+                pickedPartsList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">No parts picked yet</div>';
+                return;
+            }
+
+            pickedPartsList.innerHTML = pickedParts.map((part, index) => `
+                <div class="picked-part-item">
+                    <div class="picked-part-info">
+                        <div class="picked-part-number">${part.partNumber}</div>
+                        <div class="picked-part-description">${part.description}</div>
+                        <div style="font-size: 11px; color: #999;">${part.category}</div>
+                    </div>
+                    <div class="picked-part-quantity">
+                        <button onclick="updatePartQuantity(${index}, -1)">-</button>
+                        <input type="number" min="1" value="${part.quantity}" onchange="setPartQuantity(${index}, this.value)">
+                        <button onclick="updatePartQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="picked-part-actions">
+                        <button class="btn-status" onclick="updatePartStatus(${index})">${part.status}</button>
+                        <button class="btn-remove" onclick="removePart(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updatePartQuantity(index, change) {
+            const newQuantity = pickedParts[index].quantity + change;
+            if (newQuantity >= 1) {
+                pickedParts[index].quantity = newQuantity;
+                renderPickedParts();
+            }
+        }
+
+        function setPartQuantity(index, value) {
+            const qty = parseInt(value);
+            if (qty >= 1) {
+                pickedParts[index].quantity = qty;
+                renderPickedParts();
+            }
+        }
+
+        function updatePartStatus(index) {
+            const statuses = ['Pending', 'Picked', 'Installed', 'Backordered'];
+            const currentIndex = statuses.indexOf(pickedParts[index].status);
+            const nextIndex = (currentIndex + 1) % statuses.length;
+            pickedParts[index].status = statuses[nextIndex];
+            renderPickedParts();
+        }
+
+        function removePart(index) {
+            pickedParts.splice(index, 1);
+            renderPickedParts();
+        }
+
+        function clearPickedParts() {
+            if (confirm('Clear all picked parts?')) {
+                pickedParts = [];
+                renderPickedParts();
+            }
+        }
+
+        async function savePickedParts() {
+            if (!currentPickWO) return;
+
+            const wo = workOrders.find(w => w.id === currentPickWO.id);
+            if (wo) {
+                wo.pickedParts = pickedParts;
+                wo.history = wo.history || [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Updated pick ticket with ${pickedParts.reduce((sum, p) => sum + p.quantity, 0)} parts`
+                });
+
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                alert('Parts saved to work order!');
+            }
+        }
+
+        // ============================================
+        // TECHNICIAN FUNCTIONS
+        // ============================================
+        function showAddTechModal() {
+            document.getElementById('techName').value = '';
+            document.getElementById('techEmail').value = '';
+            document.getElementById('addTechModal').classList.add('active');
+        }
+
+        async function saveTech() {
+            const name = document.getElementById('techName').value;
+            const email = document.getElementById('techEmail').value;
+            if (!name || !email) {
+                alert('Please enter both name and email');
+                return;
+            }
+
+            technicians.push({
+                id: `tech-${Date.now()}`,
+                name: name,
+                email: email,
+                active: true
+            });
+
+            await db.collection('users').doc(currentUser.uid).update({
+                technicians: technicians
+            });
+
+            renderAll();
+            closeModal('addTechModal');
+        }
+
+        async function editTech(id) {
+            const tech = technicians.find(t => t.id === id);
+            if (tech) {
+                const newName = prompt('Edit technician name:', tech.name);
+                const newEmail = prompt('Edit technician email:', tech.email);
+                if (newName && newEmail) {
+                    tech.name = newName;
+                    tech.email = newEmail;
+                    await db.collection('users').doc(currentUser.uid).update({
+                        technicians: technicians
+                    });
+                    renderAll();
+                }
+            }
+        }
+
+        async function deleteTech(id) {
+            if (confirm('Are you sure you want to delete this technician?')) {
+                technicians = technicians.filter(t => t.id !== id);
+                await db.collection('users').doc(currentUser.uid).update({
+                    technicians: technicians
+                });
+                renderAll();
+            }
+        }
+
+        // ============================================
+        // STATUS FUNCTIONS
+        // ============================================
+        function showAddStatusModal() {
+            document.getElementById('statusName').value = '';
+            document.getElementById('addStatusModal').classList.add('active');
+        }
+
+        async function saveStatus() {
+            const name = document.getElementById('statusName').value;
+            const color = document.getElementById('statusColor').value;
+            if (!name) {
+                alert('Please enter a status name');
+                return;
+            }
+
+            statuses.push({
+                id: `status-${Date.now()}`,
+                name: name,
+                color: color
+            });
+
+            await db.collection('users').doc(currentUser.uid).update({
+                statuses: statuses
+            });
+
+            renderAll();
+            closeModal('addStatusModal');
+        }
+
+        async function editStatus(id) {
+            const status = statuses.find(s => s.id === id);
+            if (status) {
+                const newName = prompt('Edit status name:', status.name);
+                if (newName) {
+                    status.name = newName;
+                    await db.collection('users').doc(currentUser.uid).update({
+                        statuses: statuses
+                    });
+                    renderAll();
+                }
+            }
+        }
+
+        async function deleteStatus(id) {
+            if (confirm('Are you sure you want to delete this status?')) {
+                statuses = statuses.filter(s => s.id !== id);
+                await db.collection('users').doc(currentUser.uid).update({
+                    statuses: statuses
+                });
+                renderAll();
+            }
+        }
+
+        // ============================================
+        // REMINDER FUNCTIONS
+        // ============================================
+        function showAddReminderModal() {
+            const woSelect = document.getElementById('reminderWO');
+            woSelect.innerHTML = '<option value="">Select Work Order</option>' + 
+                workOrders.filter(wo => !wo.archived).map(wo => `<option value="${wo.id}">${wo.woNumber} - ${wo.customerName}</option>`).join('');
+            document.getElementById('reminderTitle').value = '';
+            document.getElementById('reminderTime').value = new Date().toISOString().slice(0,16);
+            document.getElementById('addReminderModal').classList.add('active');
+        }
+
+        async function saveReminder() {
+            const title = document.getElementById('reminderTitle').value;
+            const woId = document.getElementById('reminderWO').value;
+            const time = document.getElementById('reminderTime').value;
+
+            if (!title || !time) {
+                alert('Please enter title and time');
+                return;
+            }
+
+            const newReminder = {
+                id: `rem-${Date.now()}`,
+                title: title,
+                woId: woId || null,
+                time: time,
+                completed: false
+            };
+
+            reminders.push(newReminder);
+            
+            await db.collection('users').doc(currentUser.uid).collection('reminders').doc(newReminder.id).set(newReminder);
+            
+            renderAll();
+            closeModal('addReminderModal');
+
+            const reminderTime = new Date(time).getTime();
+            const now = Date.now();
+            if (reminderTime - now <= 300000 && reminderTime > now) {
+                setTimeout(() => {
+                    alert(`🔔 Reminder: ${title}`);
+                }, reminderTime - now);
+            }
+        }
+
+        function showAllReminders() {
+            const list = document.getElementById('allRemindersList');
+            const sorted = reminders.sort((a,b) => new Date(a.time) - new Date(b.time));
+            
+            list.innerHTML = sorted.map(r => {
+                const wo = workOrders.find(w => w.id === r.woId);
+                return `
+                    <div class="reminder-item" style="${r.completed ? 'opacity:0.5;' : ''}" onclick="completeReminder('${r.id}')">
+                        <div class="reminder-time">${new Date(r.time).toLocaleString()}</div>
+                        <div class="reminder-title">${r.title}</div>
+                        <div class="reminder-customer">${wo ? wo.customerName + (wo.archived ? ' (Archived)' : '') : 'General'}</div>
+                        ${r.completed ? '<div style="color:#48bb78;">✓ Completed</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            if (sorted.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#999; padding:20px;">No reminders</div>';
+            }
+
+            document.getElementById('allRemindersModal').classList.add('active');
+        }
+
+        async function completeReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (reminder) {
+                reminder.completed = !reminder.completed;
+                await db.collection('users').doc(currentUser.uid).collection('reminders').doc(reminder.id).set(reminder);
+                renderAll();
+                showAllReminders();
+            }
+        }
+
+        // ============================================
+        // BACKUP FUNCTIONS
+        // ============================================
+        async function createBackup() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                workOrders: workOrders,
+                technicians: technicians,
+                statuses: statuses,
+                reminders: reminders,
+                parts: parts,
+                userEmail: currentUser?.email
+            };
+
+            const backupName = `backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
+            
+            try {
+                const backupRef = storage.ref().child(`backups/${currentUser.uid}/${backupName}`);
+                await backupRef.putString(JSON.stringify(backup, null, 2));
+                alert('Backup created successfully!');
+            } catch (error) {
+                alert('Error creating backup: ' + error.message);
+            }
+        }
+
+        function downloadBackup() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                workOrders: workOrders,
+                technicians: technicians,
+                statuses: statuses,
+                reminders: reminders,
+                parts: parts,
+                userEmail: currentUser?.email
+            };
+
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `workorder-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function showBackupModal() {
+            document.getElementById('backupModal').classList.add('active');
+        }
+
+        function previewBackup() {
+            const file = document.getElementById('backupFile').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    const previewDiv = document.getElementById('backupPreview');
+                    previewDiv.style.display = 'block';
+                    previewDiv.innerHTML = `
+                        <strong>Backup Info:</strong><br>
+                        Date: ${new Date(backup.timestamp).toLocaleString()}<br>
+                        Work Orders: ${backup.workOrders.length}<br>
+                        Parts: ${backup.parts.length}<br>
+                        Technicians: ${backup.technicians.length}<br>
+                        Reminders: ${backup.reminders.length}
+                    `;
+                } catch (error) {
+                    alert('Invalid backup file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function restoreFromBackup() {
+            const file = document.getElementById('backupFile').files[0];
+            if (!file) {
+                alert('Please select a backup file');
+                return;
+            }
+
+            if (!confirm('This will replace all current data. Are you sure?')) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    showLoading();
+                    const backup = JSON.parse(e.target.result);
+                    
+                    workOrders = backup.workOrders || [];
+                    technicians = backup.technicians || [];
+                    statuses = backup.statuses || [];
+                    reminders = backup.reminders || [];
+                    parts = backup.parts || [];
+
+                    // Save to Firestore
+                    const batch = db.batch();
+                    
+                    for (const wo of workOrders) {
+                        const woRef = db.collection('users').doc(currentUser.uid).collection('workOrders').doc(wo.id);
+                        batch.set(woRef, wo);
+                    }
+                    
+                    for (const rem of reminders) {
+                        const remRef = db.collection('users').doc(currentUser.uid).collection('reminders').doc(rem.id);
+                        batch.set(remRef, rem);
+                    }
+                    
+                    const userRef = db.collection('users').doc(currentUser.uid);
+                    batch.update(userRef, {
+                        technicians: technicians,
+                        statuses: statuses,
+                        parts: parts
+                    });
+                    
+                    await batch.commit();
+                    
+                    hideLoading();
+                    closeModal('backupModal');
+                    renderAll();
+                    alert('Backup restored successfully!');
+                } catch (error) {
+                    hideLoading();
+                    alert('Error restoring backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
         // ============================================
         function showRegister() {
             document.getElementById('login-page').style.display = 'none';
@@ -524,22 +2651,23 @@ const firebaseConfig = {
             document.getElementById('loadingSpinner').style.display = 'none';
         }
 
-        // ============================================
-        // PLACEHOLDER FUNCTIONS (to prevent errors)
-        // ============================================
-        function switchView() {}
-        function filterWorkOrders() {}
-        function previewPartsCSV() {}
-        function importParts() {}
-        function createManualWorkOrder() {}
-        function showBackupModal() {}
-        function showAddTechModal() {}
-        function showAddStatusModal() {}
-        function showAddReminderModal() {}
-        function showAllReminders() {}
-        function closePickTicket() {}
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Check for upcoming reminders every minute
+        setInterval(() => {
+            const now = Date.now();
+            reminders.forEach(r => {
+                if (!r.completed) {
+                    const reminderTime = new Date(r.time).getTime();
+                    if (reminderTime - now <= 60000 && reminderTime - now > 0) {
+                        const wo = workOrders.find(w => w.id === r.woId);
+                        alert(`🔔 Reminder: ${r.title}\nCustomer: ${wo ? wo.customerName : 'General'}`);
+                    }
+                }
+            });
+        }, 60000);
     </script>
 </body>
 </html>
-
-
