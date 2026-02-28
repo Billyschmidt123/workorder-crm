@@ -2157,7 +2157,7 @@
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS (FIXED)
+        // CSV IMPORT FUNCTIONS - PARTS (FIXED FOR YOUR CSV FORMAT)
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
@@ -2170,64 +2170,73 @@
                 complete: (results) => {
                     const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
                     
-                    // Process ALL parts, don't filter anything out
-                    const processedParts = results.data.map((row, index) => {
-                        // Try multiple column name variations to find part number
-                        let partNum = row['Num'] || row['Number'] || row['Part #'] || row['PartNumber'] || row['Part_Number'] || 
-                                     row['Part No'] || row['PartNo'] || row['Part'] || `P-${Date.now()}-${index}`;
-                        
-                        // Try multiple column name variations to find description
-                        let description = row['Name'] || row['Description'] || row['Memo'] || row['Part Description'] || 
-                                         row['Desc'] || row['Item'] || 'Unknown';
-                        
-                        // Try to get quantity
-                        let qty = 1;
-                        if (row['Qty'] && !isNaN(parseInt(row['Qty']))) {
-                            qty = parseInt(row['Qty']);
-                        } else if (row['Quantity'] && !isNaN(parseInt(row['Quantity']))) {
-                            qty = parseInt(row['Quantity']);
-                        }
-                        
-                        // Try to get price
-                        let price = 0;
-                        if (row['Price'] && !isNaN(parseFloat(row['Price']))) {
-                            price = parseFloat(row['Price']);
-                        } else if (row['Cost'] && !isNaN(parseFloat(row['Cost']))) {
-                            price = parseFloat(row['Cost']);
-                        } else if (row['Amount'] && !isNaN(parseFloat(row['Amount']))) {
-                            price = parseFloat(row['Amount']);
-                        } else if (row['Debit'] && !isNaN(parseFloat(row['Debit']))) {
-                            price = parseFloat(row['Debit']);
-                        } else if (row['Credit'] && !isNaN(parseFloat(row['Credit']))) {
-                            price = parseFloat(row['Credit']);
-                        }
-                        
-                        return {
-                            id: `part-${Date.now()}-${index}-${Math.random()}`,
-                            partNumber: partNum.toString().trim(),
-                            description: description.toString().trim(),
-                            category: category,
-                            quantity: qty,
-                            price: price,
-                            location: 'Main',
-                            notes: row['Notes'] || row['Memo'] || ''
-                        };
-                    }).filter(p => p.partNumber && p.partNumber !== '' && p.partNumber !== 'null'); // Only filter out truly empty part numbers
+                    console.log("CSV Headers:", results.meta.fields); // Debug: see what headers are in the CSV
+                    
+                    // Process ALL parts based on your actual CSV structure
+                    const processedParts = results.data
+                        .filter(row => {
+                            // Filter out empty rows
+                            return row && Object.values(row).some(val => val && val.toString().trim() !== '');
+                        })
+                        .map((row, index) => {
+                            // For your hot tubs CSV, the important fields are:
+                            // - Num (the order number - we'll use as part number)
+                            // - Name (customer name - we'll use as part description)
+                            // - Memo (additional info - we'll use as notes)
+                            
+                            let partNum = '';
+                            let description = '';
+                            
+                            // Try to get part number from Num column
+                            if (row['Num']) {
+                                partNum = `PART-${row['Num']}`;
+                            } else {
+                                partNum = `P-${Date.now()}-${index}`;
+                            }
+                            
+                            // Try to get description from Name column
+                            if (row['Name']) {
+                                description = row['Name'];
+                            } else if (row['Memo']) {
+                                description = row['Memo'];
+                            } else {
+                                description = `Part ${index + 1}`;
+                            }
+                            
+                            // Try to get quantity (if any)
+                            let qty = 1;
+                            if (row['Qty'] && !isNaN(parseInt(row['Qty']))) {
+                                qty = parseInt(row['Qty']);
+                            }
+                            
+                            // Try to get price (if any)
+                            let price = 0;
+                            if (row['Debit'] && !isNaN(parseFloat(row['Debit']))) {
+                                price = parseFloat(row['Debit']);
+                            } else if (row['Credit'] && !isNaN(parseFloat(row['Credit']))) {
+                                price = parseFloat(row['Credit']);
+                            }
+                            
+                            return {
+                                id: `part-${Date.now()}-${index}-${Math.random()}`,
+                                partNumber: partNum.toString().trim(),
+                                description: description.toString().trim(),
+                                category: category,
+                                quantity: qty,
+                                price: price,
+                                location: 'Main',
+                                notes: row['Memo'] || ''
+                            };
+                        });
 
                     partsPreviewData[type] = processedParts;
                     
-                    // Update stats immediately
-                    updatePartsStatsPreview(type, processedParts.length);
+                    console.log(`Processed ${processedParts.length} parts for ${type}`);
                     
                     displayPartsPreview();
                     checkPartsDuplicates();
                 }
             });
-        }
-
-        function updatePartsStatsPreview(type, count) {
-            // This just updates the preview counts
-            console.log(`Preview loaded ${count} parts for ${type}`);
         }
 
         function displayPartsPreview() {
