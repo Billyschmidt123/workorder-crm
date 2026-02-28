@@ -12,6 +12,7 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
+        /* Copy all your existing CSS here - it looks fine */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Login Page */
         #login-page {
             display: flex;
             justify-content: center;
@@ -87,7 +87,6 @@
             display: none;
         }
 
-        /* Header */
         .header {
             background: white;
             border-radius: 15px;
@@ -156,7 +155,6 @@
             color: #666;
         }
 
-        /* View Toggle */
         .view-toggle {
             display: flex;
             gap: 10px;
@@ -183,14 +181,12 @@
             color: #333;
         }
 
-        /* Main Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 350px 1fr 300px;
             gap: 20px;
         }
 
-        /* Sidebar */
         .sidebar {
             background: white;
             border-radius: 15px;
@@ -213,702 +209,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        /* Manual Work Order Form */
-        .manual-wo-form {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .manual-wo-form input,
-        .manual-wo-form select,
-        .manual-wo-form textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .manual-wo-form textarea {
-            min-height: 60px;
-            resize: vertical;
-        }
-
-        /* Parts Import Section */
-        .parts-import {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .parts-import h4 {
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 13px;
-        }
-
-        .parts-import input[type="file"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-            font-size: 12px;
-        }
-
-        .parts-stats {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .parts-stat {
-            background: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .tech-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .tech-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .tech-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tech-avatar {
-            width: 30px;
-            height: 30px;
-            background: #667eea;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .tech-name {
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .tech-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #999;
-            padding: 2px 5px;
-        }
-
-        .tech-actions button:hover {
-            color: #667eea;
-        }
-
-        /* Status Tags */
-        .status-tag {
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .status-Open { background: #e3f2fd; color: #1976d2; }
-        .status-In-Progress { background: #fff3e0; color: #f57c00; }
-        .status-Completed { background: #e8f5e8; color: #388e3c; }
-        .status-On-Hold { background: #ffebee; color: #d32f2f; }
-        .status-Waiting-Parts { background: #f3e5f5; color: #7b1fa2; }
-        .status-Scheduled { background: #e0f2f1; color: #00796b; }
-
-        /* Archive badge */
-        .archive-badge {
-            background: #cbd5e0;
-            color: #4a5568;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            margin-left: 5px;
-        }
-
-        .archived-row {
-            opacity: 0.7;
-            background: #f7fafc;
-        }
-
-        /* Reminders Panel */
-        .reminders-panel {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .reminder-item {
-            background: #fff9c4;
-            border-left: 4px solid #fbc02d;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .reminder-item:hover {
-            transform: translateX(-5px);
-        }
-
-        .reminder-time {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .reminder-title {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
-
-        .reminder-customer {
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Main Content */
-        .main-content {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        /* Filters */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .filter-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .filter-group select, .filter-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 12px;
-            min-width: 150px;
-        }
-
-        .search-box {
-            flex: 1;
-            position: relative;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 8px 12px 8px 35px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 12px;
-        }
-
-        .search-box:before {
-            content: "🔍";
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 12px;
-            color: #999;
-        }
-
-        /* Work Orders Table */
-        .workorders-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .workorders-table th {
-            text-align: left;
-            padding: 12px;
-            background: #f8f9fa;
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 2px solid #ddd;
-        }
-
-        .workorders-table td {
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 13px;
-        }
-
-        .workorders-table tr {
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .workorders-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .workorders-table tr.selected {
-            background: #e3f2fd;
-        }
-
-        /* Pick Ticket Modal */
-        .pick-ticket-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .pick-ticket-modal.active {
-            display: flex;
-        }
-
-        .pick-ticket-container {
-            background: white;
-            border-radius: 15px;
-            width: 1400px;
-            max-width: 95%;
-            height: 90vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .pick-ticket-header {
-            padding: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .pick-ticket-header h2 {
-            font-size: 20px;
-            color: #333;
-        }
-
-        .pick-ticket-content {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            overflow: hidden;
-        }
-
-        /* Parts Search Panel */
-        .parts-search-panel {
-            border-right: 2px solid #f0f0f0;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .parts-search-header {
-            margin-bottom: 20px;
-        }
-
-        .parts-search-header input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .parts-filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .parts-filters select {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .parts-list {
-            height: calc(100% - 120px);
-            overflow-y: auto;
-        }
-
-        .part-item {
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .part-item:hover {
-            background: #ebf4ff;
-            border-color: #667eea;
-        }
-
-        .part-number {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .part-description {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .part-details {
-            display: flex;
-            gap: 10px;
-            font-size: 11px;
-            color: #999;
-        }
-
-        .part-category {
-            background: #e2e8f0;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        /* Picked Parts Panel */
-        .picked-parts-panel {
-            padding: 20px;
-            overflow-y: auto;
-            background: #f8fafc;
-        }
-
-        .picked-parts-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .picked-parts-header h3 {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .picked-parts-count {
-            background: #667eea;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-
-        .picked-parts-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .picked-part-item {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .picked-part-info {
-            grid-column: 1;
-        }
-
-        .picked-part-number {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 2px;
-        }
-
-        .picked-part-description {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .picked-part-quantity {
-            grid-column: 2;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .picked-part-quantity input {
-            width: 60px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .picked-part-actions {
-            grid-column: 3;
-            display: flex;
-            gap: 5px;
-        }
-
-        .picked-part-actions button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .btn-remove {
-            background: #fed7d7;
-            color: #c53030;
-        }
-
-        .btn-remove:hover {
-            background: #feb2b2;
-        }
-
-        .btn-status {
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-
-        .btn-status:hover {
-            background: #cbd5e0;
-        }
-
-        .pick-ticket-footer {
-            padding: 20px;
-            border-top: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Detail Panel */
-        .detail-panel {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 500px;
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 30px rgba(0,0,0,0.1);
-            padding: 25px;
-            overflow-y: auto;
-            transform: translateX(100%);
-            transition: transform 0.3s;
-            z-index: 1000;
-        }
-
-        .detail-panel.open {
-            transform: translateX(0);
-        }
-
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .detail-header h2 {
-            font-size: 18px;
-            color: #333;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .pick-ticket-btn {
-            background: #48bb78;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .pick-ticket-btn:hover {
-            background: #38a169;
-        }
-
-        .detail-field {
-            margin-bottom: 20px;
-        }
-
-        .detail-field label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
-        .detail-field input, .detail-field select, .detail-field textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 13px;
-        }
-
-        .detail-field textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .archive-btn {
-            background: #cbd5e0;
-            color: #4a5568;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            margin-left: 10px;
-        }
-
-        .archive-btn:hover {
-            background: #a0aec0;
-        }
-
-        .archive-btn.archived {
-            background: #48bb78;
-            color: white;
-        }
-
-        .history-section {
-            margin-top: 30px;
-        }
-
-        .history-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #f0f0f0;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .history-item {
-            padding: 10px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 12px;
-        }
-
-        .history-item:last-child {
-            border-bottom: none;
-        }
-
-        .history-time {
-            color: #667eea;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .history-note {
-            color: #666;
-        }
-
-        .add-note {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .add-note input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 13px;
-        }
-
-        .add-note button {
-            padding: 10px 20px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .add-note button:hover {
-            background: #5a67d8;
         }
 
         .btn {
@@ -948,15 +248,6 @@
             background: #e53e3e;
         }
 
-        .btn-warning {
-            background: #ed8936;
-            color: white;
-        }
-
-        .btn-warning:hover {
-            background: #dd6b20;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -984,51 +275,6 @@
             overflow-y: auto;
         }
 
-        .modal-content h3 {
-            margin-bottom: 20px;
-        }
-
-        .modal-content input, .modal-content select, .modal-content textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .task-assignment {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .task-assignment h4 {
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-
-        .task-form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .task-form input, .task-form select {
-            flex: 1;
-            min-width: 150px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
         .spinner {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #667eea;
@@ -1042,16 +288,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 1200px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar, .reminders-panel {
-                display: none;
-            }
         }
     </style>
 </head>
@@ -1082,183 +318,223 @@
 
     <!-- Main App Container -->
     <div class="app-container" id="app-container">
-        <!-- Header -->
         <div class="header">
             <div>
-                <h1>Work Order CRM System
-                    <span>Complete Work Order Management</span>
-                </h1>
+                <h1>Work Order CRM System</h1>
             </div>
             <div class="user-info">
                 <span class="user-email" id="user-email"></span>
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="number" id="totalWO">0</div>
-                    <div class="label">Work Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="totalParts">0</div>
-                    <div class="label">Parts</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="activeWO">0</div>
-                    <div class="label">Active</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="pendingReminders">0</div>
-                    <div class="label">Reminders</div>
-                </div>
-            </div>
         </div>
-
-        <!-- View Toggle -->
-        <div class="view-toggle">
-            <button class="view-btn active" id="viewActiveBtn" onclick="switchView('active')">Active Work Orders</button>
-            <button class="view-btn" id="viewArchiveBtn" onclick="switchView('archive')">Archive</button>
-        </div>
-
-        <!-- Main Layout -->
-        <div class="main-layout">
-            <!-- Left Sidebar -->
-            <div class="sidebar">
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        Parts Inventory
-                        <span class="parts-stat" id="partsCount">0 parts</span>
-                    </div>
-                    <div class="parts-import">
-                        <h4>Import Parts from CSV</h4>
-                        <input type="file" id="partsFile1" accept=".csv" onchange="previewPartsCSV(1)">
-                        <input type="file" id="partsFile2" accept=".csv" onchange="previewPartsCSV(2)">
-                        <div class="parts-stats">
-                            <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
-                            <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
-                        </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        Manual Work Order
-                    </div>
-                    <div class="manual-wo-form">
-                        <input type="text" id="manual-wo-number" placeholder="WO Number">
-                        <input type="text" id="manual-customer" placeholder="Customer Name">
-                        <input type="text" id="manual-phone" placeholder="Phone">
-                        <input type="email" id="manual-email" placeholder="Email">
-                        <input type="text" id="manual-location" placeholder="Location">
-                        <textarea id="manual-complaint" placeholder="Complaint/Issue"></textarea>
-                        <select id="manual-status">
-                            <option value="Open">Open</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="On Hold">On Hold</option>
-                            <option value="Waiting Parts">Waiting Parts</option>
-                            <option value="Scheduled">Scheduled</option>
-                        </select>
-                        <select id="manual-tech">
-                            <option value="">Select Technician</option>
-                        </select>
-                        <button class="btn btn-success" style="width:100%;" onclick="createManualWorkOrder()">Create Work Order</button>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        Backup & Restore
-                        <button class="btn btn-primary" onclick="showBackupModal()">Manage</button>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        Technicians
-                        <button class="btn btn-primary" onclick="showAddTechModal()">+ Add</button>
-                    </div>
-                    <div class="tech-list" id="techList"></div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        Statuses
-                        <button class="btn btn-primary" onclick="showAddStatusModal()">+ Add</button>
-                    </div>
-                    <div class="tech-list" id="statusList"></div>
-                </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Archive Notice -->
-                <div id="archiveNotice" style="display: none; background: #fed7d7; color: #c53030; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;"></div>
-
-                <!-- Filters -->
-                <div class="filters">
-                    <div class="filter-group">
-                        <label>Status:</label>
-                        <select id="statusFilter" onchange="filterWorkOrders()">
-                            <option value="all">All Statuses</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Tech:</label>
-                        <select id="techFilter" onchange="filterWorkOrders()">
-                            <option value="all">All Techs</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Sort:</label>
-                        <select id="sortFilter" onchange="filterWorkOrders()">
-                            <option value="date-desc">Newest First</option>
-                            <option value="date-asc">Oldest First</option>
-                            <option value="wo-asc">WO # Asc</option>
-                            <option value="wo-desc">WO # Desc</option>
-                        </select>
-                    </div>
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Search WO#, customer, phone..." onkeyup="filterWorkOrders()">
-                    </div>
-                </div>
-
-                <!-- Work Orders Table -->
-                <table class="workorders-table">
-                    <thead>
-                        <tr>
-                            <th>WO #</th>
-                            <th>Customer</th>
-                            <th>Phone</th>
-                            <th>Complaint</th>
-                            <th>Status</th>
-                            <th>Tech</th>
-                            <th>Date</th>
-                            <th>Parts</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="workordersList"></tbody>
-                </table>
-            </div>
-
-            <!-- Right Panel -->
-            <div class="reminders-panel">
-                <div class="sidebar-title">
-                    Reminders
-                    <button class="btn btn-primary" onclick="showAddReminderModal()">+ Add</button>
-                </div>
-                <div id="remindersList"></div>
-                <a href="#" onclick="showAllReminders()" style="display:block; text-align:center; margin-top:15px; color:#667eea; text-decoration:none;">
-                    View All Reminders →
-                </a>
-            </div>
+        <div id="main-content">
+            <p>Loading...</p>
         </div>
     </div>
 
-    <!-- Pick Ticket Modal -->
-    <div class="pick-ticket-modal" id="pickTicketModal">
-        <div class="pick-ticket-container">
-            <div class="pick-ticket-header">
-                <h2>Pick Ticket - <span id="pickWOInfo">Work Order</span></h2>
-                <button class="close-btn" onclick="closePickTicket()">&times
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000;">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION - REPLACE WITH YOURS!
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIZaSyDPixmCwxOMkBpBFh34GgZr-qBK3TCvaLg",
+            authDomain: "workordercrm.firebaseapp.com",
+            projectId: "workordercrm",
+            storageBucket: "workordercrm.appspot.com",
+            messagingSenderId: "84507857386",
+            appId: "1:84507857386:web:99ba6ab325669db88f6293"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        let currentUser = null;
+
+        // ============================================
+        // AUTH STATE OBSERVER
+        // ============================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is logged in
+                currentUser = user;
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                document.getElementById('user-email').textContent = user.email;
+                loadUserData();
+            } else {
+                // User is logged out
+                document.getElementById('login-page').style.display = 'flex';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('app-container').style.display = 'none';
+            }
+        });
+
+        // ============================================
+        // LOGIN FUNCTION
+        // ============================================
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
+            showLoading();
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    hideLoading();
+                })
+                .catch((error) => {
+                    hideLoading();
+                    alert('Login failed: ' + error.message);
+                });
+        }
+
+        // ============================================
+        // REGISTER FUNCTION
+        // ============================================
+        function register() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+
+            if (!email || !password || !confirm) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (password !== confirm) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            showLoading();
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User created successfully, now initialize their data
+                    return initializeUserData(userCredential.user);
+                })
+                .then(() => {
+                    hideLoading();
+                })
+                .catch((error) => {
+                    hideLoading();
+                    alert('Registration failed: ' + error.message);
+                });
+        }
+
+        // ============================================
+        // INITIALIZE USER DATA
+        // ============================================
+        async function initializeUserData(user) {
+            const defaultTechs = [
+                { id: `tech-${Date.now()}-1`, name: 'John Smith', email: 'john@example.com', active: true },
+                { id: `tech-${Date.now()}-2`, name: 'Sarah Johnson', email: 'sarah@example.com', active: true },
+                { id: `tech-${Date.now()}-3`, name: 'Mike Wilson', email: 'mike@example.com', active: true }
+            ];
+
+            const defaultStatuses = [
+                { id: '1', name: 'Open', color: '#e3f2fd' },
+                { id: '2', name: 'In Progress', color: '#fff3e0' },
+                { id: '3', name: 'Completed', color: '#e8f5e8' },
+                { id: '4', name: 'On Hold', color: '#ffebee' },
+                { id: '5', name: 'Waiting Parts', color: '#f3e5f5' },
+                { id: '6', name: 'Scheduled', color: '#e0f2f1' }
+            ];
+
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    technicians: defaultTechs,
+                    statuses: defaultStatuses,
+                    parts: [],
+                    createdAt: new Date().toISOString()
+                });
+            } catch (error) {
+                console.error('Error initializing user data:', error);
+                throw error;
+            }
+        }
+
+        // ============================================
+        // LOAD USER DATA
+        // ============================================
+        async function loadUserData() {
+            showLoading();
+            try {
+                const doc = await db.collection('users').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    console.log('User data loaded:', doc.data());
+                    document.getElementById('main-content').innerHTML = '<p>Welcome! Your CRM is ready.</p>';
+                } else {
+                    // This shouldn't happen, but just in case
+                    await initializeUserData(currentUser);
+                }
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                console.error('Error loading user data:', error);
+                alert('Error loading data: ' + error.message);
+            }
+        }
+
+        // ============================================
+        // UI HELPER FUNCTIONS
+        // ============================================
+        function showRegister() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('register-page').style.display = 'flex';
+        }
+
+        function showLogin() {
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('register-page').style.display = 'none';
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        function showLoading() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        // ============================================
+        // PLACEHOLDER FUNCTIONS (to prevent errors)
+        // ============================================
+        function switchView() {}
+        function filterWorkOrders() {}
+        function previewPartsCSV() {}
+        function importParts() {}
+        function createManualWorkOrder() {}
+        function showBackupModal() {}
+        function showAddTechModal() {}
+        function showAddStatusModal() {}
+        function showAddReminderModal() {}
+        function showAllReminders() {}
+        function closePickTicket() {}
+    </script>
+</body>
+</html>
