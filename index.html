@@ -1448,15 +1448,25 @@
     </div>
 
     <script>
-        // Firebase Configuration (Replace with your own!)
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+     <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPixmCwxOMkBPBFh34GgZr-qBK3TCvaLg",
+    authDomain: "workordercrm.firebaseapp.com",
+    projectId: "workordercrm",
+    storageBucket: "workordercrm.firebasestorage.app",
+    messagingSenderId: "84507857386",
+    appId: "1:84507857386:web:99ba6ab325669db88f6293"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -2820,4 +2830,5 @@
         }, 60000);
     </script>
 </body>
+
 </html>
