@@ -12,6 +12,7 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
+        /* All existing CSS remains exactly the same */
         * {
             margin: 0;
             padding: 0;
@@ -2156,7 +2157,7 @@
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS
+        // CSV IMPORT FUNCTIONS - PARTS (FIXED)
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
@@ -2169,29 +2170,64 @@
                 complete: (results) => {
                     const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
                     
+                    // Process ALL parts, don't filter anything out
                     const processedParts = results.data.map((row, index) => {
-                        const partNum = row['Num'] || row['Number'] || row['Part #'] || `P-${Date.now()}-${index}`;
-                        const description = row['Name'] || row['Description'] || row['Memo'] || 'Unknown';
-                        const qty = parseInt(row['Qty']) || 1;
-                        const price = parseFloat(row['Debit'] || row['Credit'] || row['Amount']) || 0;
+                        // Try multiple column name variations to find part number
+                        let partNum = row['Num'] || row['Number'] || row['Part #'] || row['PartNumber'] || row['Part_Number'] || 
+                                     row['Part No'] || row['PartNo'] || row['Part'] || `P-${Date.now()}-${index}`;
+                        
+                        // Try multiple column name variations to find description
+                        let description = row['Name'] || row['Description'] || row['Memo'] || row['Part Description'] || 
+                                         row['Desc'] || row['Item'] || 'Unknown';
+                        
+                        // Try to get quantity
+                        let qty = 1;
+                        if (row['Qty'] && !isNaN(parseInt(row['Qty']))) {
+                            qty = parseInt(row['Qty']);
+                        } else if (row['Quantity'] && !isNaN(parseInt(row['Quantity']))) {
+                            qty = parseInt(row['Quantity']);
+                        }
+                        
+                        // Try to get price
+                        let price = 0;
+                        if (row['Price'] && !isNaN(parseFloat(row['Price']))) {
+                            price = parseFloat(row['Price']);
+                        } else if (row['Cost'] && !isNaN(parseFloat(row['Cost']))) {
+                            price = parseFloat(row['Cost']);
+                        } else if (row['Amount'] && !isNaN(parseFloat(row['Amount']))) {
+                            price = parseFloat(row['Amount']);
+                        } else if (row['Debit'] && !isNaN(parseFloat(row['Debit']))) {
+                            price = parseFloat(row['Debit']);
+                        } else if (row['Credit'] && !isNaN(parseFloat(row['Credit']))) {
+                            price = parseFloat(row['Credit']);
+                        }
                         
                         return {
                             id: `part-${Date.now()}-${index}-${Math.random()}`,
-                            partNumber: partNum.toString(),
-                            description: description,
+                            partNumber: partNum.toString().trim(),
+                            description: description.toString().trim(),
                             category: category,
                             quantity: qty,
                             price: price,
                             location: 'Main',
-                            notes: row['Memo'] || ''
+                            notes: row['Notes'] || row['Memo'] || ''
                         };
-                    }).filter(p => p.partNumber && p.description !== 'Unknown');
+                    }).filter(p => p.partNumber && p.partNumber !== '' && p.partNumber !== 'null'); // Only filter out truly empty part numbers
 
                     partsPreviewData[type] = processedParts;
+                    
+                    // Update stats immediately
+                    updatePartsStatsPreview(type, processedParts.length);
+                    
                     displayPartsPreview();
                     checkPartsDuplicates();
                 }
             });
+        }
+
+        function updatePartsStatsPreview(type, count) {
+            // This just updates the preview counts
+            console.log(`Preview loaded ${count} parts for ${type}`);
         }
 
         function displayPartsPreview() {
@@ -2205,20 +2241,22 @@
                 return;
             }
 
-            const previewRows = allParts.slice(0, 5);
-            let html = '<table><tr><th>Part #</th><th>Description</th><th>Category</th><th>Qty</th></tr>';
+            // Show first 10 parts for preview
+            const previewRows = allParts.slice(0, 10);
+            let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length}</strong></div>`;
+            html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th><th>Qty</th></tr>';
             
             previewRows.forEach(part => {
                 html += `<tr>
                     <td>${part.partNumber}</td>
-                    <td>${part.description}</td>
+                    <td>${part.description.substring(0, 30)}${part.description.length > 30 ? '...' : ''}</td>
                     <td>${part.category}</td>
                     <td>${part.quantity}</td>
                 </tr>`;
             });
 
-            if (allParts.length > 5) {
-                html += `<tr><td colspan="4" style="text-align:center; color:#999;">... and ${allParts.length - 5} more parts</td></tr>`;
+            if (allParts.length > 10) {
+                html += `<tr><td colspan="4" style="text-align:center; color:#999;">... and ${allParts.length - 10} more parts</td></tr>`;
             }
 
             html += '</table>';
@@ -2258,11 +2296,16 @@
 
             parts = [...parts, ...newParts];
             
+            // Save to Firestore
             await db.collection('users').doc(currentUser.uid).update({
                 parts: parts
             });
 
-            partsPreviewData = { hotTubs: [], water: [] };
+            // Clear preview data
+            partsPreviewData = {
+                hotTubs: [],
+                water: []
+            };
             document.getElementById('hotTubsFile').value = '';
             document.getElementById('waterFile').value = '';
             document.getElementById('partsPreview').style.display = 'none';
