@@ -1173,11 +1173,17 @@
                         📥 Import Work Orders
                     </div>
                     <div class="csv-import-section">
-                        <h4>Main Work Order File</h4>
-                        <input type="file" id="workOrderFile" accept=".csv" onchange="previewWorkOrderCSV()">
-                        <div id="woPreview" class="import-preview" style="display: none;"></div>
-                        <div id="woDuplicateWarning" class="duplicate-warning" style="display: none;"></div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importWorkOrders()">Import Work Orders</button>
+                        <h4>Water Systems Work Orders</h4>
+                        <input type="file" id="workOrderFileWater" accept=".csv" onchange="previewWorkOrderCSV('water')">
+                        <div id="woPreviewWater" class="import-preview" style="display: none;"></div>
+                        <div id="woDuplicateWarningWater" class="duplicate-warning" style="display: none;"></div>
+                        
+                        <h4 style="margin-top:15px;">Hot Tubs Work Orders</h4>
+                        <input type="file" id="workOrderFileHotTubs" accept=".csv" onchange="previewWorkOrderCSV('hotTubs')">
+                        <div id="woPreviewHotTubs" class="import-preview" style="display: none;"></div>
+                        <div id="woDuplicateWarningHotTubs" class="duplicate-warning" style="display: none;"></div>
+                        
+                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importWorkOrders()">Import All Work Orders</button>
                     </div>
                 </div>
 
@@ -1490,13 +1496,21 @@
         let currentPickWO = null;
         let pickedParts = [];
         
-        // CSV preview data
-        let workOrderPreviewData = null;
+        // CSV preview data - Work Orders
+        let workOrderPreviewData = {
+            water: [],
+            hotTubs: []
+        };
+        let workOrderDuplicates = {
+            water: [],
+            hotTubs: []
+        };
+        
+        // CSV preview data - Parts
         let partsPreviewData = {
             hotTubs: [],
             water: []
         };
-        let workOrderDuplicates = [];
 
         // ============================================
         // AUTH STATE OBSERVER
@@ -1677,25 +1691,27 @@
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS
+        // CSV IMPORT FUNCTIONS - WORK ORDERS
         // ============================================
-        function previewWorkOrderCSV() {
-            const file = document.getElementById('workOrderFile').files[0];
+        function previewWorkOrderCSV(type) {
+            const fileId = type === 'water' ? 'workOrderFileWater' : 'workOrderFileHotTubs';
+            const file = document.getElementById(fileId).files[0];
             if (!file) return;
 
             Papa.parse(file, {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    workOrderPreviewData = results.data;
-                    displayWorkOrderPreview(results.data);
-                    checkWorkOrderDuplicates(results.data);
+                    workOrderPreviewData[type] = results.data;
+                    displayWorkOrderPreview(type, results.data);
+                    checkWorkOrderDuplicates(type, results.data);
                 }
             });
         }
 
-        function displayWorkOrderPreview(data) {
-            const previewDiv = document.getElementById('woPreview');
+        function displayWorkOrderPreview(type, data) {
+            const previewId = type === 'water' ? 'woPreviewWater' : 'woPreviewHotTubs';
+            const previewDiv = document.getElementById(previewId);
             previewDiv.style.display = 'block';
             
             if (data.length === 0) {
@@ -1723,24 +1739,25 @@
             previewDiv.innerHTML = html;
         }
 
-        function checkWorkOrderDuplicates(data) {
+        function checkWorkOrderDuplicates(type, data) {
             const existingWONumbers = new Set(workOrders.map(wo => wo.woNumber));
-            workOrderDuplicates = [];
+            workOrderDuplicates[type] = [];
 
             data.forEach(row => {
                 const woNum = row['WO Number'] || row['Num'] || row['WO#'] || row['Work Order'];
                 if (woNum && existingWONumbers.has(woNum.toString())) {
-                    workOrderDuplicates.push(woNum);
+                    workOrderDuplicates[type].push(woNum);
                 }
             });
 
-            const warningDiv = document.getElementById('woDuplicateWarning');
-            if (workOrderDuplicates.length > 0) {
+            const warningId = type === 'water' ? 'woDuplicateWarningWater' : 'woDuplicateWarningHotTubs';
+            const warningDiv = document.getElementById(warningId);
+            if (workOrderDuplicates[type].length > 0) {
                 warningDiv.style.display = 'block';
                 warningDiv.innerHTML = `
-                    <strong>⚠️ Found ${workOrderDuplicates.length} duplicate work order(s)</strong><br>
-                    ${workOrderDuplicates.slice(0, 5).join(', ')}${workOrderDuplicates.length > 5 ? ` and ${workOrderDuplicates.length - 5} more` : ''}<br>
-                    These will be skipped. ${data.length - workOrderDuplicates.length} new work order(s) will be imported.
+                    <strong>⚠️ Found ${workOrderDuplicates[type].length} duplicate work order(s)</strong><br>
+                    ${workOrderDuplicates[type].slice(0, 5).join(', ')}${workOrderDuplicates[type].length > 5 ? ` and ${workOrderDuplicates[type].length - 5} more` : ''}<br>
+                    These will be skipped.
                 `;
             } else {
                 warningDiv.style.display = 'none';
@@ -1748,18 +1765,47 @@
         }
 
         async function importWorkOrders() {
-            if (!workOrderPreviewData || workOrderPreviewData.length === 0) {
-                alert('Please select a work order CSV file first');
-                return;
-            }
-
-            const existingWONumbers = new Set(workOrders.map(wo => wo.woNumber));
             let imported = 0;
             let skipped = 0;
 
             showLoading();
 
-            for (const row of workOrderPreviewData) {
+            // Import Water Systems Work Orders
+            if (workOrderPreviewData.water && workOrderPreviewData.water.length > 0) {
+                const result = await processWorkOrderImport(workOrderPreviewData.water);
+                imported += result.imported;
+                skipped += result.skipped;
+            }
+
+            // Import Hot Tubs Work Orders
+            if (workOrderPreviewData.hotTubs && workOrderPreviewData.hotTubs.length > 0) {
+                const result = await processWorkOrderImport(workOrderPreviewData.hotTubs);
+                imported += result.imported;
+                skipped += result.skipped;
+            }
+
+            hideLoading();
+            
+            // Clear all previews
+            document.getElementById('workOrderFileWater').value = '';
+            document.getElementById('workOrderFileHotTubs').value = '';
+            document.getElementById('woPreviewWater').style.display = 'none';
+            document.getElementById('woPreviewHotTubs').style.display = 'none';
+            document.getElementById('woDuplicateWarningWater').style.display = 'none';
+            document.getElementById('woDuplicateWarningHotTubs').style.display = 'none';
+            
+            workOrderPreviewData = { water: [], hotTubs: [] };
+
+            renderAll();
+            alert(`Import complete!\nImported: ${imported}\nSkipped (duplicates): ${skipped}`);
+        }
+
+        async function processWorkOrderImport(data) {
+            const existingWONumbers = new Set(workOrders.map(wo => wo.woNumber));
+            let imported = 0;
+            let skipped = 0;
+
+            for (const row of data) {
                 const woNum = row['WO Number'] || row['Num'] || row['WO#'] || row['Work Order'];
                 if (!woNum) continue;
 
@@ -1805,17 +1851,12 @@
                 imported++;
             }
 
-            hideLoading();
-            
-            document.getElementById('workOrderFile').value = '';
-            document.getElementById('woPreview').style.display = 'none';
-            document.getElementById('woDuplicateWarning').style.display = 'none';
-            workOrderPreviewData = null;
-
-            renderAll();
-            alert(`Import complete!\nImported: ${imported}\nSkipped (duplicates): ${skipped}`);
+            return { imported, skipped };
         }
 
+        // ============================================
+        // CSV IMPORT FUNCTIONS - PARTS
+        // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
             const file = document.getElementById(fileId).files[0];
