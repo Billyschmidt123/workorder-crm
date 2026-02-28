@@ -12,7 +12,7 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* Copy all the CSS from the previous message - it's the same */
+        /* CSS from previous message - keep it the same */
         * {
             margin: 0;
             padding: 0;
@@ -1252,4 +1252,1672 @@
                             <option value="wo-desc">WO # Desc</option>
                         </select>
                     </div>
-                    <div class="
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search WO#, customer, phone..." onkeyup="filterWorkOrders()">
+                    </div>
+                </div>
+
+                <!-- Work Orders Table -->
+                <table class="workorders-table">
+                    <thead>
+                        <tr>
+                            <th>WO #</th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Complaint</th>
+                            <th>Status</th>
+                            <th>Tech</th>
+                            <th>Date</th>
+                            <th>Parts</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="workordersList"></tbody>
+                </table>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="reminders-panel">
+                <div class="sidebar-title">
+                    Reminders
+                    <button class="btn btn-primary" onclick="showAddReminderModal()">+ Add</button>
+                </div>
+                <div id="remindersList"></div>
+                <a href="#" onclick="showAllReminders()" style="display:block; text-align:center; margin-top:15px; color:#667eea; text-decoration:none;">
+                    View All Reminders →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pick Ticket Modal -->
+    <div class="pick-ticket-modal" id="pickTicketModal">
+        <div class="pick-ticket-container">
+            <div class="pick-ticket-header">
+                <h2>Pick Ticket - <span id="pickWOInfo">Work Order</span></h2>
+                <button class="close-btn" onclick="closePickTicket()">&times;</button>
+            </div>
+            <div class="pick-ticket-content">
+                <!-- Parts Search Panel -->
+                <div class="parts-search-panel">
+                    <div class="parts-search-header">
+                        <input type="text" id="partSearch" placeholder="Search by part number or description..." onkeyup="searchParts()">
+                        <div class="parts-filters">
+                            <select id="partCategory" onchange="searchParts()">
+                                <option value="all">All Categories</option>
+                                <option value="Hot Tubs">Hot Tubs</option>
+                                <option value="Water Systems">Water Systems</option>
+                            </select>
+                            <select id="partSort" onchange="searchParts()">
+                                <option value="number">Part #</option>
+                                <option value="description">Description</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="parts-list" id="partsList"></div>
+                </div>
+                <!-- Picked Parts Panel -->
+                <div class="picked-parts-panel">
+                    <div class="picked-parts-header">
+                        <h3>Picked Parts</h3>
+                        <span class="picked-parts-count" id="pickedPartsCount">0</span>
+                    </div>
+                    <div class="picked-parts-list" id="pickedPartsList"></div>
+                </div>
+            </div>
+            <div class="pick-ticket-footer">
+                <button class="btn btn-danger" onclick="clearPickedParts()">Clear All</button>
+                <button class="btn btn-success" onclick="savePickedParts()">Save to Work Order</button>
+                <button class="btn btn-primary" onclick="closePickTicket()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" id="detailPanel">
+        <div class="detail-header">
+            <h2>Work Order Details</h2>
+            <button class="close-btn" onclick="closeDetailPanel()">&times;</button>
+        </div>
+        <div id="detailContent"></div>
+    </div>
+
+    <!-- Add Tech Modal -->
+    <div class="modal" id="addTechModal">
+        <div class="modal-content">
+            <h3>Add Technician</h3>
+            <input type="text" id="techName" placeholder="Technician Name">
+            <input type="email" id="techEmail" placeholder="Email Address">
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addTechModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTech()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Status Modal -->
+    <div class="modal" id="addStatusModal">
+        <div class="modal-content">
+            <h3>Add Status</h3>
+            <input type="text" id="statusName" placeholder="Status Name">
+            <select id="statusColor">
+                <option value="#e3f2fd">Blue</option>
+                <option value="#fff3e0">Orange</option>
+                <option value="#e8f5e8">Green</option>
+                <option value="#ffebee">Red</option>
+                <option value="#f3e5f5">Purple</option>
+                <option value="#e0f2f1">Teal</option>
+            </select>
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addStatusModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveStatus()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Reminder Modal -->
+    <div class="modal" id="addReminderModal">
+        <div class="modal-content">
+            <h3>Add Reminder</h3>
+            <input type="text" id="reminderTitle" placeholder="Reminder Title">
+            <select id="reminderWO">
+                <option value="">Select Work Order</option>
+            </select>
+            <input type="datetime-local" id="reminderTime">
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeModal('addReminderModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveReminder()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Reminders Modal -->
+    <div class="modal" id="allRemindersModal">
+        <div class="modal-content" style="width: 800px; max-width: 95%; max-height: 80vh; overflow-y: auto;">
+            <div class="detail-header">
+                <h2>All Reminders</h2>
+                <button class="close-btn" onclick="closeModal('allRemindersModal')">&times;</button>
+            </div>
+            <div id="allRemindersList"></div>
+        </div>
+    </div>
+
+    <!-- Backup Modal -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content" style="width: 600px;">
+            <h3>Backup & Restore</h3>
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" style="width:100%; margin-bottom:10px;" onclick="createBackup()">Create New Backup</button>
+                <button class="btn btn-success" style="width:100%;" onclick="downloadBackup()">Download Backup File</button>
+            </div>
+            <div>
+                <h4>Restore from Backup</h4>
+                <input type="file" id="backupFile" accept=".json" onchange="previewBackup()">
+                <div id="backupPreview" style="margin-top:10px; padding:10px; background:#f8f9fa; border-radius:5px; display:none;"></div>
+                <button class="btn btn-warning" style="width:100%; margin-top:10px;" onclick="restoreFromBackup()">Restore Selected Backup</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <h4>Previous Backups</h4>
+                <div id="backupList" class="backup-list"></div>
+            </div>
+            <div class="modal-buttons" style="margin-top:20px;">
+                <button class="btn" onclick="closeModal('backupModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000;">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION - REPLACE WITH YOURS!
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPixmCwxOMkBPBFh34GgZr-qBK3TCvaLg",
+            authDomain: "workordercrm.firebaseapp.com",
+            projectId: "workordercrm",
+            storageBucket: "workordercrm.firebasestorage.app",
+            messagingSenderId: "84507857386",
+            appId: "1:84507857386:web:99ba6ab325669db88f6293"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        let currentUser = null;
+        let workOrders = [];
+        let technicians = [];
+        let statuses = [];
+        let reminders = [];
+        let parts = [];
+        let currentView = 'active';
+        let selectedWO = null;
+        let currentPickWO = null;
+        let pickedParts = [];
+        
+        // CSV preview data
+        let workOrderPreviewData = null;
+        let partsPreviewData = {
+            hotTubs: [],
+            water: []
+        };
+        let workOrderDuplicates = [];
+
+        // ============================================
+        // AUTH FUNCTIONS
+        // ============================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                document.getElementById('user-email').textContent = user.email;
+                loadUserData();
+            } else {
+                document.getElementById('login-page').style.display = 'flex';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('app-container').style.display = 'none';
+            }
+        });
+
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
+            showLoading();
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    hideLoading();
+                })
+                .catch((error) => {
+                    hideLoading();
+                    alert('Login failed: ' + error.message);
+                });
+        }
+
+        function register() {
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+
+            if (!email || !password || !confirm) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (password !== confirm) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+
+            showLoading();
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    return initializeUserData(userCredential.user);
+                })
+                .then(() => {
+                    hideLoading();
+                })
+                .catch((error) => {
+                    hideLoading();
+                    alert('Registration failed: ' + error.message);
+                });
+        }
+
+        function showRegister() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('register-page').style.display = 'flex';
+        }
+
+        function showLogin() {
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('register-page').style.display = 'none';
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        function showLoading() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        // ============================================
+        // INITIALIZE USER DATA
+        // ============================================
+        async function initializeUserData(user) {
+            const defaultTechs = [
+                { id: `tech-${Date.now()}-1`, name: 'John Smith', email: 'john@example.com', active: true },
+                { id: `tech-${Date.now()}-2`, name: 'Sarah Johnson', email: 'sarah@example.com', active: true },
+                { id: `tech-${Date.now()}-3`, name: 'Mike Wilson', email: 'mike@example.com', active: true }
+            ];
+
+            const defaultStatuses = [
+                { id: '1', name: 'Open', color: '#e3f2fd' },
+                { id: '2', name: 'In Progress', color: '#fff3e0' },
+                { id: '3', name: 'Completed', color: '#e8f5e8' },
+                { id: '4', name: 'On Hold', color: '#ffebee' },
+                { id: '5', name: 'Waiting Parts', color: '#f3e5f5' },
+                { id: '6', name: 'Scheduled', color: '#e0f2f1' }
+            ];
+
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    technicians: defaultTechs,
+                    statuses: defaultStatuses,
+                    parts: [],
+                    workOrders: [],
+                    reminders: [],
+                    createdAt: new Date().toISOString()
+                });
+                
+                technicians = defaultTechs;
+                statuses = defaultStatuses;
+                renderAll();
+            } catch (error) {
+                console.error('Error initializing user data:', error);
+                throw error;
+            }
+        }
+
+        // ============================================
+        // LOAD USER DATA
+        // ============================================
+        async function loadUserData() {
+            showLoading();
+            try {
+                const doc = await db.collection('users').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    technicians = data.technicians || [];
+                    statuses = data.statuses || [];
+                    parts = data.parts || [];
+                    
+                    // Load work orders subcollection
+                    const woSnapshot = await db.collection('users').doc(currentUser.uid).collection('workOrders').get();
+                    workOrders = woSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    
+                    // Load reminders subcollection
+                    const remSnapshot = await db.collection('users').doc(currentUser.uid).collection('reminders').get();
+                    reminders = remSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    
+                    renderAll();
+                }
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                console.error('Error loading user data:', error);
+                alert('Error loading data: ' + error.message);
+            }
+        }
+
+        // ============================================
+        // CSV IMPORT FUNCTIONS - WORK ORDERS
+        // ============================================
+        function previewWorkOrderCSV() {
+            const file = document.getElementById('workOrderFile').files[0];
+            if (!file) return;
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    workOrderPreviewData = results.data;
+                    
+                    // Display preview
+                    displayWorkOrderPreview(results.data);
+                    
+                    // Check for duplicates
+                    checkWorkOrderDuplicates(results.data);
+                }
+            });
+        }
+
+        function displayWorkOrderPreview(data) {
+            const previewDiv = document.getElementById('woPreview');
+            previewDiv.style.display = 'block';
+            
+            if (data.length === 0) {
+                previewDiv.innerHTML = 'No data found in CSV';
+                return;
+            }
+
+            // Get first 5 rows for preview
+            const previewRows = data.slice(0, 5);
+            
+            let html = '<table><tr>';
+            // Get column headers
+            const headers = Object.keys(data[0]).filter(key => data[0][key] !== undefined);
+            headers.forEach(h => html += `<th>${h}</th>`);
+            html += '</tr>';
+
+            previewRows.forEach(row => {
+                html += '<tr>';
+                headers.forEach(h => html += `<td>${row[h] || ''}</td>`);
+                html += '</tr>';
+            });
+
+            if (data.length > 5) {
+                html += `<tr><td colspan="${headers.length}" style="text-align:center; color:#999;">... and ${data.length - 5} more rows</td></tr>`;
+            }
+
+            html += '</table>';
+            previewDiv.innerHTML = html;
+        }
+
+        function checkWorkOrderDuplicates(data) {
+            const existingWONumbers = new Set(workOrders.map(wo => wo.woNumber));
+            workOrderDuplicates = [];
+
+            data.forEach(row => {
+                const woNum = row['WO Number'] || row['Num'] || row['WO#'] || row['Work Order'] || row['woNumber'];
+                if (woNum && existingWONumbers.has(woNum.toString())) {
+                    workOrderDuplicates.push(woNum);
+                }
+            });
+
+            const warningDiv = document.getElementById('woDuplicateWarning');
+            if (workOrderDuplicates.length > 0) {
+                warningDiv.style.display = 'block';
+                warningDiv.innerHTML = `
+                    <strong>⚠️ Found ${workOrderDuplicates.length} duplicate work order(s):</strong><br>
+                    ${workOrderDuplicates.slice(0, 5).join(', ')}${workOrderDuplicates.length > 5 ? ` and ${workOrderDuplicates.length - 5} more` : ''}<br>
+                    These will be skipped. ${data.length - workOrderDuplicates.length} new work order(s) will be imported.
+                `;
+            } else {
+                warningDiv.style.display = 'none';
+            }
+        }
+
+        async function importWorkOrders() {
+            if (!workOrderPreviewData || workOrderPreviewData.length === 0) {
+                alert('Please select a work order CSV file first');
+                return;
+            }
+
+            const existingWONumbers = new Set(workOrders.map(wo => wo.woNumber));
+            let imported = 0;
+            let skipped = 0;
+
+            showLoading();
+
+            for (const row of workOrderPreviewData) {
+                // Try different possible column names for work order number
+                const woNum = row['WO Number'] || row['Num'] || row['WO#'] || row['Work Order'] || row['woNumber'];
+                if (!woNum) continue;
+
+                // Skip duplicates
+                if (existingWONumbers.has(woNum.toString())) {
+                    skipped++;
+                    continue;
+                }
+
+                // Try different column names for other fields
+                const customerName = row['Customer Name'] || row['Name'] || row['Customer'] || 'Unknown';
+                const phone = row['Phone'] || row['Telephone'] || row['Tel'] || '';
+                const email = row['Email'] || row['E-mail'] || '';
+                const location = row['Location'] || row['Address'] || row['Site'] || '';
+                const complaint = row['Problem Description'] || row['Complaint'] || row['Description'] || row['Memo'] || '';
+                const status = row['Status'] || 'Open';
+                const date = row['Created Date'] || row['Date'] || row['Created'] || new Date().toISOString().split('T')[0];
+                
+                // Format date if needed
+                let formattedDate = date;
+                if (date && date.includes(' ')) {
+                    formattedDate = date.split(' ')[0]; // Take just the date part if it has time
+                }
+
+                const newWO = {
+                    id: `wo-${Date.now()}-${Math.random()}`,
+                    woNumber: woNum.toString(),
+                    customerName: customerName,
+                    phone: phone,
+                    email: email,
+                    location: location,
+                    complaint: complaint,
+                    status: status,
+                    techId: null,
+                    date: formattedDate,
+                    archived: false,
+                    pickedParts: [],
+                    history: [{
+                        time: new Date().toLocaleString(),
+                        note: 'Imported from CSV'
+                    }]
+                };
+
+                workOrders.push(newWO);
+                await saveWorkOrderToFirestore(newWO);
+                imported++;
+            }
+
+            hideLoading();
+            
+            // Clear preview
+            document.getElementById('workOrderFile').value = '';
+            document.getElementById('woPreview').style.display = 'none';
+            document.getElementById('woDuplicateWarning').style.display = 'none';
+            workOrderPreviewData = null;
+
+            renderAll();
+            alert(`Import complete!\nImported: ${imported}\nSkipped (duplicates): ${skipped}`);
+        }
+
+        // ============================================
+        // CSV IMPORT FUNCTIONS - PARTS
+        // ============================================
+        function previewPartsCSV(type) {
+            const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
+            const file = document.getElementById(fileId).files[0];
+            if (!file) return;
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
+                    
+                    // Process parts data
+                    const processedParts = results.data.map((row, index) => {
+                        // Try different possible column names
+                        const partNum = row['Num'] || row['Number'] || row['Part #'] || row['PartNumber'] || `P-${Date.now()}-${index}`;
+                        const description = row['Name'] || row['Description'] || row['Memo'] || row['Part Description'] || 'Unknown';
+                        const qty = parseInt(row['Qty']) || 1;
+                        const price = parseFloat(row['Debit'] || row['Credit'] || row['Amount']) || 0;
+                        
+                        return {
+                            id: `part-${Date.now()}-${index}-${Math.random()}`,
+                            partNumber: partNum.toString(),
+                            description: description,
+                            category: category,
+                            quantity: qty,
+                            price: price,
+                            location: 'Main',
+                            notes: row['Memo'] || ''
+                        };
+                    }).filter(p => p.partNumber && p.description !== 'Unknown');
+
+                    partsPreviewData[type] = processedParts;
+                    
+                    // Display combined preview
+                    displayPartsPreview();
+                    
+                    // Check for duplicates
+                    checkPartsDuplicates();
+                }
+            });
+        }
+
+        function displayPartsPreview() {
+            const previewDiv = document.getElementById('partsPreview');
+            previewDiv.style.display = 'block';
+            
+            const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
+            
+            if (allParts.length === 0) {
+                previewDiv.innerHTML = 'No parts found in CSV files';
+                return;
+            }
+
+            // Show first 5 parts
+            const previewRows = allParts.slice(0, 5);
+            
+            let html = '<table><tr><th>Part #</th><th>Description</th><th>Category</th><th>Qty</th></tr>';
+            
+            previewRows.forEach(part => {
+                html += `<tr>
+                    <td>${part.partNumber}</td>
+                    <td>${part.description}</td>
+                    <td>${part.category}</td>
+                    <td>${part.quantity}</td>
+                </tr>`;
+            });
+
+            if (allParts.length > 5) {
+                html += `<tr><td colspan="4" style="text-align:center; color:#999;">... and ${allParts.length - 5} more parts</td></tr>`;
+            }
+
+            html += '</table>';
+            previewDiv.innerHTML = html;
+        }
+
+        function checkPartsDuplicates() {
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
+            const allPreviewParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
+            const duplicates = allPreviewParts.filter(p => existingPartNumbers.has(p.partNumber));
+
+            const warningDiv = document.getElementById('partsDuplicateWarning');
+            if (duplicates.length > 0) {
+                warningDiv.style.display = 'block';
+                warningDiv.innerHTML = `
+                    <strong>⚠️ Found ${duplicates.length} duplicate part(s)</strong><br>
+                    These will be skipped. ${allPreviewParts.length - duplicates.length} new parts will be imported.
+                `;
+            } else {
+                warningDiv.style.display = 'none';
+            }
+        }
+
+        async function importParts() {
+            const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
+            
+            if (allParts.length === 0) {
+                alert('Please select parts CSV files first');
+                return;
+            }
+
+            showLoading();
+
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
+            const newParts = allParts.filter(p => !existingPartNumbers.has(p.partNumber));
+            const duplicates = allParts.length - newParts.length;
+
+            parts = [...parts, ...newParts];
+            
+            // Save to Firestore
+            await db.collection('users').doc(currentUser.uid).update({
+                parts: parts
+            });
+
+            // Clear preview data
+            partsPreviewData = {
+                hotTubs: [],
+                water: []
+            };
+            document.getElementById('hotTubsFile').value = '';
+            document.getElementById('waterFile').value = '';
+            document.getElementById('partsPreview').style.display = 'none';
+            document.getElementById('partsDuplicateWarning').style.display = 'none';
+
+            hideLoading();
+            updatePartsStats();
+            alert(`Import complete!\nNew parts: ${newParts.length}\nDuplicates skipped: ${duplicates}`);
+        }
+
+        // ============================================
+        // RENDER FUNCTIONS
+        // ============================================
+        function renderAll() {
+            renderStats();
+            renderTechList();
+            renderStatusList();
+            updateTechDropdowns();
+            filterWorkOrders();
+            renderReminders();
+            updateFilters();
+            updatePartsStats();
+        }
+
+        function renderStats() {
+            const total = workOrders.length;
+            const active = workOrders.filter(wo => !wo.archived).length;
+            
+            document.getElementById('totalWO').textContent = total;
+            document.getElementById('activeWO').textContent = active;
+            document.getElementById('pendingReminders').textContent = reminders.filter(r => !r.completed).length;
+            document.getElementById('totalParts').textContent = parts.length;
+        }
+
+        function updatePartsStats() {
+            const hotTubsCount = parts.filter(p => p.category === 'Hot Tubs').length;
+            const waterSystemsCount = parts.filter(p => p.category === 'Water Systems').length;
+            
+            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
+            document.getElementById('partsCat2').textContent = `Water Systems: ${waterSystemsCount}`;
+        }
+
+        function renderTechList() {
+            const techList = document.getElementById('techList');
+            techList.innerHTML = technicians.map(tech => `
+                <div class="tech-item">
+                    <div class="tech-info">
+                        <div class="tech-avatar">${tech.name.charAt(0)}</div>
+                        <div>
+                            <div class="tech-name">${tech.name}</div>
+                            <div style="font-size: 10px; color: #999;">${tech.email}</div>
+                        </div>
+                    </div>
+                    <div class="tech-actions">
+                        <button onclick="editTech('${tech.id}')">✏️</button>
+                        <button onclick="deleteTech('${tech.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStatusList() {
+            const statusList = document.getElementById('statusList');
+            statusList.innerHTML = statuses.map(status => `
+                <div class="tech-item">
+                    <div class="tech-info">
+                        <div style="width: 20px; height: 20px; background: ${status.color}; border-radius: 4px;"></div>
+                        <span class="tech-name">${status.name}</span>
+                    </div>
+                    <div class="tech-actions">
+                        <button onclick="editStatus('${status.id}')">✏️</button>
+                        <button onclick="deleteStatus('${status.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTechDropdowns() {
+            const manualTech = document.getElementById('manual-tech');
+            const techFilter = document.getElementById('techFilter');
+            
+            const techOptions = technicians
+                .filter(t => t.active)
+                .map(t => `<option value="${t.id}">${t.name}</option>`)
+                .join('');
+
+            manualTech.innerHTML = '<option value="">Select Technician</option>' + techOptions;
+        }
+
+        function updateFilters() {
+            const statusFilter = document.getElementById('statusFilter');
+            const techFilter = document.getElementById('techFilter');
+
+            statusFilter.innerHTML = '<option value="all">All Statuses</option>' + 
+                statuses.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+
+            const techOptions = technicians
+                .filter(t => t.active)
+                .map(t => `<option value="${t.id}">${t.name}</option>`)
+                .join('');
+            techFilter.innerHTML = '<option value="all">All Techs</option>' + techOptions;
+        }
+
+        function filterWorkOrders() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const techFilter = document.getElementById('techFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            let filtered = workOrders.filter(wo => {
+                if (currentView === 'active') return !wo.archived;
+                else return wo.archived;
+            });
+
+            filtered = filtered.filter(wo => {
+                if (statusFilter !== 'all' && wo.status !== statusFilter) return false;
+                if (techFilter !== 'all' && wo.techId !== techFilter) return false;
+                if (searchQuery) {
+                    return (wo.woNumber && wo.woNumber.toLowerCase().includes(searchQuery)) ||
+                           (wo.customerName && wo.customerName.toLowerCase().includes(searchQuery)) ||
+                           (wo.phone && wo.phone.includes(searchQuery));
+                }
+                return true;
+            });
+
+            filtered.sort((a, b) => {
+                switch(sortFilter) {
+                    case 'date-desc': return new Date(b.date) - new Date(a.date);
+                    case 'date-asc': return new Date(a.date) - new Date(b.date);
+                    case 'wo-asc': return (a.woNumber || '').localeCompare(b.woNumber || '');
+                    case 'wo-desc': return (b.woNumber || '').localeCompare(a.woNumber || '');
+                    default: return 0;
+                }
+            });
+
+            renderWorkOrdersList(filtered);
+        }
+
+        function renderWorkOrdersList(orders) {
+            const tbody = document.getElementById('workordersList');
+            tbody.innerHTML = orders.map(wo => {
+                const tech = technicians.find(t => t.id === wo.techId);
+                const statusClass = `status-${wo.status ? wo.status.replace(/\s+/g, '-') : 'Open'}`;
+                const partsCount = wo.pickedParts ? wo.pickedParts.reduce((sum, p) => sum + p.quantity, 0) : 0;
+                
+                return `
+                    <tr onclick="selectWorkOrder('${wo.id}')" class="${wo.id === selectedWO ? 'selected' : ''} ${wo.archived ? 'archived-row' : ''}">
+                        <td><strong>${wo.woNumber || 'N/A'}</strong></td>
+                        <td>${wo.customerName || 'N/A'}</td>
+                        <td>${wo.phone || 'N/A'}</td>
+                        <td>${(wo.complaint || '').substring(0, 30)}${wo.complaint && wo.complaint.length > 30 ? '...' : ''}</td>
+                        <td>
+                            <span class="status-tag ${statusClass}">${wo.status || 'Open'}</span>
+                            ${wo.archived ? '<span class="archive-badge">Archived</span>' : ''}
+                        </td>
+                        <td>${tech ? tech.name : 'Unassigned'}</td>
+                        <td>${wo.date || 'N/A'}</td>
+                        <td>${partsCount > 0 ? `📦 ${partsCount}` : '-'}</td>
+                        <td>
+                            ${!wo.archived ? 
+                                `<button class="archive-btn" onclick="event.stopPropagation(); archiveWorkOrder('${wo.id}')">Archive</button>` : 
+                                `<button class="archive-btn archived" onclick="event.stopPropagation(); unarchiveWorkOrder('${wo.id}')">Unarchive</button>`
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:#999;">
+                    No ${currentView === 'active' ? 'active' : 'archived'} work orders found
+                </td></tr>`;
+            }
+        }
+
+        function renderReminders() {
+            const remindersList = document.getElementById('remindersList');
+            const now = new Date();
+            const upcoming = reminders.filter(r => !r.completed && new Date(r.time) > now).slice(0, 5);
+            
+            remindersList.innerHTML = upcoming.map(r => {
+                const wo = workOrders.find(w => w.id === r.woId);
+                return `
+                    <div class="reminder-item" onclick="completeReminder('${r.id}')">
+                        <div class="reminder-time">${new Date(r.time).toLocaleString()}</div>
+                        <div class="reminder-title">${r.title}</div>
+                        <div class="reminder-customer">${wo ? wo.customerName : 'General'}</div>
+                    </div>
+                `;
+            }).join('');
+
+            if (upcoming.length === 0) {
+                remindersList.innerHTML = '<div style="text-align:center; color:#999; padding:20px;">No upcoming reminders</div>';
+            }
+        }
+
+        // ============================================
+        // WORK ORDER FUNCTIONS
+        // ============================================
+        function switchView(view) {
+            currentView = view;
+            document.getElementById('viewActiveBtn').classList.toggle('active', view === 'active');
+            document.getElementById('viewArchiveBtn').classList.toggle('active', view === 'archive');
+            filterWorkOrders();
+        }
+
+        async function saveWorkOrderToFirestore(wo) {
+            if (!currentUser) return;
+            try {
+                await db.collection('users').doc(currentUser.uid).collection('workOrders').doc(wo.id).set(wo);
+            } catch (error) {
+                console.error('Error saving work order:', error);
+            }
+        }
+
+        async function createManualWorkOrder() {
+            const woNumber = document.getElementById('manual-wo-number').value;
+            const customer = document.getElementById('manual-customer').value;
+            
+            if (!woNumber || !customer) {
+                alert('WO Number and Customer Name are required');
+                return;
+            }
+
+            if (workOrders.some(wo => wo.woNumber === woNumber)) {
+                alert('Work order number already exists!');
+                return;
+            }
+
+            const newWO = {
+                id: `wo-${Date.now()}-${Math.random()}`,
+                woNumber: woNumber,
+                customerName: customer,
+                phone: document.getElementById('manual-phone').value,
+                email: document.getElementById('manual-email').value,
+                location: document.getElementById('manual-location').value,
+                complaint: document.getElementById('manual-complaint').value,
+                status: document.getElementById('manual-status').value,
+                techId: document.getElementById('manual-tech').value || null,
+                date: new Date().toISOString().split('T')[0],
+                archived: false,
+                pickedParts: [],
+                history: [{
+                    time: new Date().toLocaleString(),
+                    note: 'Work order created manually'
+                }]
+            };
+
+            workOrders.push(newWO);
+            await saveWorkOrderToFirestore(newWO);
+            
+            // Clear form
+            document.getElementById('manual-wo-number').value = '';
+            document.getElementById('manual-customer').value = '';
+            document.getElementById('manual-phone').value = '';
+            document.getElementById('manual-email').value = '';
+            document.getElementById('manual-location').value = '';
+            document.getElementById('manual-complaint').value = '';
+            
+            renderAll();
+            alert('Work order created successfully!');
+        }
+
+        async function archiveWorkOrder(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && confirm(`Archive work order ${wo.woNumber}?`)) {
+                wo.archived = true;
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: 'Work order archived'
+                });
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        async function unarchiveWorkOrder(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && confirm(`Unarchive work order ${wo.woNumber}?`)) {
+                wo.archived = false;
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: 'Work order unarchived'
+                });
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        function selectWorkOrder(id) {
+            selectedWO = id;
+            const wo = workOrders.find(w => w.id === id);
+            if (!wo) return;
+
+            const techs = technicians.filter(t => t.active);
+            const statusOptions = statuses.map(s => 
+                `<option value="${s.name}" ${wo.status === s.name ? 'selected' : ''}>${s.name</option>`
+            }).join('');
+
+            const techOptions = `<option value="">Unassigned</option>` + 
+                techs.map(t => `<option value="${t.id}" ${wo.techId === t.id ? 'selected' : ''}>${t.name}</option>`).join('');
+
+            const historyItems = (wo.history || []).map(h => `
+                <div class="history-item">
+                    <div class="history-time">${h.time}</div>
+                    <div class="history-note">${h.note}</div>
+                </div>
+            `).join('');
+
+            const partsItems = (wo.pickedParts || []).map(p => `
+                <div style="padding:5px 0; border-bottom:1px solid #f0f0f0; font-size:12px;">
+                    <strong>${p.partNumber}</strong> - ${p.description}<br>
+                    Qty: ${p.quantity} | Status: ${p.status}
+                </div>
+            `).join('');
+
+            document.getElementById('detailContent').innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; font-weight: 600; color: ${wo.archived ? '#c53030' : '#48bb78'}">
+                        ${wo.archived ? '📦 Archived' : '✓ Active'}
+                    </div>
+                    ${!wo.archived ? 
+                        `<button class="archive-btn" onclick="archiveWorkOrder('${wo.id}')">Archive Work Order</button>` :
+                        `<button class="archive-btn archived" onclick="unarchiveWorkOrder('${wo.id}')">Unarchive Work Order</button>`
+                    }
+                </div>
+
+                <button class="pick-ticket-btn" onclick="openPickTicket('${wo.id}')">
+                    📋 Open Pick Ticket (${(wo.pickedParts || []).reduce((sum, p) => sum + p.quantity, 0)} parts)
+                </button>
+
+                <div class="detail-field">
+                    <label>Work Order #</label>
+                    <input type="text" value="${wo.woNumber || ''}" onchange="updateWO('${wo.id}', 'woNumber', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Customer Name</label>
+                    <input type="text" value="${wo.customerName || ''}" onchange="updateWO('${wo.id}', 'customerName', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Phone</label>
+                    <input type="text" value="${wo.phone || ''}" onchange="updateWO('${wo.id}', 'phone', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Email</label>
+                    <input type="email" value="${wo.email || ''}" onchange="updateWO('${wo.id}', 'email', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Location</label>
+                    <input type="text" value="${wo.location || ''}" onchange="updateWO('${wo.id}', 'location', this.value)" ${wo.archived ? 'disabled' : ''}>
+                </div>
+                <div class="detail-field">
+                    <label>Status</label>
+                    <select onchange="updateWO('${wo.id}', 'status', this.value)" ${wo.archived ? 'disabled' : ''}>
+                        ${statusOptions}
+                    </select>
+                </div>
+                <div class="detail-field">
+                    <label>Assigned Tech</label>
+                    <select onchange="updateWO('${wo.id}', 'techId', this.value)" ${wo.archived ? 'disabled' : ''}>
+                        ${techOptions}
+                    </select>
+                </div>
+                <div class="detail-field">
+                    <label>Complaint / Issue</label>
+                    <textarea onchange="updateWO('${wo.id}', 'complaint', this.value)" ${wo.archived ? 'disabled' : ''}>${wo.complaint || ''}</textarea>
+                </div>
+
+                <div class="detail-field">
+                    <label>Picked Parts</label>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                        ${partsItems || '<div style="text-align:center; color:#999;">No parts picked yet</div>'}
+                    </div>
+                </div>
+
+                ${!wo.archived ? `
+                <div class="task-assignment">
+                    <h4>Assign Task</h4>
+                    <div class="task-form">
+                        <input type="text" id="taskDesc" placeholder="Task description">
+                        <select id="taskTech">
+                            ${techs.map(t => `<option value="${t.id}">${t.name}</option>`).join('')}
+                        </select>
+                        <button class="btn btn-primary" onclick="assignTask('${wo.id}')">Assign</button>
+                    </div>
+                </div>
+                ` : ''}
+
+                <div class="history-section">
+                    <div class="history-title">
+                        History
+                        ${!wo.archived ? `<button class="btn btn-primary" onclick="addNote('${wo.id}')">Add Note</button>` : ''}
+                    </div>
+                    <div class="history-list">
+                        ${historyItems || '<div style="text-align:center; color:#999; padding:20px;">No history yet</div>'}
+                    </div>
+                    ${!wo.archived ? `
+                    <div class="add-note">
+                        <input type="text" id="newNote" placeholder="Add quick note...">
+                        <button onclick="addQuickNote('${wo.id}')">Add</button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('detailPanel').classList.add('open');
+        }
+
+        function closeDetailPanel() {
+            document.getElementById('detailPanel').classList.remove('open');
+            selectedWO = null;
+        }
+
+        async function updateWO(id, field, value) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                const oldValue = wo[field];
+                wo[field] = value;
+                
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Updated ${field} from "${oldValue}" to "${value}"`
+                });
+
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                if (selectedWO === id) selectWorkOrder(id);
+            }
+        }
+
+        async function addQuickNote(id) {
+            const note = document.getElementById('newNote').value;
+            if (!note.trim()) return;
+
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: note
+                });
+
+                document.getElementById('newNote').value = '';
+                await saveWorkOrderToFirestore(wo);
+                selectWorkOrder(id);
+            }
+        }
+
+        async function addNote(id) {
+            const wo = workOrders.find(w => w.id === id);
+            if (wo && !wo.archived) {
+                const note = prompt('Enter note:');
+                if (note) {
+                    if (!wo.history) wo.history = [];
+                    wo.history.unshift({
+                        time: new Date().toLocaleString(),
+                        note: note
+                    });
+                    await saveWorkOrderToFirestore(wo);
+                    selectWorkOrder(id);
+                }
+            }
+        }
+
+        async function assignTask(woId) {
+            const desc = document.getElementById('taskDesc').value;
+            const techId = document.getElementById('taskTech').value;
+            if (!desc || !techId) return;
+
+            const wo = workOrders.find(w => w.id === woId);
+            const tech = technicians.find(t => t.id === techId);
+            
+            if (wo && tech && !wo.archived) {
+                if (!wo.history) wo.history = [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Task assigned to ${tech.name}: ${desc}`
+                });
+
+                alert(`Task assigned to ${tech.name} (${tech.email})\nTask: ${desc}`);
+
+                document.getElementById('taskDesc').value = '';
+                await saveWorkOrderToFirestore(wo);
+                selectWorkOrder(woId);
+            }
+        }
+
+        // ============================================
+        // PICK TICKET FUNCTIONS
+        // ============================================
+        function openPickTicket(woId) {
+            const wo = workOrders.find(w => w.id === woId);
+            if (!wo) return;
+
+            currentPickWO = wo;
+            pickedParts = wo.pickedParts || [];
+            document.getElementById('pickWOInfo').textContent = `${wo.woNumber} - ${wo.customerName}`;
+            document.getElementById('pickTicketModal').classList.add('active');
+            searchParts();
+            renderPickedParts();
+        }
+
+        function closePickTicket() {
+            document.getElementById('pickTicketModal').classList.remove('active');
+            currentPickWO = null;
+        }
+
+        function searchParts() {
+            const searchTerm = document.getElementById('partSearch').value.toLowerCase();
+            const category = document.getElementById('partCategory').value;
+            const sortBy = document.getElementById('partSort').value;
+
+            let filteredParts = parts;
+
+            if (category !== 'all') {
+                filteredParts = filteredParts.filter(p => p.category === category);
+            }
+
+            if (searchTerm) {
+                filteredParts = filteredParts.filter(p => 
+                    (p.partNumber && p.partNumber.toLowerCase().includes(searchTerm)) ||
+                    (p.description && p.description.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            filteredParts.sort((a, b) => {
+                if (sortBy === 'number') {
+                    return (a.partNumber || '').localeCompare(b.partNumber || '');
+                } else {
+                    return (a.description || '').localeCompare(b.description || '');
+                }
+            });
+
+            filteredParts = filteredParts.slice(0, 200);
+            renderPartsList(filteredParts);
+        }
+
+        function renderPartsList(partsToRender) {
+            const partsList = document.getElementById('partsList');
+            
+            if (partsToRender.length === 0) {
+                partsList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">No parts found</div>';
+                return;
+            }
+
+            partsList.innerHTML = partsToRender.map(part => `
+                <div class="part-item" onclick="addPartToPick('${part.id}')">
+                    <div class="part-number">${part.partNumber || 'N/A'}</div>
+                    <div class="part-description">${part.description || 'No description'}</div>
+                    <div class="part-details">
+                        <span class="part-category">${part.category || 'Uncategorized'}</span>
+                        <span>Qty: ${part.quantity || 1}</span>
+                        ${part.price ? `<span>$${part.price.toFixed(2)}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addPartToPick(partId) {
+            const part = parts.find(p => p.id === partId);
+            if (!part) return;
+
+            const existingPart = pickedParts.find(p => p.partId === partId);
+            
+            if (existingPart) {
+                existingPart.quantity += 1;
+            } else {
+                pickedParts.push({
+                    partId: part.id,
+                    partNumber: part.partNumber,
+                    description: part.description,
+                    category: part.category,
+                    quantity: 1,
+                    price: part.price,
+                    status: 'Pending',
+                    notes: ''
+                });
+            }
+
+            renderPickedParts();
+        }
+
+        function renderPickedParts() {
+            const pickedPartsList = document.getElementById('pickedPartsList');
+            const count = document.getElementById('pickedPartsCount');
+
+            count.textContent = pickedParts.reduce((sum, p) => sum + p.quantity, 0);
+
+            if (pickedParts.length === 0) {
+                pickedPartsList.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">No parts picked yet</div>';
+                return;
+            }
+
+            pickedPartsList.innerHTML = pickedParts.map((part, index) => `
+                <div class="picked-part-item">
+                    <div class="picked-part-info">
+                        <div class="picked-part-number">${part.partNumber || 'N/A'}</div>
+                        <div class="picked-part-description">${part.description || 'No description'}</div>
+                        <div style="font-size: 11px; color: #999;">${part.category || 'Uncategorized'}</div>
+                    </div>
+                    <div class="picked-part-quantity">
+                        <button onclick="updatePartQuantity(${index}, -1)">-</button>
+                        <input type="number" min="1" value="${part.quantity}" onchange="setPartQuantity(${index}, this.value)">
+                        <button onclick="updatePartQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="picked-part-actions">
+                        <button class="btn-status" onclick="updatePartStatus(${index})">${part.status || 'Pending'}</button>
+                        <button class="btn-remove" onclick="removePart(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updatePartQuantity(index, change) {
+            const newQuantity = pickedParts[index].quantity + change;
+            if (newQuantity >= 1) {
+                pickedParts[index].quantity = newQuantity;
+                renderPickedParts();
+            }
+        }
+
+        function setPartQuantity(index, value) {
+            const qty = parseInt(value);
+            if (qty >= 1) {
+                pickedParts[index].quantity = qty;
+                renderPickedParts();
+            }
+        }
+
+        function updatePartStatus(index) {
+            const statuses = ['Pending', 'Picked', 'Installed', 'Backordered'];
+            const currentIndex = statuses.indexOf(pickedParts[index].status);
+            const nextIndex = (currentIndex + 1) % statuses.length;
+            pickedParts[index].status = statuses[nextIndex];
+            renderPickedParts();
+        }
+
+        function removePart(index) {
+            pickedParts.splice(index, 1);
+            renderPickedParts();
+        }
+
+        function clearPickedParts() {
+            if (confirm('Clear all picked parts?')) {
+                pickedParts = [];
+                renderPickedParts();
+            }
+        }
+
+        async function savePickedParts() {
+            if (!currentPickWO) return;
+
+            const wo = workOrders.find(w => w.id === currentPickWO.id);
+            if (wo) {
+                wo.pickedParts = pickedParts;
+                wo.history = wo.history || [];
+                wo.history.unshift({
+                    time: new Date().toLocaleString(),
+                    note: `Updated pick ticket with ${pickedParts.reduce((sum, p) => sum + p.quantity, 0)} parts`
+                });
+
+                await saveWorkOrderToFirestore(wo);
+                renderAll();
+                alert('Parts saved to work order!');
+            }
+        }
+
+        // ============================================
+        // TECHNICIAN FUNCTIONS
+        // ============================================
+        function showAddTechModal() {
+            document.getElementById('techName').value = '';
+            document.getElementById('techEmail').value = '';
+            document.getElementById('addTechModal').classList.add('active');
+        }
+
+        async function saveTech() {
+            const name = document.getElementById('techName').value;
+            const email = document.getElementById('techEmail').value;
+            if (!name || !email) {
+                alert('Please enter both name and email');
+                return;
+            }
+
+            technicians.push({
+                id: `tech-${Date.now()}`,
+                name: name,
+                email: email,
+                active: true
+            });
+
+            await db.collection('users').doc(currentUser.uid).update({
+                technicians: technicians
+            });
+
+            renderAll();
+            closeModal('addTechModal');
+        }
+
+        async function editTech(id) {
+            const tech = technicians.find(t => t.id === id);
+            if (tech) {
+                const newName = prompt('Edit technician name:', tech.name);
+                const newEmail = prompt('Edit technician email:', tech.email);
+                if (newName && newEmail) {
+                    tech.name = newName;
+                    tech.email = newEmail;
+                    await db.collection('users').doc(currentUser.uid).update({
+                        technicians: technicians
+                    });
+                    renderAll();
+                }
+            }
+        }
+
+        async function deleteTech(id) {
+            if (confirm('Are you sure you want to delete this technician?')) {
+                technicians = technicians.filter(t => t.id !== id);
+                await db.collection('users').doc(currentUser.uid).update({
+                    technicians: technicians
+                });
+                renderAll();
+            }
+        }
+
+        // ============================================
+        // STATUS FUNCTIONS
+        // ============================================
+        function showAddStatusModal() {
+            document.getElementById('statusName').value = '';
+            document.getElementById('addStatusModal').classList.add('active');
+        }
+
+        async function saveStatus() {
+            const name = document.getElementById('statusName').value;
+            const color = document.getElementById('statusColor').value;
+            if (!name) {
+                alert('Please enter a status name');
+                return;
+            }
+
+            statuses.push({
+                id: `status-${Date.now()}`,
+                name: name,
+                color: color
+            });
+
+            await db.collection('users').doc(currentUser.uid).update({
+                statuses: statuses
+            });
+
+            renderAll();
+            closeModal('addStatusModal');
+        }
+
+        async function editStatus(id) {
+            const status = statuses.find(s => s.id === id);
+            if (status) {
+                const newName = prompt('Edit status name:', status.name);
+                if (newName) {
+                    status.name = newName;
+                    await db.collection('users').doc(currentUser.uid).update({
+                        statuses: statuses
+                    });
+                    renderAll();
+                }
+            }
+        }
+
+        async function deleteStatus(id) {
+            if (confirm('Are you sure you want to delete this status?')) {
+                statuses = statuses.filter(s => s.id !== id);
+                await db.collection('users').doc(currentUser.uid).update({
+                    statuses: statuses
+                });
+                renderAll();
+            }
+        }
+
+        // ============================================
+        // REMINDER FUNCTIONS
+        // ============================================
+        function showAddReminderModal() {
+            const woSelect = document.getElementById('reminderWO');
+            woSelect.innerHTML = '<option value="">Select Work Order</option>' + 
+                workOrders.filter(wo => !wo.archived).map(wo => `<option value="${wo.id}">${wo.woNumber} - ${wo.customerName}</option>`).join('');
+            document.getElementById('reminderTitle').value = '';
+            document.getElementById('reminderTime').value = new Date().toISOString().slice(0,16);
+            document.getElementById('addReminderModal').classList.add('active');
+        }
+
+        async function saveReminder() {
+            const title = document.getElementById('reminderTitle').value;
+            const woId = document.getElementById('reminderWO').value;
+            const time = document.getElementById('reminderTime').value;
+
+            if (!title || !time) {
+                alert('Please enter title and time');
+                return;
+            }
+
+            const newReminder = {
+                id: `rem-${Date.now()}`,
+                title: title,
+                woId: woId || null,
+                time: time,
+                completed: false
+            };
+
+            reminders.push(newReminder);
+            
+            await db.collection('users').doc(currentUser.uid).collection('reminders').doc(newReminder.id).set(newReminder);
+            
+            renderAll();
+            closeModal('addReminderModal');
+
+            const reminderTime = new Date(time).getTime();
+            const now = Date.now();
+            if (reminderTime - now <= 300000 && reminderTime > now) {
+                setTimeout(() => {
+                    alert(`🔔 Reminder: ${title}`);
+                }, reminderTime - now);
+            }
+        }
+
+        function showAllReminders() {
+            const list = document.getElementById('allRemindersList');
+            const sorted = reminders.sort((a,b) => new Date(a.time) - new Date(b.time));
+            
+            list.innerHTML = sorted.map(r => {
+                const wo = workOrders.find(w => w.id === r.woId);
+                return `
+                    <div class="reminder-item" style="${r.completed ? 'opacity:0.5;' : ''}" onclick="completeReminder('${r.id}')">
+                        <div class="reminder-time">${new Date(r.time).toLocaleString()}</div>
+                        <div class="reminder-title">${r.title}</div>
+                        <div class="reminder-customer">${wo ? wo.customerName + (wo.archived ? ' (Archived)' : '') : 'General'}</div>
+                        ${r.completed ? '<div style="color:#48bb78;">✓ Completed</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            if (sorted.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#999; padding:20px;">No reminders</div>';
+            }
+
+            document.getElementById('allRemindersModal').classList.add('active');
+        }
+
+        async function completeReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (reminder) {
+                reminder.completed = !reminder.completed;
+                await db.collection('users').doc(currentUser.uid).collection('reminders').doc(reminder.id).set(reminder);
+                renderAll();
+                showAllReminders();
+            }
+        }
+
+        // ============================================
+        // BACKUP FUNCTIONS
+        // ============================================
+        function showBackupModal() {
+            document.getElementById('backupModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        async function createBackup() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                workOrders: workOrders,
+                technicians: technicians,
+                statuses: statuses,
+                reminders: reminders,
+                parts: parts,
+                userEmail: currentUser?.email
+            };
+
+            const backupName = `backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
+            
+            try {
+                const backupRef = storage.ref().child(`backups/${currentUser.uid}/${backupName}`);
+                await backupRef.putString(JSON.stringify(backup, null, 2));
+                alert('Backup created successfully!');
+            } catch (error) {
+                alert('Error creating backup: ' + error.message);
+            }
+        }
+
+        function downloadBackup() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                workOrders: workOrders,
+                technicians: technicians,
+                statuses: statuses,
+                reminders: reminders,
+                parts: parts,
+                userEmail: currentUser?.email
+            };
+
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `workorder-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+
+        function previewBackup() {
+            const file = document.getElementById('backupFile').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    const previewDiv = document.getElementById('backupPreview');
+                    previewDiv.style.display = 'block';
+                    previewDiv.innerHTML = `
+                        <strong>Backup Info:</strong><br>
+                        Date: ${new Date(backup.timestamp).toLocaleString()}<br>
+                        Work Orders: ${backup.workOrders.length}<br>
+                        Parts: ${backup.parts.length}<br>
+                        Technicians: ${backup.technicians.length}<br>
+                        Reminders: ${backup.reminders.length}
+                    `;
+                } catch (error) {
+                    alert('Invalid backup file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        async function restoreFromBackup() {
+            const file = document.getElementById('backupFile').files[0];
+            if (!file) {
+                alert('Please select a backup file');
+                return;
+            }
+
+            if (!confirm('This will replace all current data. Are you sure?')) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    showLoading();
+                    const backup = JSON.parse(e.target.result);
+                    
+                    workOrders = backup.workOrders || [];
+                    technicians = backup.technicians || [];
+                    statuses = backup.statuses || [];
+                    reminders = backup.reminders || [];
+                    parts = backup.parts || [];
+
+                    // Save to Firestore
+                    const batch = db.batch();
+                    
+                    for (const wo of workOrders) {
+                        const woRef = db.collection('users').doc(currentUser.uid).collection('workOrders').doc(wo.id);
+                        batch.set(woRef, wo);
+                    }
+                    
+                    for (const rem of reminders) {
+                        const remRef = db.collection('users').doc(currentUser.uid).collection('reminders').doc(rem.id);
+                        batch.set(remRef, rem);
+                    }
+                    
+                    const userRef = db.collection('users').doc(currentUser.uid);
+                    batch.update(userRef, {
+                        technicians: technicians,
+                        statuses: statuses,
+                        parts: parts
+                    });
+                    
+                    await batch.commit();
+                    
+                    hideLoading();
+                    closeModal('backupModal');
+                    renderAll();
+                    alert('Backup restored successfully!');
+                } catch (error) {
+                    hideLoading();
+                    alert('Error restoring backup: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Check for upcoming reminders every minute
+        setInterval(() => {
+            const now = Date.now();
+            reminders.forEach(r => {
+                if (!r.completed) {
+                    const reminderTime = new Date(r.time).getTime();
+                    if (reminderTime - now <= 60000 && reminderTime - now > 0) {
+                        const wo = workOrders.find(w => w.id === r.woId);
+                        alert(`🔔 Reminder: ${r.title}\nCustomer: ${wo ? wo.customerName : 'General'}`);
+                    }
+                }
+            });
+        }, 60000);
+    </script>
+</body>
+</html>
