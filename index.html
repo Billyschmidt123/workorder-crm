@@ -157,132 +157,6 @@
             color: #666;
         }
 
-        /* Floating Action Button */
-        .fab-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .fab {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #667eea;
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: all 0.3s;
-        }
-
-        .fab:hover {
-            background: #5a67d8;
-            transform: scale(1.1);
-        }
-
-        .fab.secondary {
-            background: #48bb78;
-        }
-
-        .fab.secondary:hover {
-            background: #38a169;
-        }
-
-        .fab-label {
-            position: absolute;
-            right: 70px;
-            background: white;
-            color: #333;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            display: none;
-        }
-
-        .fab-container:hover .fab-label {
-            display: block;
-        }
-
-        /* Quick Pick Ticket Modal */
-        .quick-pick-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 4000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .quick-pick-modal.active {
-            display: flex;
-        }
-
-        .quick-pick-container {
-            background: white;
-            border-radius: 15px;
-            width: 500px;
-            max-width: 95%;
-            padding: 25px;
-        }
-
-        .quick-pick-container h3 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .quick-pick-container input,
-        .quick-pick-container select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .quick-pick-search {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-
-        .quick-pick-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-
-        .quick-pick-item:hover {
-            background: #f0f4ff;
-        }
-
-        .quick-pick-item .part-num {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .quick-pick-item .part-desc {
-            font-size: 12px;
-            color: #666;
-        }
-
         /* View Toggle */
         .view-toggle {
             display: flex;
@@ -317,7 +191,7 @@
             gap: 20px;
         }
 
-        /* Sidebar */
+        /* Sidebar with Dropdowns */
         .sidebar {
             background: white;
             border-radius: 15px;
@@ -326,8 +200,45 @@
             height: fit-content;
         }
 
-        .sidebar-section {
-            margin-bottom: 25px;
+        .dropdown-section {
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #333;
+            transition: background 0.2s;
+        }
+
+        .dropdown-header:hover {
+            background: #edf2f7;
+        }
+
+        .dropdown-header .arrow {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-header.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .dropdown-content.hidden {
+            display: none;
         }
 
         .sidebar-title {
@@ -335,11 +246,6 @@
             font-weight: 600;
             color: #333;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         /* CSV Import Sections */
@@ -654,6 +560,25 @@
 
         .workorders-table tr.selected {
             background: #e3f2fd;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .pick-ticket-table-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .pick-ticket-table-btn:hover {
+            background: #38a169;
         }
 
         /* Pick Ticket Modal */
@@ -1124,7 +1049,6 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
-            margin-left: 10px;
         }
 
         .archive-btn:hover {
@@ -1462,30 +1386,6 @@
             </div>
         </div>
 
-        <!-- Floating Action Buttons -->
-        <div class="fab-container">
-            <div class="fab secondary" onclick="openQuickPickTicket()" title="Quick Pick Ticket">
-                <span>📋</span>
-                <span class="fab-label">Quick Pick Ticket</span>
-            </div>
-        </div>
-
-        <!-- Quick Pick Ticket Modal -->
-        <div class="quick-pick-modal" id="quickPickModal">
-            <div class="quick-pick-container">
-                <h3>Quick Pick Ticket</h3>
-                <select id="quickPickWO" onchange="quickPickSelectWO()">
-                    <option value="">Select Work Order</option>
-                </select>
-                <div id="quickPickCustomer" style="margin-bottom: 15px; font-size: 14px; color: #666;"></div>
-                <input type="text" id="quickPickSearch" placeholder="Search part number or description..." onkeyup="quickPickSearch()">
-                <div id="quickPickResults" class="quick-pick-search"></div>
-                <div class="modal-buttons">
-                    <button class="btn" onclick="closeQuickPickModal()">Cancel</button>
-                </div>
-            </div>
-        </div>
-
         <!-- View Toggle -->
         <div class="view-toggle">
             <button class="view-btn active" id="viewActiveBtn" onclick="switchView('active')">Active Work Orders</button>
@@ -1494,93 +1394,123 @@
 
         <!-- Main Layout -->
         <div class="main-layout">
-            <!-- Left Sidebar -->
+            <!-- Left Sidebar with Dropdowns -->
             <div class="sidebar">
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        📥 Import Work Orders
+                <!-- Import Work Orders Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('importWODropdown')">
+                        <span>📥 Import Work Orders</span>
+                        <span class="arrow">▼</span>
                     </div>
-                    <div class="csv-import-section">
-                        <h4>Water Systems Work Orders</h4>
-                        <input type="file" id="workOrderFileWater" accept=".csv" onchange="previewWorkOrderCSV('water')">
-                        <div id="woPreviewWater" class="import-preview" style="display: none;"></div>
-                        <div id="woDuplicateWarningWater" class="duplicate-warning" style="display: none;"></div>
-                        
-                        <h4 style="margin-top:15px;">Hot Tubs Work Orders</h4>
-                        <input type="file" id="workOrderFileHotTubs" accept=".csv" onchange="previewWorkOrderCSV('hotTubs')">
-                        <div id="woPreviewHotTubs" class="import-preview" style="display: none;"></div>
-                        <div id="woDuplicateWarningHotTubs" class="duplicate-warning" style="display: none;"></div>
-                        
-                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importWorkOrders()">Import All Work Orders</button>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        📦 Import Parts
-                    </div>
-                    <div class="csv-import-section">
-                        <h4>Hot Tubs Parts</h4>
-                        <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
-                        <h4 style="margin-top:10px;">Water Systems Parts</h4>
-                        <input type="file" id="waterFile" accept=".csv" onchange="previewPartsCSV('water')">
-                        <div id="partsPreview" class="import-preview" style="display: none;"></div>
-                        <div id="partsDuplicateWarning" class="duplicate-warning" style="display: none;"></div>
-                        <div class="parts-stats">
-                            <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
-                            <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
+                    <div id="importWODropdown" class="dropdown-content">
+                        <div class="csv-import-section">
+                            <h4>Water Systems Work Orders</h4>
+                            <input type="file" id="workOrderFileWater" accept=".csv" onchange="previewWorkOrderCSV('water')">
+                            <div id="woPreviewWater" class="import-preview" style="display: none;"></div>
+                            <div id="woDuplicateWarningWater" class="duplicate-warning" style="display: none;"></div>
+                            
+                            <h4 style="margin-top:15px;">Hot Tubs Work Orders</h4>
+                            <input type="file" id="workOrderFileHotTubs" accept=".csv" onchange="previewWorkOrderCSV('hotTubs')">
+                            <div id="woPreviewHotTubs" class="import-preview" style="display: none;"></div>
+                            <div id="woDuplicateWarningHotTubs" class="duplicate-warning" style="display: none;"></div>
+                            
+                            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importWorkOrders()">Import All Work Orders</button>
                         </div>
-                        <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
                     </div>
                 </div>
 
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        📝 Manual Work Order
+                <!-- Import Parts Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('importPartsDropdown')">
+                        <span>📦 Import Parts</span>
+                        <span class="arrow">▼</span>
                     </div>
-                    <div class="manual-wo-form">
-                        <input type="text" id="manual-wo-number" placeholder="WO Number">
-                        <input type="text" id="manual-customer" placeholder="Customer Name">
-                        <input type="text" id="manual-phone" placeholder="Phone">
-                        <input type="email" id="manual-email" placeholder="Email">
-                        <input type="text" id="manual-location" placeholder="Location">
-                        <textarea id="manual-complaint" placeholder="Complaint/Issue"></textarea>
-                        <select id="manual-status">
-                            <option value="Open">Open</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="On Hold">On Hold</option>
-                            <option value="Waiting Parts">Waiting Parts</option>
-                            <option value="Scheduled">Scheduled</option>
-                        </select>
-                        <select id="manual-tech">
-                            <option value="">Select Technician</option>
-                        </select>
-                        <button class="btn btn-success" style="width:100%;" onclick="createManualWorkOrder()">Create Work Order</button>
+                    <div id="importPartsDropdown" class="dropdown-content">
+                        <div class="csv-import-section">
+                            <h4>Hot Tubs Parts</h4>
+                            <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
+                            <h4 style="margin-top:10px;">Water Systems Parts</h4>
+                            <input type="file" id="waterFile" accept=".csv" onchange="previewPartsCSV('water')">
+                            <div id="partsPreview" class="import-preview" style="display: none;"></div>
+                            <div id="partsDuplicateWarning" class="duplicate-warning" style="display: none;"></div>
+                            <div class="parts-stats">
+                                <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
+                                <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
+                            </div>
+                            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        💾 Backup & Restore
-                        <button class="btn btn-primary" onclick="showBackupModal()">Manage</button>
+                <!-- Manual Work Order Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('manualWODropdown')">
+                        <span>📝 Manual Work Order</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div id="manualWODropdown" class="dropdown-content">
+                        <div class="manual-wo-form">
+                            <input type="text" id="manual-wo-number" placeholder="WO Number">
+                            <input type="text" id="manual-customer" placeholder="Customer Name">
+                            <input type="text" id="manual-phone" placeholder="Phone">
+                            <input type="email" id="manual-email" placeholder="Email">
+                            <input type="text" id="manual-location" placeholder="Location">
+                            <textarea id="manual-complaint" placeholder="Complaint/Issue"></textarea>
+                            <select id="manual-status">
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="Waiting Parts">Waiting Parts</option>
+                                <option value="Scheduled">Scheduled</option>
+                            </select>
+                            <select id="manual-tech">
+                                <option value="">Select Technician</option>
+                            </select>
+                            <button class="btn btn-success" style="width:100%;" onclick="createManualWorkOrder()">Create Work Order</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        👥 Technicians
-                        <button class="btn btn-primary" onclick="showAddTechModal()">+ Add</button>
+                <!-- Backup & Restore Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('backupDropdown')">
+                        <span>💾 Backup & Restore</span>
+                        <span class="arrow">▼</span>
                     </div>
-                    <div class="tech-list" id="techList"></div>
+                    <div id="backupDropdown" class="dropdown-content">
+                        <button class="btn btn-primary" style="width:100%; margin-bottom:10px;" onclick="showBackupModal()">Manage Backups</button>
+                    </div>
                 </div>
 
-                <div class="sidebar-section">
-                    <div class="sidebar-title">
-                        🏷️ Statuses
-                        <button class="btn btn-primary" onclick="showAddStatusModal()">+ Add</button>
+                <!-- Technicians Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('techDropdown')">
+                        <span>👥 Technicians</span>
+                        <span class="arrow">▼</span>
                     </div>
-                    <div class="tech-list" id="statusList"></div>
+                    <div id="techDropdown" class="dropdown-content">
+                        <div class="sidebar-title">
+                            Technicians
+                            <button class="btn btn-primary" onclick="showAddTechModal()">+ Add</button>
+                        </div>
+                        <div class="tech-list" id="techList"></div>
+                    </div>
+                </div>
+
+                <!-- Statuses Dropdown -->
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown('statusDropdown')">
+                        <span>🏷️ Statuses</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div id="statusDropdown" class="dropdown-content">
+                        <div class="sidebar-title">
+                            Statuses
+                            <button class="btn btn-primary" onclick="showAddStatusModal()">+ Add</button>
+                        </div>
+                        <div class="tech-list" id="statusList"></div>
+                    </div>
                 </div>
             </div>
 
@@ -1629,7 +1559,7 @@
                             <th>Tech</th>
                             <th>Date</th>
                             <th>Parts</th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="workordersList"></tbody>
@@ -1844,6 +1774,16 @@
         const storage = firebase.storage();
 
         // ============================================
+        // DROPDOWN FUNCTIONS
+        // ============================================
+        function toggleDropdown(id) {
+            const element = document.getElementById(id);
+            const header = element.previousElementSibling;
+            element.classList.toggle('hidden');
+            header.classList.toggle('open');
+        }
+
+        // ============================================
         // GLOBAL VARIABLES
         // ============================================
         let currentUser = null;
@@ -1856,7 +1796,6 @@
         let selectedWO = null;
         let currentPickWO = null;
         let pickedParts = [];
-        let quickPickSelectedWO = null;
         
         // CSV preview data - Work Orders
         let workOrderPreviewData = {
@@ -2480,10 +2419,13 @@
                         <td>${wo.date || 'N/A'}</td>
                         <td>${partsCount > 0 ? `📦 ${partsCount}` : '-'}</td>
                         <td>
-                            ${!wo.archived ? 
-                                `<button class="archive-btn" onclick="event.stopPropagation(); archiveWorkOrder('${wo.id}')">Archive</button>` : 
-                                `<button class="archive-btn archived" onclick="event.stopPropagation(); unarchiveWorkOrder('${wo.id}')">Unarchive</button>`
-                            }
+                            <div class="action-buttons">
+                                ${!wo.archived ? 
+                                    `<button class="archive-btn" onclick="event.stopPropagation(); archiveWorkOrder('${wo.id}')">Archive</button>` : 
+                                    `<button class="archive-btn archived" onclick="event.stopPropagation(); unarchiveWorkOrder('${wo.id}')">Unarchive</button>`
+                                }
+                                <button class="pick-ticket-table-btn" onclick="event.stopPropagation(); openPickTicket('${wo.id}')">📋 Pick</button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -2831,135 +2773,6 @@
         }
 
         // ============================================
-        // QUICK PICK TICKET FUNCTIONS
-        // ============================================
-        function openQuickPickTicket() {
-            // Populate work order dropdown
-            const woSelect = document.getElementById('quickPickWO');
-            woSelect.innerHTML = '<option value="">Select Work Order</option>' + 
-                workOrders.filter(wo => !wo.archived).map(wo => `<option value="${wo.id}">${wo.woNumber} - ${wo.customerName}</option>`).join('');
-            
-            document.getElementById('quickPickCustomer').innerHTML = '';
-            document.getElementById('quickPickSearch').value = '';
-            document.getElementById('quickPickResults').innerHTML = '';
-            quickPickSelectedWO = null;
-            
-            document.getElementById('quickPickModal').classList.add('active');
-        }
-
-        function closeQuickPickModal() {
-            document.getElementById('quickPickModal').classList.remove('active');
-        }
-
-        function quickPickSelectWO() {
-            const woId = document.getElementById('quickPickWO').value;
-            if (!woId) {
-                document.getElementById('quickPickCustomer').innerHTML = '';
-                quickPickSelectedWO = null;
-                return;
-            }
-            
-            const wo = workOrders.find(w => w.id === woId);
-            if (wo) {
-                document.getElementById('quickPickCustomer').innerHTML = `<strong>Customer:</strong> ${wo.customerName} | ${wo.phone || 'No phone'}`;
-                quickPickSelectedWO = wo;
-            }
-        }
-
-        function quickPickSearch() {
-            const searchTerm = document.getElementById('quickPickSearch').value.toLowerCase();
-            if (!searchTerm || searchTerm.length < 2) {
-                document.getElementById('quickPickResults').innerHTML = '';
-                return;
-            }
-
-            let filteredParts = parts.filter(p => p && p.partNumber && p.description);
-
-            filteredParts = filteredParts.filter(p => 
-                (p.partNumber && p.partNumber.toLowerCase().includes(searchTerm)) ||
-                (p.description && p.description.toLowerCase().includes(searchTerm))
-            );
-
-            filteredParts = filteredParts.slice(0, 20);
-            
-            if (filteredParts.length === 0) {
-                document.getElementById('quickPickResults').innerHTML = '<div style="padding:10px; text-align:center; color:#999;">No parts found</div>';
-                return;
-            }
-
-            document.getElementById('quickPickResults').innerHTML = filteredParts.map(part => `
-                <div class="quick-pick-item" onclick="quickPickAddPart('${part.id}')">
-                    <div class="part-num">${part.partNumber}</div>
-                    <div class="part-desc">${part.description}</div>
-                    <div style="font-size:10px; color:#999;">${part.category} | Qty: ${part.quantity}</div>
-                </div>
-            `).join('');
-        }
-
-        function quickPickAddPart(partId) {
-            if (!quickPickSelectedWO) {
-                alert('Please select a work order first');
-                return;
-            }
-
-            const part = parts.find(p => p.id === partId);
-            if (!part) return;
-
-            // Ask for quantity
-            const quantity = prompt(`Enter quantity for ${part.partNumber}:`, '1');
-            if (!quantity) return;
-            
-            const qty = parseInt(quantity);
-            if (isNaN(qty) || qty < 1) {
-                alert('Please enter a valid quantity');
-                return;
-            }
-
-            // Ask for serial number (optional)
-            const serialNumber = prompt(`Enter serial number for ${part.partNumber} (optional):`, '');
-
-            // Add to work order's picked parts
-            const wo = workOrders.find(w => w.id === quickPickSelectedWO.id);
-            if (!wo) return;
-
-            if (!wo.pickedParts) wo.pickedParts = [];
-
-            const existingPart = wo.pickedParts.find(p => p.partId === partId);
-            if (existingPart) {
-                existingPart.quantity += qty;
-                if (serialNumber) {
-                    existingPart.serialNumber = existingPart.serialNumber ? 
-                        existingPart.serialNumber + ', ' + serialNumber : serialNumber;
-                }
-            } else {
-                wo.pickedParts.push({
-                    partId: part.id,
-                    partNumber: part.partNumber,
-                    description: part.description,
-                    category: part.category,
-                    quantity: qty,
-                    price: part.price,
-                    status: 'Pending',
-                    serialNumber: serialNumber || '',
-                    notes: ''
-                });
-            }
-
-            // Add to history
-            if (!wo.history) wo.history = [];
-            wo.history.unshift({
-                time: new Date().toLocaleString(),
-                note: `Added ${qty}x ${part.partNumber} via Quick Pick${serialNumber ? ` (SN: ${serialNumber})` : ''}`
-            });
-
-            saveWorkOrderToFirestore(wo).then(() => {
-                alert(`Added ${qty}x ${part.partNumber} to work order ${wo.woNumber}`);
-                renderAll();
-                closeQuickPickModal();
-            });
-        }
-
-        // ============================================
         // PICK TICKET FUNCTIONS
         // ============================================
         function openPickTicket(woId) {
@@ -2984,6 +2797,7 @@
             const category = document.getElementById('partCategory').value;
             const sortBy = document.getElementById('partSort').value;
 
+            // Only search in parts array, NOT in work orders
             let filteredParts = parts.filter(p => p && p.partNumber && p.description);
 
             if (category !== 'all') {
@@ -3107,7 +2921,7 @@
                 parts: parts
             });
 
-            // Add to current pick list with serial number prompt
+            // Ask for serial number (optional)
             const serialNumber = prompt(`Enter serial number for ${description} (optional):`, '');
 
             const existingPart = pickedParts.find(p => p.partId === newPart.id);
