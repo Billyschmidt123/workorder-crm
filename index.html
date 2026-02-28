@@ -12,7 +12,6 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* All existing CSS remains exactly the same */
         * {
             margin: 0;
             padding: 0;
@@ -2157,7 +2156,7 @@
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS (FIXED FOR YOUR CSV FORMAT)
+        // CSV IMPORT FUNCTIONS - PARTS (FIXED FOR YOUR FORMAT)
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
@@ -2170,62 +2169,86 @@
                 complete: (results) => {
                     const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
                     
-                    console.log("CSV Headers:", results.meta.fields); // Debug: see what headers are in the CSV
+                    console.log(`Processing ${type} parts file with ${results.data.length} rows`);
+                    console.log("Headers found:", results.meta.fields);
                     
-                    // Process ALL parts based on your actual CSV structure
+                    // Process ALL parts - your file has exactly two columns: part_number and description
                     const processedParts = results.data
                         .filter(row => {
-                            // Filter out empty rows
-                            return row && Object.values(row).some(val => val && val.toString().trim() !== '');
+                            // Filter out completely empty rows
+                            return row && Object.keys(row).length > 0;
                         })
                         .map((row, index) => {
-                            // For your hot tubs CSV, the important fields are:
-                            // - Num (the order number - we'll use as part number)
-                            // - Name (customer name - we'll use as part description)
-                            // - Memo (additional info - we'll use as notes)
+                            // For your specific file format: 
+                            // - Column 1: part_number (may have various names)
+                            // - Column 2: description (may have various names)
                             
-                            let partNum = '';
+                            let partNumber = '';
                             let description = '';
                             
-                            // Try to get part number from Num column
-                            if (row['Num']) {
-                                partNum = `PART-${row['Num']}`;
+                            // Try to find part number - check for common column names
+                            if (row['part_number']) {
+                                partNumber = row['part_number'].toString().trim();
+                            } else if (row['part number']) {
+                                partNumber = row['part number'].toString().trim();
+                            } else if (row['part#']) {
+                                partNumber = row['part#'].toString().trim();
+                            } else if (row['Part Number']) {
+                                partNumber = row['Part Number'].toString().trim();
+                            } else if (row['Part_Number']) {
+                                partNumber = row['Part_Number'].toString().trim();
+                            } else if (row['Num']) {
+                                partNumber = row['Num'].toString().trim();
                             } else {
-                                partNum = `P-${Date.now()}-${index}`;
+                                // If no part number column found, use the first column's value
+                                const firstKey = Object.keys(row)[0];
+                                if (firstKey && row[firstKey]) {
+                                    partNumber = row[firstKey].toString().trim();
+                                } else {
+                                    partNumber = `PART-${Date.now()}-${index}`;
+                                }
                             }
                             
-                            // Try to get description from Name column
-                            if (row['Name']) {
-                                description = row['Name'];
+                            // Try to find description
+                            if (row['description']) {
+                                description = row['description'].toString().trim();
+                            } else if (row['Description']) {
+                                description = row['Description'].toString().trim();
+                            } else if (row['desc']) {
+                                description = row['desc'].toString().trim();
                             } else if (row['Memo']) {
-                                description = row['Memo'];
+                                description = row['Memo'].toString().trim();
+                            } else if (row['Name']) {
+                                description = row['Name'].toString().trim();
                             } else {
-                                description = `Part ${index + 1}`;
+                                // If no description column, use the second column or a default
+                                const keys = Object.keys(row);
+                                if (keys.length > 1 && row[keys[1]]) {
+                                    description = row[keys[1]].toString().trim();
+                                } else {
+                                    description = 'No description';
+                                }
                             }
                             
-                            // Try to get quantity (if any)
-                            let qty = 1;
-                            if (row['Qty'] && !isNaN(parseInt(row['Qty']))) {
-                                qty = parseInt(row['Qty']);
+                            // If part number is empty, create a unique one
+                            if (!partNumber || partNumber === '') {
+                                partNumber = `PART-${Date.now()}-${index}`;
                             }
                             
-                            // Try to get price (if any)
-                            let price = 0;
-                            if (row['Debit'] && !isNaN(parseFloat(row['Debit']))) {
-                                price = parseFloat(row['Debit']);
-                            } else if (row['Credit'] && !isNaN(parseFloat(row['Credit']))) {
-                                price = parseFloat(row['Credit']);
+                            // If description is empty, use a placeholder
+                            if (!description || description === '') {
+                                description = 'No description';
                             }
                             
                             return {
                                 id: `part-${Date.now()}-${index}-${Math.random()}`,
-                                partNumber: partNum.toString().trim(),
-                                description: description.toString().trim(),
+                                partNumber: partNumber,
+                                description: description,
                                 category: category,
-                                quantity: qty,
-                                price: price,
+                                quantity: 1, // Default quantity
+                                price: 0, // Default price
                                 location: 'Main',
-                                notes: row['Memo'] || ''
+                                notes: ''
                             };
                         });
 
@@ -2250,26 +2273,35 @@
                 return;
             }
 
-            // Show first 10 parts for preview
-            const previewRows = allParts.slice(0, 10);
+            // Show first 20 parts for preview (since you have 6000+ parts)
+            const previewRows = allParts.slice(0, 20);
             let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length}</strong></div>`;
-            html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th><th>Qty</th></tr>';
+            html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th></tr>';
             
             previewRows.forEach(part => {
+                // Truncate long descriptions
+                const shortDesc = part.description.length > 40 ? 
+                    part.description.substring(0, 40) + '...' : part.description;
+                    
                 html += `<tr>
                     <td>${part.partNumber}</td>
-                    <td>${part.description.substring(0, 30)}${part.description.length > 30 ? '...' : ''}</td>
+                    <td>${shortDesc}</td>
                     <td>${part.category}</td>
-                    <td>${part.quantity}</td>
                 </tr>`;
             });
 
-            if (allParts.length > 10) {
-                html += `<tr><td colspan="4" style="text-align:center; color:#999;">... and ${allParts.length - 10} more parts</td></tr>`;
+            if (allParts.length > 20) {
+                html += `<tr><td colspan="3" style="text-align:center; color:#999;">... and ${allParts.length - 20} more parts</td></tr>`;
             }
 
             html += '</table>';
             previewDiv.innerHTML = html;
+            
+            // Update the category counts in real-time
+            const hotTubsCount = partsPreviewData.hotTubs?.length || 0;
+            const waterCount = partsPreviewData.water?.length || 0;
+            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
+            document.getElementById('partsCat2').textContent = `Water Systems: ${waterCount}`;
         }
 
         function checkPartsDuplicates() {
@@ -2890,7 +2922,6 @@
                     <div class="part-details">
                         <span class="part-category">${part.category || 'Uncategorized'}</span>
                         <span>Qty: ${part.quantity || 1}</span>
-                        ${part.price ? `<span>$${part.price.toFixed(2)}</span>` : ''}
                     </div>
                 </div>
             `).join('');
@@ -2928,7 +2959,7 @@
                     description: part.description,
                     category: part.category,
                     quantity: qty,
-                    price: part.price,
+                    price: part.price || 0,
                     status: 'Pending',
                     serialNumber: serialNumber || '',
                     notes: ''
