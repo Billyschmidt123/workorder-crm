@@ -278,18 +278,26 @@
             margin-top: 5px;
             margin-bottom: 10px;
             font-size: 12px;
-        }
-
-        .file-count {
             background: #e2e8f0;
-            padding: 2px 8px;
-            border-radius: 12px;
-            color: #4a5568;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
 
         .file-name {
-            color: #4a5568;
-            font-weight: 500;
+            color: #2d3748;
+            font-weight: 600;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-count {
+            background: #48bb78;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
         }
 
         .import-preview {
@@ -327,28 +335,30 @@
             font-size: 12px;
         }
 
-        /* Progress Bar */
+        /* Progress Bar - Made more prominent */
         .progress-container {
             margin: 15px 0;
             background: #edf2f7;
             border-radius: 10px;
             overflow: hidden;
             position: relative;
-            height: 30px;
+            height: 40px;
+            border: 2px solid #cbd5e0;
         }
 
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: width 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            min-width: 30px;
         }
 
         .progress-text {
@@ -357,8 +367,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #1a202c;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.8);
+            padding: 2px 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .parts-stats {
@@ -374,6 +388,7 @@
             padding: 5px 10px;
             border-radius: 15px;
             border: 1px solid #e2e8f0;
+            font-weight: 600;
         }
 
         .manual-wo-form {
@@ -1484,25 +1499,28 @@
                             <h4>Hot Tubs Parts</h4>
                             <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
                             <div class="file-info">
-                                <span class="file-name" id="hotTubsFileName">No file selected</span>
+                                <span class="file-name" id="hotTubsFileName">📄 No file selected</span>
                                 <span class="file-count" id="hotTubsFileCount">0 parts</span>
                             </div>
                             
                             <h4 style="margin-top:15px;">Water Systems Parts</h4>
                             <input type="file" id="waterFile" accept=".csv" onchange="previewPartsCSV('water')">
                             <div class="file-info">
-                                <span class="file-name" id="waterFileName">No file selected</span>
+                                <span class="file-name" id="waterFileName">📄 No file selected</span>
                                 <span class="file-count" id="waterFileCount">0 parts</span>
                             </div>
                             
                             <div id="partsPreview" class="import-preview" style="display: none;"></div>
                             <div id="partsDuplicateWarning" class="duplicate-warning" style="display: none;"></div>
                             
-                            <!-- Progress Bar -->
-                            <div class="progress-container" id="importProgress" style="display: none;">
+                            <!-- Progress Bar - Made more visible -->
+                            <div class="progress-container" id="importProgress" style="display: none; margin: 20px 0;">
                                 <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
-                                <div class="progress-text" id="progressText">0 / 0 parts imported</div>
+                                <div class="progress-text" id="progressText">0 / 0 parts processed</div>
                             </div>
+                            
+                            <!-- Test Progress Button (for debugging) -->
+                            <button class="btn btn-warning" style="width:100%; margin-bottom:10px;" onclick="testProgressBar()">Test Progress Bar</button>
                             
                             <div class="parts-stats">
                                 <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
@@ -2237,9 +2255,9 @@
 
             // Update file name display
             if (type === 'hotTubs') {
-                document.getElementById('hotTubsFileName').textContent = file.name;
+                document.getElementById('hotTubsFileName').textContent = `📄 ${file.name}`;
             } else {
-                document.getElementById('waterFileName').textContent = file.name;
+                document.getElementById('waterFileName').textContent = `📄 ${file.name}`;
             }
 
             Papa.parse(file, {
@@ -2331,9 +2349,9 @@
                     
                     // Update file count display
                     if (type === 'hotTubs') {
-                        document.getElementById('hotTubsFileCount').textContent = `${processedParts.length} parts`;
+                        document.getElementById('hotTubsFileCount').textContent = `${processedParts.length.toLocaleString()} parts`;
                     } else {
-                        document.getElementById('waterFileCount').textContent = `${processedParts.length} parts`;
+                        document.getElementById('waterFileCount').textContent = `${processedParts.length.toLocaleString()} parts`;
                     }
                     
                     console.log(`Processed ${processedParts.length} parts for ${type}`);
@@ -2357,7 +2375,7 @@
 
             // Show first 20 parts for preview
             const previewRows = allParts.slice(0, 20);
-            let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length}</strong></div>`;
+            let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length.toLocaleString()}</strong></div>`;
             html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th></tr>';
             
             previewRows.forEach(part => {
@@ -2373,7 +2391,7 @@
             });
 
             if (allParts.length > 20) {
-                html += `<tr><td colspan="3" style="text-align:center; color:#999;">... and ${allParts.length - 20} more parts</td></tr>`;
+                html += `<tr><td colspan="3" style="text-align:center; color:#999;">... and ${(allParts.length - 20).toLocaleString()} more parts</td></tr>`;
             }
 
             html += '</table>';
@@ -2392,11 +2410,37 @@
                 warningDiv.style.display = 'block';
                 warningDiv.innerHTML = `
                     <strong>⚠️ Found ${duplicates.length} duplicate part(s)</strong><br>
-                    These will be skipped. ${allPreviewParts.length - duplicates.length} new parts will be imported.
+                    These will be skipped. ${(allPreviewParts.length - duplicates.length).toLocaleString()} new parts will be imported.
                 `;
             } else {
                 warningDiv.style.display = 'none';
             }
+        }
+
+        // Test function for progress bar
+        function testProgressBar() {
+            const progressContainer = document.getElementById('importProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressContainer.style.display = 'block';
+            
+            let percent = 0;
+            const total = 100;
+            
+            const interval = setInterval(() => {
+                percent += 10;
+                if (percent <= 100) {
+                    progressBar.style.width = percent + '%';
+                    progressBar.textContent = percent + '%';
+                    progressText.textContent = `${percent} / 100 test progress`;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                    }, 1000);
+                }
+            }, 500);
         }
 
         async function importParts() {
@@ -2415,7 +2459,7 @@
             progressContainer.style.display = 'block';
             progressBar.style.width = '0%';
             progressBar.textContent = '0%';
-            progressText.textContent = `0 / ${allParts.length} parts imported`;
+            progressText.textContent = `0 / ${allParts.length.toLocaleString()} parts processed`;
 
             const existingPartNumbers = new Set(parts.map(p => p.partNumber));
             const newParts = [];
@@ -2436,10 +2480,11 @@
                 }
 
                 // Update progress
-                const percent = Math.round(((i + batch.length) / allParts.length) * 100);
+                const processed = Math.min(i + batchSize, allParts.length);
+                const percent = Math.round((processed / allParts.length) * 100);
                 progressBar.style.width = percent + '%';
                 progressBar.textContent = percent + '%';
-                progressText.textContent = `${i + batch.length} / ${allParts.length} parts processed`;
+                progressText.textContent = `${processed.toLocaleString()} / ${allParts.length.toLocaleString()} parts processed`;
 
                 // Small delay to allow UI to update
                 await new Promise(resolve => setTimeout(resolve, 10));
@@ -2460,18 +2505,20 @@
             };
             document.getElementById('hotTubsFile').value = '';
             document.getElementById('waterFile').value = '';
-            document.getElementById('hotTubsFileName').textContent = 'No file selected';
-            document.getElementById('waterFileName').textContent = 'No file selected';
+            document.getElementById('hotTubsFileName').textContent = '📄 No file selected';
+            document.getElementById('waterFileName').textContent = '📄 No file selected';
             document.getElementById('hotTubsFileCount').textContent = '0 parts';
             document.getElementById('waterFileCount').textContent = '0 parts';
             document.getElementById('partsPreview').style.display = 'none';
             document.getElementById('partsDuplicateWarning').style.display = 'none';
             
             // Hide progress bar
-            progressContainer.style.display = 'none';
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
 
             updatePartsStats();
-            alert(`Import complete!\nNew parts: ${newParts.length}\nDuplicates skipped: ${duplicates.length}`);
+            alert(`Import complete!\nNew parts: ${newParts.length.toLocaleString()}\nDuplicates skipped: ${duplicates.length.toLocaleString()}`);
         }
 
         // ============================================
@@ -2492,10 +2539,10 @@
             const total = workOrders.length;
             const active = workOrders.filter(wo => !wo.archived).length;
             
-            document.getElementById('totalWO').textContent = total;
-            document.getElementById('activeWO').textContent = active;
-            document.getElementById('pendingReminders').textContent = reminders.filter(r => !r.completed).length;
-            document.getElementById('totalParts').textContent = parts.length;
+            document.getElementById('totalWO').textContent = total.toLocaleString();
+            document.getElementById('activeWO').textContent = active.toLocaleString();
+            document.getElementById('pendingReminders').textContent = reminders.filter(r => !r.completed).length.toLocaleString();
+            document.getElementById('totalParts').textContent = parts.length.toLocaleString();
         }
 
         function updatePartsStats() {
@@ -2503,9 +2550,9 @@
             const waterSystemsCount = parts.filter(p => p.category === 'Water Systems').length;
             const totalCount = parts.length;
             
-            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount}`;
-            document.getElementById('partsCat2').textContent = `Water Systems: ${waterSystemsCount}`;
-            document.getElementById('totalPartsStat').textContent = `Total: ${totalCount}`;
+            document.getElementById('partsCat1').textContent = `Hot Tubs: ${hotTubsCount.toLocaleString()}`;
+            document.getElementById('partsCat2').textContent = `Water Systems: ${waterSystemsCount.toLocaleString()}`;
+            document.getElementById('totalPartsStat').textContent = `Total: ${totalCount.toLocaleString()}`;
         }
 
         function renderTechList() {
@@ -2547,7 +2594,7 @@
             const manualTech = document.getElementById('manual-tech');
             const techOptions = technicians
                 .filter(t => t.active)
-                .map(t => `<option value="${t.id}">${t.name</option>`)
+                .map(t => `<option value="${t.id}">${t.name}</option>`)
                 .join('');
             manualTech.innerHTML = '<option value="">Select Technician</option>' + techOptions;
         }
