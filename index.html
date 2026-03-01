@@ -12,7 +12,6 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        /* All CSS styles from previous version - keeping them the same */
         * {
             margin: 0;
             padding: 0;
@@ -533,6 +532,63 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
+        /* Bulk Actions Bar */
+        .bulk-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .bulk-actions .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4a5568;
+            cursor: pointer;
+        }
+
+        .bulk-actions .checkbox-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .bulk-archive-btn {
+            background: #c53030;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .bulk-archive-btn:hover {
+            background: #9b2c2c;
+        }
+
+        .bulk-archive-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .selected-count {
+            font-size: 13px;
+            color: #4a5568;
+            margin-left: auto;
+        }
+
         .filters {
             display: flex;
             gap: 15px;
@@ -617,6 +673,18 @@
 
         .workorders-table tr.selected {
             background: #e3f2fd;
+        }
+
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
+            cursor: default;
+        }
+
+        .checkbox-cell input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
         .action-buttons {
@@ -1588,6 +1656,19 @@
                 <!-- Archive Notice -->
                 <div id="archiveNotice" style="display: none; background: #fed7d7; color: #c53030; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;"></div>
 
+                <!-- Bulk Actions Bar -->
+                <div class="bulk-actions">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                        <span>Select All</span>
+                    </label>
+                    <button class="bulk-archive-btn" id="bulkArchiveBtn" onclick="bulkArchive()" disabled>
+                        <span>🗑️</span>
+                        Bulk Archive Selected
+                    </button>
+                    <span class="selected-count" id="selectedCount">0 selected</span>
+                </div>
+
                 <!-- Filters -->
                 <div class="filters">
                     <div class="filter-group">
@@ -1620,6 +1701,7 @@
                 <table class="workorders-table">
                     <thead>
                         <tr>
+                            <th class="checkbox-cell"></th>
                             <th>WO #</th>
                             <th>Customer</th>
                             <th>Phone</th>
@@ -1627,6 +1709,7 @@
                             <th>Status</th>
                             <th>Tech</th>
                             <th>Date</th>
+                            <th>Scheduled</th>
                             <th>Parts</th>
                             <th>Actions</th>
                         </tr>
@@ -1866,6 +1949,9 @@
         let currentPickWO = null;
         let pickedParts = [];
         
+        // Bulk selection
+        let selectedWOs = new Set();
+        
         // CSV preview data - Work Orders
         let workOrderPreviewData = {
             water: [],
@@ -1977,6 +2063,87 @@
 
         function hideLoading() {
             document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        // ============================================
+        // BULK SELECTION FUNCTIONS
+        // ============================================
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const checkboxes = document.querySelectorAll('.wo-checkbox');
+            
+            if (selectAllCheckbox.checked) {
+                checkboxes.forEach(cb => {
+                    cb.checked = true;
+                    selectedWOs.add(cb.value);
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    cb.checked = false;
+                });
+                selectedWOs.clear();
+            }
+            
+            updateBulkArchiveButton();
+        }
+
+        function toggleSelect(woId, checkbox) {
+            if (checkbox.checked) {
+                selectedWOs.add(woId);
+            } else {
+                selectedWOs.delete(woId);
+                
+                // Uncheck "Select All" if any checkbox is unchecked
+                document.getElementById('selectAllCheckbox').checked = false;
+            }
+            
+            updateBulkArchiveButton();
+        }
+
+        function updateBulkArchiveButton() {
+            const count = selectedWOs.size;
+            document.getElementById('selectedCount').textContent = `${count} selected`;
+            document.getElementById('bulkArchiveBtn').disabled = count === 0;
+        }
+
+        async function bulkArchive() {
+            if (selectedWOs.size === 0) return;
+            
+            if (!confirm(`Are you sure you want to archive ${selectedWOs.size} work order(s)?`)) {
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const promises = [];
+                selectedWOs.forEach(woId => {
+                    const wo = workOrders.find(w => w.id === woId);
+                    if (wo && !wo.archived) {
+                        wo.archived = true;
+                        if (!wo.history) wo.history = [];
+                        wo.history.unshift({
+                            time: new Date().toLocaleString(),
+                            note: 'Bulk archived'
+                        });
+                        promises.push(saveWorkOrderToFirestore(wo));
+                    }
+                });
+                
+                await Promise.all(promises);
+                
+                // Clear selections
+                selectedWOs.clear();
+                document.getElementById('selectAllCheckbox').checked = false;
+                updateBulkArchiveButton();
+                
+                renderAll();
+                toast.success(`${selectedWOs.size} work orders archived successfully`);
+            } catch (error) {
+                alert('Error archiving work orders: ' + error.message);
+            } finally {
+                hideLoading();
+            }
         }
 
         // ============================================
@@ -2208,6 +2375,7 @@
                     status: status,
                     techId: null,
                     date: formattedDate,
+                    scheduledDate: null,
                     archived: false,
                     pickedParts: [],
                     history: [{
@@ -2607,9 +2775,14 @@
                 const tech = technicians.find(t => t.id === wo.techId);
                 const statusClass = `status-${wo.status ? wo.status.replace(/\s+/g, '-') : 'Open'}`;
                 const partsCount = wo.pickedParts ? wo.pickedParts.reduce((sum, p) => sum + p.quantity, 0) : 0;
+                const scheduledDate = wo.scheduledDate ? new Date(wo.scheduledDate).toLocaleDateString() : '-';
+                const isChecked = selectedWOs.has(wo.id) ? 'checked' : '';
                 
                 return `
                     <tr onclick="selectWorkOrder('${wo.id}')" class="${wo.id === selectedWO ? 'selected' : ''} ${wo.archived ? 'archived-row' : ''}">
+                        <td class="checkbox-cell" onclick="event.stopPropagation()">
+                            <input type="checkbox" class="wo-checkbox" value="${wo.id}" onchange="toggleSelect('${wo.id}', this)" ${isChecked}>
+                        </td>
                         <td><strong>${wo.woNumber || 'N/A'}</strong></td>
                         <td>${wo.customerName || 'N/A'}</td>
                         <td>${wo.phone || 'N/A'}</td>
@@ -2620,6 +2793,7 @@
                         </td>
                         <td>${tech ? tech.name : 'Unassigned'}</td>
                         <td>${wo.date || 'N/A'}</td>
+                        <td>${scheduledDate}</td>
                         <td>${partsCount > 0 ? `📦 ${partsCount}` : '-'}</td>
                         <td>
                             <div class="action-buttons">
@@ -2635,10 +2809,13 @@
             }).join('');
 
             if (orders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:#999;">
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:40px; color:#999;">
                     No ${currentView === 'active' ? 'active' : 'archived'} work orders found
                 </td></tr>`;
             }
+            
+            // Update bulk archive button state
+            updateBulkArchiveButton();
         }
 
         function renderReminders() {
@@ -2666,6 +2843,12 @@
             currentView = view;
             document.getElementById('viewActiveBtn').classList.toggle('active', view === 'active');
             document.getElementById('viewArchiveBtn').classList.toggle('active', view === 'archive');
+            
+            // Clear selections when switching views
+            selectedWOs.clear();
+            document.getElementById('selectAllCheckbox').checked = false;
+            updateBulkArchiveButton();
+            
             filterWorkOrders();
         }
 
@@ -2694,6 +2877,7 @@
                 status: document.getElementById('manual-status').value,
                 techId: document.getElementById('manual-tech').value || null,
                 date: new Date().toISOString().split('T')[0],
+                scheduledDate: null,
                 archived: false,
                 pickedParts: [],
                 history: [{
@@ -2726,6 +2910,11 @@
                     note: 'Work order archived'
                 });
                 await saveWorkOrderToFirestore(wo);
+                
+                // Remove from selected if it was selected
+                selectedWOs.delete(id);
+                updateBulkArchiveButton();
+                
                 renderAll();
                 if (selectedWO === id) selectWorkOrder(id);
             }
@@ -2822,6 +3011,10 @@
                     <select onchange="updateWO('${wo.id}', 'techId', this.value)" ${wo.archived ? 'disabled' : ''}>
                         ${techOptions}
                     </select>
+                </div>
+                <div class="detail-field">
+                    <label>Scheduled Date</label>
+                    <input type="date" value="${wo.scheduledDate || ''}" onchange="updateWO('${wo.id}', 'scheduledDate', this.value)" ${wo.archived ? 'disabled' : ''}>
                 </div>
                 <div class="detail-field">
                     <label>Complaint / Issue</label>
