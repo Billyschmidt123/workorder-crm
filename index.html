@@ -12,6 +12,7 @@
     <!-- Papa Parse for CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
+        /* All CSS styles from previous version - keeping them the same */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Login Page */
         #login-page {
             display: flex;
             justify-content: center;
@@ -87,7 +87,6 @@
             display: none;
         }
 
-        /* Header */
         .header {
             background: white;
             border-radius: 15px;
@@ -157,7 +156,6 @@
             color: #666;
         }
 
-        /* View Toggle */
         .view-toggle {
             display: flex;
             gap: 10px;
@@ -184,14 +182,12 @@
             color: #333;
         }
 
-        /* Main Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 350px 1fr 300px;
             gap: 20px;
         }
 
-        /* Sidebar with Dropdowns */
         .sidebar {
             background: white;
             border-radius: 15px;
@@ -248,7 +244,6 @@
             margin-bottom: 15px;
         }
 
-        /* CSV Import Sections */
         .csv-import-section {
             background: #f8f9fa;
             border-radius: 8px;
@@ -335,7 +330,6 @@
             font-size: 12px;
         }
 
-        /* Progress Bar */
         .progress-container {
             margin: 15px 0;
             background: #edf2f7;
@@ -465,7 +459,6 @@
             color: #667eea;
         }
 
-        /* Status Tags */
         .status-tag {
             padding: 4px 8px;
             border-radius: 20px;
@@ -481,7 +474,6 @@
         .status-Waiting-Parts { background: #f3e5f5; color: #7b1fa2; }
         .status-Scheduled { background: #e0f2f1; color: #00796b; }
 
-        /* Archive badge */
         .archive-badge {
             background: #cbd5e0;
             color: #4a5568;
@@ -496,7 +488,6 @@
             background: #f7fafc;
         }
 
-        /* Reminders Panel */
         .reminders-panel {
             background: white;
             border-radius: 15px;
@@ -535,7 +526,6 @@
             color: #666;
         }
 
-        /* Main Content */
         .main-content {
             background: white;
             border-radius: 15px;
@@ -543,7 +533,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Filters */
         .filters {
             display: flex;
             gap: 15px;
@@ -596,7 +585,6 @@
             color: #999;
         }
 
-        /* Work Orders Table */
         .workorders-table {
             width: 100%;
             border-collapse: collapse;
@@ -650,7 +638,6 @@
             background: #38a169;
         }
 
-        /* Pick Ticket Modal */
         .pick-ticket-modal {
             display: none;
             position: fixed;
@@ -733,7 +720,6 @@
             overflow: hidden;
         }
 
-        /* Parts Search Panel */
         .parts-search-panel {
             border-right: 2px solid #f0f0f0;
             padding: 20px;
@@ -812,7 +798,6 @@
             border-radius: 4px;
         }
 
-        /* Custom Part Section */
         .custom-part-section {
             border-top: 2px solid #f0f0f0;
             padding-top: 15px;
@@ -872,7 +857,6 @@
             margin-top: 5px;
         }
 
-        /* Picked Parts Panel */
         .picked-parts-panel {
             padding: 20px;
             overflow-y: auto;
@@ -1001,7 +985,6 @@
             gap: 10px;
         }
 
-        /* Detail Panel */
         .detail-panel {
             position: fixed;
             right: 0;
@@ -1341,7 +1324,6 @@
             }
         }
 
-        /* Print Styles */
         @media print {
             body * {
                 visibility: hidden;
