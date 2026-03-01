@@ -1263,6 +1263,8 @@
     </div>
         <script>
         // ============================================
+         <script>
+        // ============================================
         // FIREBASE CONFIGURATION
         // ============================================
         const firebaseConfig = {
@@ -1814,14 +1816,15 @@
             
             // Add error rows
             currentImportLog.errors.forEach(error => {
+                // Escape any commas in the text fields
                 const row = [
                     error.timestamp,
                     error.rowNumber,
-                    `"${error.partNumber}"`, // Wrap in quotes to handle commas in part numbers
-                    `"${error.description}"`,
-                    `"${error.category}"`,
-                    `"${error.errorType}"`,
-                    `"${error.errorMessage}"`
+                    `"${error.partNumber.replace(/"/g, '""')}"`,
+                    `"${error.description.replace(/"/g, '""')}"`,
+                    `"${error.category.replace(/"/g, '""')}"`,
+                    `"${error.errorType.replace(/"/g, '""')}"`,
+                    `"${error.errorMessage.replace(/"/g, '""')}"`
                 ];
                 csvRows.push(row.join(','));
             });
@@ -1863,7 +1866,7 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
         }
 
         // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS
+        // CSV IMPORT FUNCTIONS - PARTS (FIXED VERSION)
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
@@ -1884,19 +1887,26 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                     const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
                     
                     console.log(`Processing ${type} parts file with ${results.data.length} rows`);
+                    console.log("Sample row:", results.data[0]);
                     
-                    // Process ALL parts
+                    // Process ALL parts - preserve original data
                     const processedParts = results.data
                         .filter(row => {
                             // Filter out completely empty rows
                             return row && Object.keys(row).length > 0;
                         })
                         .map((row, index) => {
+                            // Get ALL values from the row
                             let partNumber = '';
                             let description = '';
                             
-                            // Try to find part number
-                            const possiblePartFields = ['part_number', 'part number', 'part#', 'Part Number', 'Part_Number', 'Num', 'Part #', 'Part#'];
+                            // Try to find part number - check ALL possible fields
+                            const possiblePartFields = [
+                                'part_number', 'part number', 'part#', 'Part Number', 'Part_Number', 
+                                'Num', 'Part #', 'Part#', 'PART_NUMBER', 'Part No', 'PartNo',
+                                'Part Number', 'PART NUMBER', 'Part #', 'Part#'
+                            ];
+                            
                             for (const field of possiblePartFields) {
                                 if (row[field] && row[field].toString().trim() !== '') {
                                     partNumber = row[field].toString().trim();
@@ -1904,16 +1914,27 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                                 }
                             }
                             
-                            // If still no part number, use the first column's value
+                            // If still no part number, check each column value
                             if (!partNumber) {
-                                const firstKey = Object.keys(row)[0];
-                                if (firstKey && row[firstKey] && row[firstKey].toString().trim() !== '') {
-                                    partNumber = row[firstKey].toString().trim();
+                                for (const key in row) {
+                                    if (row[key] && row[key].toString().trim() !== '') {
+                                        // If this value looks like a part number (contains letters/numbers)
+                                        const val = row[key].toString().trim();
+                                        if (val.length > 0 && !partNumber) {
+                                            partNumber = val;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                             
                             // Try to find description
-                            const possibleDescFields = ['description', 'Description', 'desc', 'Memo', 'Name', 'Part Description', 'Item Description'];
+                            const possibleDescFields = [
+                                'description', 'Description', 'desc', 'Memo', 'Name', 
+                                'Part Description', 'Item Description', 'DESCRIPTION',
+                                'Part Name', 'PART NAME', 'Desc', 'DESC'
+                            ];
+                            
                             for (const field of possibleDescFields) {
                                 if (row[field] && row[field].toString().trim() !== '') {
                                     description = row[field].toString().trim();
@@ -1921,17 +1942,32 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                                 }
                             }
                             
-                            // If no description, use the second column or a default
+                            // If no description, try to use any other field
                             if (!description) {
-                                const keys = Object.keys(row);
-                                if (keys.length > 1 && row[keys[1]] && row[keys[1]].toString().trim() !== '') {
-                                    description = row[keys[1]].toString().trim();
-                                } else {
-                                    description = 'No description';
+                                for (const key in row) {
+                                    if (row[key] && row[key].toString().trim() !== '' && key !== Object.keys(row)[0]) {
+                                        description = row[key].toString().trim();
+                                        break;
+                                    }
                                 }
                             }
                             
-                            // If part number is empty, create a unique one
+                            // For labor items, use the description from the first column
+                            if (!description && partNumber.toLowerCase().includes('labor')) {
+                                description = partNumber;
+                            }
+                            
+                            // If description still empty, use placeholder
+                            if (!description || description === '') {
+                                description = 'No description';
+                            }
+                            
+                            // For labor items, use the description as part number if none exists
+                            if ((!partNumber || partNumber === '') && description.toLowerCase().includes('labor')) {
+                                partNumber = description.replace(/\s+/g, '-').toUpperCase();
+                            }
+                            
+                            // If part number is still empty, create a unique one
                             if (!partNumber || partNumber === '') {
                                 partNumber = `PART-${Date.now()}-${index}`;
                             }
@@ -1941,6 +1977,8 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                                 partNumber: partNumber,
                                 description: description,
                                 category: category,
+                                originalRow: index + 2, // +2 for header row and 1-index
+                                originalData: row, // Keep original data for debugging
                                 quantity: 1,
                                 price: 0,
                                 location: 'Main',
@@ -1969,6 +2007,8 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
             const previewDiv = document.getElementById('partsPreview');
             previewDiv.style.display = 'block';
             
+            const hotTubsCount = (partsPreviewData.hotTubs || []).length;
+            const waterCount = (partsPreviewData.water || []).length;
             const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
             
             if (allParts.length === 0) {
@@ -1976,25 +2016,40 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                 return;
             }
 
+            // Show accurate counts
+            let html = `<div style="margin-bottom:10px; background:#e2e8f0; padding:10px; border-radius:5px;">`;
+            html += `<strong>Total parts to import: ${allParts.length.toLocaleString()}</strong><br>`;
+            html += `Hot Tubs: ${hotTubsCount.toLocaleString()} | Water Systems: ${waterCount.toLocaleString()}`;
+            html += `</div>`;
+            
             // Show first 20 parts for preview
             const previewRows = allParts.slice(0, 20);
-            let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length.toLocaleString()}</strong></div>`;
-            html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th></tr>';
+            html += '<table><tr><th>Row</th><th>Part #</th><th>Description</th><th>Category</th></tr>';
             
-            previewRows.forEach(part => {
+            previewRows.forEach((part, idx) => {
+                const rowNum = part.originalRow || (idx + 2);
                 // Truncate long descriptions
                 const shortDesc = part.description.length > 40 ? 
                     part.description.substring(0, 40) + '...' : part.description;
                     
+                // Highlight missing values
+                const partNumDisplay = part.partNumber && !part.partNumber.includes('PART-') ? 
+                    part.partNumber : '<span style="color:red; font-weight:bold;">MISSING</span>';
+                const descDisplay = part.description && part.description !== 'No description' ? 
+                    shortDesc : '<span style="color:orange;">No description</span>';
+                    
                 html += `<tr>
-                    <td>${part.partNumber}</td>
-                    <td>${shortDesc}</td>
+                    <td>${rowNum}</td>
+                    <td>${partNumDisplay}</td>
+                    <td>${descDisplay}</td>
                     <td>${part.category}</td>
                 </tr>`;
             });
 
             if (allParts.length > 20) {
-                html += `<tr><td colspan="3" style="text-align:center; color:#999;">... and ${(allParts.length - 20).toLocaleString()} more parts</td></tr>`;
+                html += `<tr><td colspan="4" style="text-align:center; color:#999; padding:10px;">
+                    ... and ${(allParts.length - 20).toLocaleString()} more parts
+                </td></tr>`;
             }
 
             html += '</table>';
@@ -2004,9 +2059,9 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
         }
 
         function checkPartsDuplicates() {
-            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber.toLowerCase()));
             const allPreviewParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
-            const duplicates = allPreviewParts.filter(p => existingPartNumbers.has(p.partNumber));
+            const duplicates = allPreviewParts.filter(p => existingPartNumbers.has(p.partNumber.toLowerCase()));
 
             const warningDiv = document.getElementById('partsDuplicateWarning');
             if (duplicates.length > 0) {
@@ -2021,14 +2076,19 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
         }
 
         async function importParts() {
-            const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
+            const hotTubsParts = partsPreviewData.hotTubs || [];
+            const waterParts = partsPreviewData.water || [];
+            const allParts = [...hotTubsParts, ...waterParts];
+            
+            console.log(`Total parts to import: ${allParts.length}`);
+            console.log(`Hot Tubs: ${hotTubsParts.length}, Water: ${waterParts.length}`);
             
             if (allParts.length === 0) {
                 alert('Please select parts CSV files first');
                 return;
             }
 
-            // Initialize import log
+            // Initialize import log with correct total
             initializeImportLog('parts_import.csv', allParts.length);
             
             // Show progress bar
@@ -2043,56 +2103,79 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
             progressText.textContent = `0 / ${allParts.length.toLocaleString()} parts processed`;
             downloadBtn.style.display = 'none';
 
-            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber.toLowerCase()));
             const newParts = [];
-            let rowNumber = 1;
-
-            // Process in batches to show progress
-            const batchSize = 100;
-            for (let i = 0; i < allParts.length; i += batchSize) {
-                const batch = allParts.slice(i, i + batchSize);
+            
+            // Process each part with proper row numbering
+            for (let i = 0; i < allParts.length; i++) {
+                const part = allParts[i];
+                const rowNumber = part.originalRow || (i + 2); // +2 for header
+                let hasError = false;
                 
-                for (const part of batch) {
-                    let hasError = false;
-                    
-                    // Validate part number
-                    if (!part.partNumber || part.partNumber === '') {
-                        logPartError(rowNumber, part, 'REQUIRED_FIELD', 'Part number is required');
-                        hasError = true;
-                    }
-                    
-                    // Validate description
-                    if (!part.description || part.description === '') {
-                        logPartError(rowNumber, part, 'REQUIRED_FIELD', 'Description is required');
-                        hasError = true;
-                    }
-                    
-                    // Check for duplicates
-                    if (existingPartNumbers.has(part.partNumber)) {
-                        logPartError(rowNumber, part, 'DUPLICATE', `Part number "${part.partNumber}" already exists`);
-                        hasError = true;
-                    }
-                    
-                    // Validate category
-                    if (!part.category || (part.category !== 'Hot Tubs' && part.category !== 'Water Systems')) {
-                        logPartError(rowNumber, part, 'INVALID_CATEGORY', `Category must be "Hot Tubs" or "Water Systems", got "${part.category}"`);
-                        hasError = true;
-                    }
-                    
-                    if (!hasError) {
-                        newParts.push(part);
-                        existingPartNumbers.add(part.partNumber);
-                        logPartSuccess(rowNumber, part);
-                    }
-                    
-                    rowNumber++;
+                // Log what we're processing
+                console.log(`Processing row ${rowNumber}:`, part);
+                
+                // Check for missing part number
+                if (!part.partNumber || part.partNumber === '' || part.partNumber.includes('PART-')) {
+                    logPartError(rowNumber, part, 'MISSING_PART_NUMBER', 
+                        `Part number is missing or invalid. Found: "${part.partNumber}"`);
+                    hasError = true;
                 }
-
-                // Update progress
-                updateImportProgress();
-
-                // Small delay to allow UI to update
-                await new Promise(resolve => setTimeout(resolve, 10));
+                
+                // Check for missing description
+                if (!part.description || part.description === '' || part.description === 'No description') {
+                    logPartError(rowNumber, part, 'MISSING_DESCRIPTION', 
+                        `Description is missing. Found: "${part.description}"`);
+                    hasError = true;
+                }
+                
+                // Check for duplicates (case insensitive)
+                const partNumLower = part.partNumber.toLowerCase();
+                let isDuplicate = false;
+                for (const existingNum of existingPartNumbers) {
+                    if (existingNum.toLowerCase() === partNumLower) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                
+                if (isDuplicate) {
+                    logPartError(rowNumber, part, 'DUPLICATE_PART', 
+                        `Part number "${part.partNumber}" already exists in database`);
+                    hasError = true;
+                }
+                
+                // Check category
+                if (!part.category || (part.category !== 'Hot Tubs' && part.category !== 'Water Systems')) {
+                    logPartError(rowNumber, part, 'INVALID_CATEGORY', 
+                        `Category must be "Hot Tubs" or "Water Systems". Found: "${part.category}"`);
+                    hasError = true;
+                }
+                
+                if (!hasError) {
+                    // Create a clean part object
+                    const newPart = {
+                        id: `part-${Date.now()}-${i}-${Math.random()}`,
+                        partNumber: part.partNumber,
+                        description: part.description,
+                        category: part.category,
+                        quantity: 1,
+                        price: 0,
+                        location: 'Main',
+                        notes: '',
+                        importedAt: new Date().toISOString()
+                    };
+                    
+                    newParts.push(newPart);
+                    existingPartNumbers.add(part.partNumber.toLowerCase());
+                    logPartSuccess(rowNumber, part);
+                }
+                
+                // Update progress every 10 rows for performance
+                if (i % 10 === 0 || i === allParts.length - 1) {
+                    updateImportProgress();
+                    await new Promise(resolve => setTimeout(resolve, 5));
+                }
             }
 
             // Add all valid new parts at once
