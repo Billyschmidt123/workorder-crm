@@ -1907,6 +1907,18 @@
     </div>
 
     <script>
+        // --- TOAST ERROR FIX ---
+// This defines 'toast' so your archiving and other functions don't crash.
+const toast = {
+    success: (message) => {
+        console.log("Success: " + message);
+        alert("✅ SUCCESS: " + message);
+    },
+    error: (message) => {
+        console.error("Error: " + message);
+        alert("❌ ERROR: " + message);
+    }
+};
         // ============================================
         // FIREBASE CONFIGURATION
         // ============================================
@@ -3857,3 +3869,4 @@
     </script>
 </body>
 </html>
+
