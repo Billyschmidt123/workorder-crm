@@ -335,7 +335,7 @@
             font-size: 12px;
         }
 
-        /* Progress Bar - Made more prominent */
+        /* Progress Bar */
         .progress-container {
             margin: 15px 0;
             background: #edf2f7;
@@ -811,6 +811,590 @@
             padding: 2px 6px;
             border-radius: 4px;
         }
+
+        /* Custom Part Section */
+        .custom-part-section {
+            border-top: 2px solid #f0f0f0;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .custom-part-section h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .custom-part-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .custom-part-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .custom-part-row input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .add-custom-btn {
+            width: 100%;
+            padding: 10px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .add-custom-btn:hover {
+            background: #38a169;
+        }
+
+        .save-to-db-note {
+            font-size: 11px;
+            color: #718096;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* Picked Parts Panel */
+        .picked-parts-panel {
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .picked-parts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .picked-parts-header h3 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .picked-parts-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .picked-parts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .picked-part-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .picked-part-info {
+            grid-column: 1;
+        }
+
+        .picked-part-number {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .picked-part-description {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .picked-part-serial {
+            font-size: 11px;
+            color: #48bb78;
+            margin-top: 2px;
+        }
+
+        .picked-part-quantity {
+            grid-column: 2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .picked-part-quantity input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .picked-part-actions {
+            grid-column: 3;
+            display: flex;
+            gap: 5px;
+        }
+
+        .picked-part-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .btn-serial {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-serial:hover {
+            background: #38a169;
+        }
+
+        .btn-remove {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .btn-remove:hover {
+            background: #feb2b2;
+        }
+
+        .btn-status {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-status:hover {
+            background: #cbd5e0;
+        }
+
+        .pick-ticket-footer {
+            padding: 20px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Detail Panel */
+        .detail-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 500px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .detail-panel.open {
+            transform: translateX(0);
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-header h2 {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .detail-header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .reminder-btn {
+            background: #fbbf24;
+            color: #333;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .reminder-btn:hover {
+            background: #f59e0b;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .pick-ticket-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .pick-ticket-btn:hover {
+            background: #38a169;
+        }
+
+        .detail-field {
+            margin-bottom: 20px;
+        }
+
+        .detail-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .detail-field input, .detail-field select, .detail-field textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .detail-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .archive-btn {
+            background: #cbd5e0;
+            color: #4a5568;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .archive-btn:hover {
+            background: #a0aec0;
+        }
+
+        .archive-btn.archived {
+            background: #48bb78;
+            color: white;
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-time {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .history-note {
+            color: #666;
+        }
+
+        .add-note {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-note input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .add-note button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .add-note button:hover {
+            background: #5a67d8;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input, .modal-content select, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .task-assignment {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .task-assignment h4 {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .task-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .task-form input, .task-form select {
+            flex: 1;
+            min-width: 150px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar, .reminders-panel {
+                display: none;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .printable-ticket, .printable-ticket * {
+                visibility: visible;
+            }
+            .printable-ticket {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .printable-ticket {
+            background: white;
+            padding: 20px;
+            font-family: monospace;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .printable-ticket h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .printable-ticket h2 {
+            font-size: 18px;
+            margin: 15px 0 5px;
+        }
+
+        .printable-ticket table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .printable-ticket th,
+        .printable-ticket td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .printable-ticket th {
+            background: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -916,11 +1500,7 @@
                             <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
                             <div class="file-info">
                                 <span class="file-name" id="hotTubsFileName">📄 No file selected</span>
-                                <span class="file-count" id="hotTubsFileCount">0 parts</span>                                                         
-                            </div>
-                            <div style="font-size: 11px; color: #666; text-align: center; margin-bottom: 10px;">
-                                ⚠️ Use these buttons to clear your parts database before reimporting from scratch
-                            </div>
+                                <span class="file-count" id="hotTubsFileCount">0 parts</span>
                             </div>
                             
                             <h4 style="margin-top:15px;">Water Systems Parts</h4>
@@ -939,27 +1519,10 @@
                                 <div class="progress-text" id="progressText">0 / 0 parts processed</div>
                             </div>
                             
-                            <!-- Download Error Report Button -->
-                            <button class="btn btn-warning" id="downloadErrorReportBtn" style="width:100%; margin-bottom:10px; display:none;" onclick="downloadErrorReport()">
-                                ⚠️ Download Error Report
-                            </button>
-                            
                             <div class="parts-stats">
                                 <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
                                 <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
                                 <span class="parts-stat" id="totalPartsStat">Total: 0</span>
-                            </div>
-                                                    <!-- CLEAR PARTS BUTTONS -->
-                            <div style="display: flex; gap: 10px; margin: 20px 0; padding-top: 15px; border-top: 2px solid #ff6b6b;">
-                                <button class="btn btn-danger" style="flex: 1; background-color: #dc3545; color: white; font-weight: bold; padding: 12px;" onclick="clearAllParts()">
-                                    🗑️ DELETE ALL PARTS
-                                </button>
-                                <button class="btn btn-warning" style="flex: 1; background-color: #ffc107; color: black; font-weight: bold; padding: 12px;" onclick="resetAndReimport()">
-                                    🔄 RESET & REIMPORT
-                                </button>
-                            </div>
-                            <div style="font-size: 11px; color: #666; text-align: center; margin-bottom: 10px;">
-                                ⚠️ Use these buttons to clear your parts database before reimporting from scratch
                             </div>
                             <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
                         </div>
@@ -1277,9 +1840,8 @@
     <div id="loadingSpinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3000;">
         <div class="spinner"></div>
     </div>
-        <script>
-        // ============================================
-         <script>
+
+    <script>
         // ============================================
         // FIREBASE CONFIGURATION
         // ============================================
@@ -1321,20 +1883,6 @@
         let selectedWO = null;
         let currentPickWO = null;
         let pickedParts = [];
-        
-        // Import error logging
-        let currentImportLog = {
-            importId: null,
-            startTime: null,
-            endTime: null,
-            status: 'idle',
-            totalRows: 0,
-            processedRows: 0,
-            successfulRows: 0,
-            failedRows: 0,
-            errors: [],
-            fileName: ''
-        };
         
         // CSV preview data - Work Orders
         let workOrderPreviewData = {
@@ -1516,10 +2064,11 @@
                 console.error('Error loading user data:', error);
                 alert('Error loading data: ' + error.message);
             }
-           // ============================================
+        }
+
+        // ============================================
         // SAVE FUNCTIONS
         // ============================================
-             
         async function saveWorkOrderToFirestore(wo) {
             if (!currentUser) return;
             try {
@@ -1528,168 +2077,7 @@
                 console.error('Error saving work order:', error);
             }
         }
-        // ============================================
-        // CLEAR ALL PARTS DATA
-        // ============================================
-        async function clearAllParts() {
-            // Show confirmation dialog
-            const confirmClear = confirm(
-                "⚠️ WARNING: This will PERMANENTLY DELETE all parts from your database!\n\n" +
-                `You currently have ${parts.length.toLocaleString()} parts in your system.\n\n` +
-                "This action cannot be undone. Are you ABSOLUTELY sure?"
-            );
-            
-            if (!confirmClear) return;
-            
-            // Double-check with password-like confirmation
-            const password = prompt(
-                "⚠️ FINAL WARNING!\n\n" +
-                "Type 'DELETE ALL PARTS' to confirm you want to delete every part from the database:"
-            );
-            
-            if (password !== 'DELETE ALL PARTS') {
-                alert('Clear cancelled - incorrect confirmation');
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                // Clear the local parts array
-                const deletedCount = parts.length;
-                parts = [];
-                
-                // Clear from Firestore
-                await db.collection('users').doc(currentUser.uid).update({
-                    parts: []
-                });
-                
-                // Also clear any parts in subcollections if they exist
-                try {
-                    const partsSnapshot = await db.collection('users').doc(currentUser.uid).collection('parts').get();
-                    const batch = db.batch();
-                    partsSnapshot.docs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    await batch.commit();
-                } catch (e) {
-                    console.log('No parts subcollection to clear');
-                }
-                
-                // Reset parts preview data
-                partsPreviewData = {
-                    hotTubs: [],
-                    water: []
-                };
-                
-                // Clear file inputs and displays
-                document.getElementById('hotTubsFile').value = '';
-                document.getElementById('waterFile').value = '';
-                document.getElementById('hotTubsFileName').textContent = '📄 No file selected';
-                document.getElementById('waterFileName').textContent = '📄 No file selected';
-                document.getElementById('hotTubsFileCount').textContent = '0 parts';
-                document.getElementById('waterFileCount').textContent = '0 parts';
-                document.getElementById('partsPreview').style.display = 'none';
-                document.getElementById('partsDuplicateWarning').style.display = 'none';
-                document.getElementById('importProgress').style.display = 'none';
-                document.getElementById('downloadErrorReportBtn').style.display = 'none';
-                
-                // Reset import log
-                currentImportLog = {
-                    importId: null,
-                    startTime: null,
-                    endTime: null,
-                    status: 'idle',
-                    totalRows: 0,
-                    processedRows: 0,
-                    successfulRows: 0,
-                    failedRows: 0,
-                    errors: [],
-                    fileName: ''
-                };
-                
-                // Update stats
-                updatePartsStats();
-                renderAll();
-                
-                hideLoading();
-                
-                alert(`✅ SUCCESS!\n\nAll ${deletedCount.toLocaleString()} parts have been permanently deleted from your database.\n\nYou can now import your CSV files from scratch.`);
-                
-            } catch (error) {
-                hideLoading();
-                console.error('Error clearing parts:', error);
-                alert('Error clearing parts: ' + error.message);
-            }
-        }
 
-        // ============================================
-        // QUICK RESET FUNCTION (Less Destructive)
-        // ============================================
-        async function resetAndReimport() {
-            // Show confirmation
-            const confirmReset = confirm(
-                "This will clear ALL parts and reset the import system.\n\n" +
-                "Your work orders and other data will NOT be affected.\n\n" +
-                "Continue?"
-            );
-            
-            if (!confirmReset) return;
-            
-            showLoading();
-            
-            try {
-                // Clear local parts
-                parts = [];
-                
-                // Clear from Firestore
-                await db.collection('users').doc(currentUser.uid).update({
-                    parts: []
-                });
-                
-                // Reset all UI elements
-                partsPreviewData = {
-                    hotTubs: [],
-                    water: []
-                };
-                
-                document.getElementById('hotTubsFile').value = '';
-                document.getElementById('waterFile').value = '';
-                document.getElementById('hotTubsFileName').textContent = '📄 No file selected';
-                document.getElementById('waterFileName').textContent = '📄 No file selected';
-                document.getElementById('hotTubsFileCount').textContent = '0 parts';
-                document.getElementById('waterFileCount').textContent = '0 parts';
-                document.getElementById('partsPreview').style.display = 'none';
-                document.getElementById('partsDuplicateWarning').style.display = 'none';
-                document.getElementById('importProgress').style.display = 'none';
-                document.getElementById('downloadErrorReportBtn').style.display = 'none';
-                
-                // Reset import log
-                currentImportLog = {
-                    importId: null,
-                    startTime: null,
-                    endTime: null,
-                    status: 'idle',
-                    totalRows: 0,
-                    processedRows: 0,
-                    successfulRows: 0,
-                    failedRows: 0,
-                    errors: [],
-                    fileName: ''
-                };
-                
-                updatePartsStats();
-                renderAll();
-                
-                hideLoading();
-                
-                alert('✅ Database cleared! You can now import your parts from scratch.');
-                
-            } catch (error) {
-                hideLoading();
-                alert('Error resetting: ' + error.message);
-            }
-        }
         // ============================================
         // CSV IMPORT FUNCTIONS - WORK ORDERS
         // ============================================
@@ -1855,194 +2243,7 @@
         }
 
         // ============================================
-        // IMPORT ERROR REPORTING FUNCTIONS
-        // ============================================
-        function initializeImportLog(fileName, totalRows) {
-            currentImportLog = {
-                importId: `import-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                startTime: new Date().toISOString(),
-                endTime: null,
-                status: 'processing',
-                totalRows: totalRows,
-                processedRows: 0,
-                successfulRows: 0,
-                failedRows: 0,
-                errors: [],
-                fileName: fileName || 'parts_import.csv'
-            };
-            
-            console.log('Import log initialized:', currentImportLog);
-            return currentImportLog.importId;
-        }
-
-        function logPartError(rowNumber, partData, errorType, errorMessage) {
-            if (!currentImportLog || currentImportLog.status !== 'processing') {
-                console.warn('No active import log to record error');
-                return;
-            }
-            
-            const error = {
-                timestamp: new Date().toISOString(),
-                rowNumber: rowNumber,
-                partNumber: partData?.partNumber || 'N/A',
-                description: partData?.description || 'N/A',
-                category: partData?.category || 'N/A',
-                errorType: errorType,
-                errorMessage: errorMessage,
-                rawData: JSON.stringify(partData)
-            };
-            
-            currentImportLog.errors.push(error);
-            currentImportLog.failedRows++;
-            currentImportLog.processedRows++;
-            
-            console.log(`Error logged at row ${rowNumber}:`, errorMessage);
-            
-            // Update UI
-            updateImportProgress();
-        }
-
-        function logPartSuccess(rowNumber, partData) {
-            if (!currentImportLog || currentImportLog.status !== 'processing') return;
-            
-            currentImportLog.successfulRows++;
-            currentImportLog.processedRows++;
-            
-            // Update UI
-            updateImportProgress();
-        }
-
-        function updateImportProgress() {
-            if (!currentImportLog || currentImportLog.totalRows === 0) return;
-            
-            const percent = Math.round((currentImportLog.processedRows / currentImportLog.totalRows) * 100);
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            const downloadBtn = document.getElementById('downloadErrorReportBtn');
-            
-            if (progressBar) {
-                progressBar.style.width = percent + '%';
-                progressBar.textContent = percent + '%';
-            }
-            
-            if (progressText) {
-                let statusText = `${currentImportLog.processedRows.toLocaleString()} / ${currentImportLog.totalRows.toLocaleString()} parts processed`;
-                if (currentImportLog.failedRows > 0) {
-                    statusText += ` (${currentImportLog.failedRows} failed)`;
-                }
-                progressText.textContent = statusText;
-            }
-            
-            // Show download button if there are errors
-            if (downloadBtn) {
-                if (currentImportLog.failedRows > 0) {
-                    downloadBtn.style.display = 'block';
-                    downloadBtn.textContent = `⚠️ Download Error Report (${currentImportLog.failedRows} errors)`;
-                } else if (currentImportLog.processedRows === currentImportLog.totalRows && currentImportLog.failedRows === 0) {
-                    downloadBtn.style.display = 'none';
-                }
-            }
-        }
-
-        function completeImportLog() {
-            if (!currentImportLog) return;
-            
-            currentImportLog.endTime = new Date().toISOString();
-            currentImportLog.status = 'completed';
-            
-            console.log('Import completed:', {
-                total: currentImportLog.totalRows,
-                successful: currentImportLog.successfulRows,
-                failed: currentImportLog.failedRows
-            });
-            
-            // Store in session storage for recovery
-            try {
-                const completedImports = JSON.parse(sessionStorage.getItem('completedImports') || '[]');
-                completedImports.unshift({
-                    importId: currentImportLog.importId,
-                    timestamp: currentImportLog.endTime,
-                    fileName: currentImportLog.fileName,
-                    totalRows: currentImportLog.totalRows,
-                    successfulRows: currentImportLog.successfulRows,
-                    failedRows: currentImportLog.failedRows
-                });
-                // Keep only last 10 imports
-                if (completedImports.length > 10) completedImports.pop();
-                sessionStorage.setItem('completedImports', JSON.stringify(completedImports));
-            } catch (e) {
-                console.warn('Could not save to session storage:', e);
-            }
-            
-            updateImportProgress();
-        }
-
-        function downloadErrorReport() {
-            if (!currentImportLog || currentImportLog.errors.length === 0) {
-                alert('No errors to report');
-                return;
-            }
-            
-            // Create CSV content
-            const headers = ['Timestamp', 'Row Number', 'Part Number', 'Description', 'Category', 'Error Type', 'Error Message'];
-            const csvRows = [];
-            
-            // Add headers
-            csvRows.push(headers.join(','));
-            
-            // Add error rows
-            currentImportLog.errors.forEach(error => {
-                // Escape any commas in the text fields
-                const row = [
-                    error.timestamp,
-                    error.rowNumber,
-                    `"${error.partNumber.replace(/"/g, '""')}"`,
-                    `"${error.description.replace(/"/g, '""')}"`,
-                    `"${error.category.replace(/"/g, '""')}"`,
-                    `"${error.errorType.replace(/"/g, '""')}"`,
-                    `"${error.errorMessage.replace(/"/g, '""')}"`
-                ];
-                csvRows.push(row.join(','));
-            });
-            
-            // Add summary at the bottom
-            csvRows.push(''); // Empty line
-            csvRows.push(`"Import Summary: ${new Date(currentImportLog.startTime).toLocaleString()}"`);
-            csvRows.push(`"Total Rows:,${currentImportLog.totalRows}"`);
-            csvRows.push(`"Successful:,${currentImportLog.successfulRows}"`);
-            csvRows.push(`"Failed:,${currentImportLog.failedRows}"`);
-            csvRows.push(`"File:,${currentImportLog.fileName}"`);
-            
-            const csvContent = csvRows.join('\n');
-            
-            // Create download
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', `import_errors_${new Date().toISOString().split('T')[0]}_${currentImportLog.importId}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        }
-
-        function showImportSummary() {
-            if (!currentImportLog || currentImportLog.status !== 'completed') return;
-            
-            const summary = `Import Complete!
-    
-Total Parts: ${currentImportLog.totalRows.toLocaleString()}
-Successfully Imported: ${currentImportLog.successfulRows.toLocaleString()}
-Failed: ${currentImportLog.failedRows.toLocaleString()}
-
-${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.' : '✅ All parts imported successfully!'}`;
-            
-            alert(summary);
-        }
-
-        // ============================================
-        // CSV IMPORT FUNCTIONS - PARTS (FIXED VERSION)
+        // CSV IMPORT FUNCTIONS - PARTS
         // ============================================
         function previewPartsCSV(type) {
             const fileId = type === 'hotTubs' ? 'hotTubsFile' : 'waterFile';
@@ -2063,89 +2264,70 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                     const category = type === 'hotTubs' ? 'Hot Tubs' : 'Water Systems';
                     
                     console.log(`Processing ${type} parts file with ${results.data.length} rows`);
-                    console.log("Sample row:", results.data[0]);
+                    console.log("Headers found:", results.meta.fields);
                     
-                    // Process ALL parts - preserve original data
+                    // Process ALL parts
                     const processedParts = results.data
                         .filter(row => {
                             // Filter out completely empty rows
                             return row && Object.keys(row).length > 0;
                         })
                         .map((row, index) => {
-                            // Get ALL values from the row
                             let partNumber = '';
                             let description = '';
                             
-                            // Try to find part number - check ALL possible fields
-                            const possiblePartFields = [
-                                'part_number', 'part number', 'part#', 'Part Number', 'Part_Number', 
-                                'Num', 'Part #', 'Part#', 'PART_NUMBER', 'Part No', 'PartNo',
-                                'Part Number', 'PART NUMBER', 'Part #', 'Part#'
-                            ];
-                            
-                            for (const field of possiblePartFields) {
-                                if (row[field] && row[field].toString().trim() !== '') {
-                                    partNumber = row[field].toString().trim();
-                                    break;
-                                }
-                            }
-                            
-                            // If still no part number, check each column value
-                            if (!partNumber) {
-                                for (const key in row) {
-                                    if (row[key] && row[key].toString().trim() !== '') {
-                                        // If this value looks like a part number (contains letters/numbers)
-                                        const val = row[key].toString().trim();
-                                        if (val.length > 0 && !partNumber) {
-                                            partNumber = val;
-                                            break;
-                                        }
-                                    }
+                            // Try to find part number
+                            if (row['part_number']) {
+                                partNumber = row['part_number'].toString().trim();
+                            } else if (row['part number']) {
+                                partNumber = row['part number'].toString().trim();
+                            } else if (row['part#']) {
+                                partNumber = row['part#'].toString().trim();
+                            } else if (row['Part Number']) {
+                                partNumber = row['Part Number'].toString().trim();
+                            } else if (row['Part_Number']) {
+                                partNumber = row['Part_Number'].toString().trim();
+                            } else if (row['Num']) {
+                                partNumber = row['Num'].toString().trim();
+                            } else {
+                                // If no part number column found, use the first column's value
+                                const firstKey = Object.keys(row)[0];
+                                if (firstKey && row[firstKey]) {
+                                    partNumber = row[firstKey].toString().trim();
+                                } else {
+                                    partNumber = `PART-${Date.now()}-${index}`;
                                 }
                             }
                             
                             // Try to find description
-                            const possibleDescFields = [
-                                'description', 'Description', 'desc', 'Memo', 'Name', 
-                                'Part Description', 'Item Description', 'DESCRIPTION',
-                                'Part Name', 'PART NAME', 'Desc', 'DESC'
-                            ];
-                            
-                            for (const field of possibleDescFields) {
-                                if (row[field] && row[field].toString().trim() !== '') {
-                                    description = row[field].toString().trim();
-                                    break;
+                            if (row['description']) {
+                                description = row['description'].toString().trim();
+                            } else if (row['Description']) {
+                                description = row['Description'].toString().trim();
+                            } else if (row['desc']) {
+                                description = row['desc'].toString().trim();
+                            } else if (row['Memo']) {
+                                description = row['Memo'].toString().trim();
+                            } else if (row['Name']) {
+                                description = row['Name'].toString().trim();
+                            } else {
+                                // If no description column, use the second column or a default
+                                const keys = Object.keys(row);
+                                if (keys.length > 1 && row[keys[1]]) {
+                                    description = row[keys[1]].toString().trim();
+                                } else {
+                                    description = 'No description';
                                 }
                             }
                             
-                            // If no description, try to use any other field
-                            if (!description) {
-                                for (const key in row) {
-                                    if (row[key] && row[key].toString().trim() !== '' && key !== Object.keys(row)[0]) {
-                                        description = row[key].toString().trim();
-                                        break;
-                                    }
-                                }
-                            }
-                            
-                            // For labor items, use the description from the first column
-                            if (!description && partNumber.toLowerCase().includes('labor')) {
-                                description = partNumber;
-                            }
-                            
-                            // If description still empty, use placeholder
-                            if (!description || description === '') {
-                                description = 'No description';
-                            }
-                            
-                            // For labor items, use the description as part number if none exists
-                            if ((!partNumber || partNumber === '') && description.toLowerCase().includes('labor')) {
-                                partNumber = description.replace(/\s+/g, '-').toUpperCase();
-                            }
-                            
-                            // If part number is still empty, create a unique one
+                            // If part number is empty, create a unique one
                             if (!partNumber || partNumber === '') {
                                 partNumber = `PART-${Date.now()}-${index}`;
+                            }
+                            
+                            // If description is empty, use a placeholder
+                            if (!description || description === '') {
+                                description = 'No description';
                             }
                             
                             return {
@@ -2153,8 +2335,6 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                                 partNumber: partNumber,
                                 description: description,
                                 category: category,
-                                originalRow: index + 2, // +2 for header row and 1-index
-                                originalData: row, // Keep original data for debugging
                                 quantity: 1,
                                 price: 0,
                                 location: 'Main',
@@ -2183,8 +2363,6 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
             const previewDiv = document.getElementById('partsPreview');
             previewDiv.style.display = 'block';
             
-            const hotTubsCount = (partsPreviewData.hotTubs || []).length;
-            const waterCount = (partsPreviewData.water || []).length;
             const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
             
             if (allParts.length === 0) {
@@ -2192,40 +2370,25 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
                 return;
             }
 
-            // Show accurate counts
-            let html = `<div style="margin-bottom:10px; background:#e2e8f0; padding:10px; border-radius:5px;">`;
-            html += `<strong>Total parts to import: ${allParts.length.toLocaleString()}</strong><br>`;
-            html += `Hot Tubs: ${hotTubsCount.toLocaleString()} | Water Systems: ${waterCount.toLocaleString()}`;
-            html += `</div>`;
-            
             // Show first 20 parts for preview
             const previewRows = allParts.slice(0, 20);
-            html += '<table><tr><th>Row</th><th>Part #</th><th>Description</th><th>Category</th></tr>';
+            let html = `<div style="margin-bottom:5px;"><strong>Total parts to import: ${allParts.length.toLocaleString()}</strong></div>`;
+            html += '<table><tr><th>Part #</th><th>Description</th><th>Category</th></tr>';
             
-            previewRows.forEach((part, idx) => {
-                const rowNum = part.originalRow || (idx + 2);
+            previewRows.forEach(part => {
                 // Truncate long descriptions
                 const shortDesc = part.description.length > 40 ? 
                     part.description.substring(0, 40) + '...' : part.description;
                     
-                // Highlight missing values
-                const partNumDisplay = part.partNumber && !part.partNumber.includes('PART-') ? 
-                    part.partNumber : '<span style="color:red; font-weight:bold;">MISSING</span>';
-                const descDisplay = part.description && part.description !== 'No description' ? 
-                    shortDesc : '<span style="color:orange;">No description</span>';
-                    
                 html += `<tr>
-                    <td>${rowNum}</td>
-                    <td>${partNumDisplay}</td>
-                    <td>${descDisplay}</td>
+                    <td>${part.partNumber}</td>
+                    <td>${shortDesc}</td>
                     <td>${part.category}</td>
                 </tr>`;
             });
 
             if (allParts.length > 20) {
-                html += `<tr><td colspan="4" style="text-align:center; color:#999; padding:10px;">
-                    ... and ${(allParts.length - 20).toLocaleString()} more parts
-                </td></tr>`;
+                html += `<tr><td colspan="3" style="text-align:center; color:#999;">... and ${(allParts.length - 20).toLocaleString()} more parts</td></tr>`;
             }
 
             html += '</table>';
@@ -2235,9 +2398,9 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
         }
 
         function checkPartsDuplicates() {
-            const existingPartNumbers = new Set(parts.map(p => p.partNumber.toLowerCase()));
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
             const allPreviewParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
-            const duplicates = allPreviewParts.filter(p => existingPartNumbers.has(p.partNumber.toLowerCase()));
+            const duplicates = allPreviewParts.filter(p => existingPartNumbers.has(p.partNumber));
 
             const warningDiv = document.getElementById('partsDuplicateWarning');
             if (duplicates.length > 0) {
@@ -2252,120 +2415,59 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
         }
 
         async function importParts() {
-            const hotTubsParts = partsPreviewData.hotTubs || [];
-            const waterParts = partsPreviewData.water || [];
-            const allParts = [...hotTubsParts, ...waterParts];
-            
-            console.log(`Total parts to import: ${allParts.length}`);
-            console.log(`Hot Tubs: ${hotTubsParts.length}, Water: ${waterParts.length}`);
+            const allParts = [...(partsPreviewData.hotTubs || []), ...(partsPreviewData.water || [])];
             
             if (allParts.length === 0) {
                 alert('Please select parts CSV files first');
                 return;
             }
 
-            // Initialize import log with correct total
-            initializeImportLog('parts_import.csv', allParts.length);
-            
             // Show progress bar
             const progressContainer = document.getElementById('importProgress');
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
-            const downloadBtn = document.getElementById('downloadErrorReportBtn');
             
             progressContainer.style.display = 'block';
             progressBar.style.width = '0%';
             progressBar.textContent = '0%';
             progressText.textContent = `0 / ${allParts.length.toLocaleString()} parts processed`;
-            downloadBtn.style.display = 'none';
 
-            const existingPartNumbers = new Set(parts.map(p => p.partNumber.toLowerCase()));
+            const existingPartNumbers = new Set(parts.map(p => p.partNumber));
             const newParts = [];
-            
-            // Process each part with proper row numbering
-            for (let i = 0; i < allParts.length; i++) {
-                const part = allParts[i];
-                const rowNumber = part.originalRow || (i + 2); // +2 for header
-                let hasError = false;
+            const duplicates = [];
+
+            // Process in batches to show progress
+            const batchSize = 100;
+            for (let i = 0; i < allParts.length; i += batchSize) {
+                const batch = allParts.slice(i, i + batchSize);
                 
-                // Log what we're processing
-                console.log(`Processing row ${rowNumber}:`, part);
-                
-                // Check for missing part number
-                if (!part.partNumber || part.partNumber === '' || part.partNumber.includes('PART-')) {
-                    logPartError(rowNumber, part, 'MISSING_PART_NUMBER', 
-                        `Part number is missing or invalid. Found: "${part.partNumber}"`);
-                    hasError = true;
-                }
-                
-                // Check for missing description
-                if (!part.description || part.description === '' || part.description === 'No description') {
-                    logPartError(rowNumber, part, 'MISSING_DESCRIPTION', 
-                        `Description is missing. Found: "${part.description}"`);
-                    hasError = true;
-                }
-                
-                // Check for duplicates (case insensitive)
-                const partNumLower = part.partNumber.toLowerCase();
-                let isDuplicate = false;
-                for (const existingNum of existingPartNumbers) {
-                    if (existingNum.toLowerCase() === partNumLower) {
-                        isDuplicate = true;
-                        break;
+                for (const part of batch) {
+                    if (existingPartNumbers.has(part.partNumber)) {
+                        duplicates.push(part);
+                    } else {
+                        newParts.push(part);
+                        existingPartNumbers.add(part.partNumber);
                     }
                 }
-                
-                if (isDuplicate) {
-                    logPartError(rowNumber, part, 'DUPLICATE_PART', 
-                        `Part number "${part.partNumber}" already exists in database`);
-                    hasError = true;
-                }
-                
-                // Check category
-                if (!part.category || (part.category !== 'Hot Tubs' && part.category !== 'Water Systems')) {
-                    logPartError(rowNumber, part, 'INVALID_CATEGORY', 
-                        `Category must be "Hot Tubs" or "Water Systems". Found: "${part.category}"`);
-                    hasError = true;
-                }
-                
-                if (!hasError) {
-                    // Create a clean part object
-                    const newPart = {
-                        id: `part-${Date.now()}-${i}-${Math.random()}`,
-                        partNumber: part.partNumber,
-                        description: part.description,
-                        category: part.category,
-                        quantity: 1,
-                        price: 0,
-                        location: 'Main',
-                        notes: '',
-                        importedAt: new Date().toISOString()
-                    };
-                    
-                    newParts.push(newPart);
-                    existingPartNumbers.add(part.partNumber.toLowerCase());
-                    logPartSuccess(rowNumber, part);
-                }
-                
-                // Update progress every 10 rows for performance
-                if (i % 10 === 0 || i === allParts.length - 1) {
-                    updateImportProgress();
-                    await new Promise(resolve => setTimeout(resolve, 5));
-                }
+
+                // Update progress
+                const processed = Math.min(i + batchSize, allParts.length);
+                const percent = Math.round((processed / allParts.length) * 100);
+                progressBar.style.width = percent + '%';
+                progressBar.textContent = percent + '%';
+                progressText.textContent = `${processed.toLocaleString()} / ${allParts.length.toLocaleString()} parts processed`;
+
+                // Small delay to allow UI to update
+                await new Promise(resolve => setTimeout(resolve, 10));
             }
 
-            // Add all valid new parts at once
-            if (newParts.length > 0) {
-                parts = [...parts, ...newParts];
-                
-                // Save to Firestore
-                await db.collection('users').doc(currentUser.uid).update({
-                    parts: parts
-                });
-            }
-
-            // Complete the import log
-            completeImportLog();
+            // Add all new parts at once
+            parts = [...parts, ...newParts];
+            
+            // Save to Firestore
+            await db.collection('users').doc(currentUser.uid).update({
+                parts: parts
+            });
 
             // Clear preview data
             partsPreviewData = {
@@ -2381,8 +2483,13 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
             document.getElementById('partsPreview').style.display = 'none';
             document.getElementById('partsDuplicateWarning').style.display = 'none';
             
+            // Hide progress bar
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
+
             updatePartsStats();
-            showImportSummary();
+            alert(`Import complete!\nNew parts: ${newParts.length.toLocaleString()}\nDuplicates skipped: ${duplicates.length.toLocaleString()}`);
         }
 
         // ============================================
@@ -3575,4 +3682,3 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
     </script>
 </body>
 </html>
-
