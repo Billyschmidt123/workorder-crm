@@ -916,7 +916,11 @@
                             <input type="file" id="hotTubsFile" accept=".csv" onchange="previewPartsCSV('hotTubs')">
                             <div class="file-info">
                                 <span class="file-name" id="hotTubsFileName">📄 No file selected</span>
-                                <span class="file-count" id="hotTubsFileCount">0 parts</span>
+                                <span class="file-count" id="hotTubsFileCount">0 parts</span>                                                         
+                            </div>
+                            <div style="font-size: 11px; color: #666; text-align: center; margin-bottom: 10px;">
+                                ⚠️ Use these buttons to clear your parts database before reimporting from scratch
+                            </div>
                             </div>
                             
                             <h4 style="margin-top:15px;">Water Systems Parts</h4>
@@ -944,6 +948,18 @@
                                 <span class="parts-stat" id="partsCat1">Hot Tubs: 0</span>
                                 <span class="parts-stat" id="partsCat2">Water Systems: 0</span>
                                 <span class="parts-stat" id="totalPartsStat">Total: 0</span>
+                            </div>
+                                                    <!-- CLEAR PARTS BUTTONS -->
+                            <div style="display: flex; gap: 10px; margin: 20px 0; padding-top: 15px; border-top: 2px solid #ff6b6b;">
+                                <button class="btn btn-danger" style="flex: 1; background-color: #dc3545; color: white; font-weight: bold; padding: 12px;" onclick="clearAllParts()">
+                                    🗑️ DELETE ALL PARTS
+                                </button>
+                                <button class="btn btn-warning" style="flex: 1; background-color: #ffc107; color: black; font-weight: bold; padding: 12px;" onclick="resetAndReimport()">
+                                    🔄 RESET & REIMPORT
+                                </button>
+                            </div>
+                            <div style="font-size: 11px; color: #666; text-align: center; margin-bottom: 10px;">
+                                ⚠️ Use these buttons to clear your parts database before reimporting from scratch
                             </div>
                             <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="importParts()">Import Parts</button>
                         </div>
@@ -1500,11 +1516,10 @@
                 console.error('Error loading user data:', error);
                 alert('Error loading data: ' + error.message);
             }
-        }
-
-        // ============================================
+           // ============================================
         // SAVE FUNCTIONS
         // ============================================
+             
         async function saveWorkOrderToFirestore(wo) {
             if (!currentUser) return;
             try {
@@ -1513,7 +1528,168 @@
                 console.error('Error saving work order:', error);
             }
         }
+        // ============================================
+        // CLEAR ALL PARTS DATA
+        // ============================================
+        async function clearAllParts() {
+            // Show confirmation dialog
+            const confirmClear = confirm(
+                "⚠️ WARNING: This will PERMANENTLY DELETE all parts from your database!\n\n" +
+                `You currently have ${parts.length.toLocaleString()} parts in your system.\n\n` +
+                "This action cannot be undone. Are you ABSOLUTELY sure?"
+            );
+            
+            if (!confirmClear) return;
+            
+            // Double-check with password-like confirmation
+            const password = prompt(
+                "⚠️ FINAL WARNING!\n\n" +
+                "Type 'DELETE ALL PARTS' to confirm you want to delete every part from the database:"
+            );
+            
+            if (password !== 'DELETE ALL PARTS') {
+                alert('Clear cancelled - incorrect confirmation');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                // Clear the local parts array
+                const deletedCount = parts.length;
+                parts = [];
+                
+                // Clear from Firestore
+                await db.collection('users').doc(currentUser.uid).update({
+                    parts: []
+                });
+                
+                // Also clear any parts in subcollections if they exist
+                try {
+                    const partsSnapshot = await db.collection('users').doc(currentUser.uid).collection('parts').get();
+                    const batch = db.batch();
+                    partsSnapshot.docs.forEach(doc => {
+                        batch.delete(doc.ref);
+                    });
+                    await batch.commit();
+                } catch (e) {
+                    console.log('No parts subcollection to clear');
+                }
+                
+                // Reset parts preview data
+                partsPreviewData = {
+                    hotTubs: [],
+                    water: []
+                };
+                
+                // Clear file inputs and displays
+                document.getElementById('hotTubsFile').value = '';
+                document.getElementById('waterFile').value = '';
+                document.getElementById('hotTubsFileName').textContent = '📄 No file selected';
+                document.getElementById('waterFileName').textContent = '📄 No file selected';
+                document.getElementById('hotTubsFileCount').textContent = '0 parts';
+                document.getElementById('waterFileCount').textContent = '0 parts';
+                document.getElementById('partsPreview').style.display = 'none';
+                document.getElementById('partsDuplicateWarning').style.display = 'none';
+                document.getElementById('importProgress').style.display = 'none';
+                document.getElementById('downloadErrorReportBtn').style.display = 'none';
+                
+                // Reset import log
+                currentImportLog = {
+                    importId: null,
+                    startTime: null,
+                    endTime: null,
+                    status: 'idle',
+                    totalRows: 0,
+                    processedRows: 0,
+                    successfulRows: 0,
+                    failedRows: 0,
+                    errors: [],
+                    fileName: ''
+                };
+                
+                // Update stats
+                updatePartsStats();
+                renderAll();
+                
+                hideLoading();
+                
+                alert(`✅ SUCCESS!\n\nAll ${deletedCount.toLocaleString()} parts have been permanently deleted from your database.\n\nYou can now import your CSV files from scratch.`);
+                
+            } catch (error) {
+                hideLoading();
+                console.error('Error clearing parts:', error);
+                alert('Error clearing parts: ' + error.message);
+            }
+        }
 
+        // ============================================
+        // QUICK RESET FUNCTION (Less Destructive)
+        // ============================================
+        async function resetAndReimport() {
+            // Show confirmation
+            const confirmReset = confirm(
+                "This will clear ALL parts and reset the import system.\n\n" +
+                "Your work orders and other data will NOT be affected.\n\n" +
+                "Continue?"
+            );
+            
+            if (!confirmReset) return;
+            
+            showLoading();
+            
+            try {
+                // Clear local parts
+                parts = [];
+                
+                // Clear from Firestore
+                await db.collection('users').doc(currentUser.uid).update({
+                    parts: []
+                });
+                
+                // Reset all UI elements
+                partsPreviewData = {
+                    hotTubs: [],
+                    water: []
+                };
+                
+                document.getElementById('hotTubsFile').value = '';
+                document.getElementById('waterFile').value = '';
+                document.getElementById('hotTubsFileName').textContent = '📄 No file selected';
+                document.getElementById('waterFileName').textContent = '📄 No file selected';
+                document.getElementById('hotTubsFileCount').textContent = '0 parts';
+                document.getElementById('waterFileCount').textContent = '0 parts';
+                document.getElementById('partsPreview').style.display = 'none';
+                document.getElementById('partsDuplicateWarning').style.display = 'none';
+                document.getElementById('importProgress').style.display = 'none';
+                document.getElementById('downloadErrorReportBtn').style.display = 'none';
+                
+                // Reset import log
+                currentImportLog = {
+                    importId: null,
+                    startTime: null,
+                    endTime: null,
+                    status: 'idle',
+                    totalRows: 0,
+                    processedRows: 0,
+                    successfulRows: 0,
+                    failedRows: 0,
+                    errors: [],
+                    fileName: ''
+                };
+                
+                updatePartsStats();
+                renderAll();
+                
+                hideLoading();
+                
+                alert('✅ Database cleared! You can now import your parts from scratch.');
+                
+            } catch (error) {
+                hideLoading();
+                alert('Error resetting: ' + error.message);
+            }
+        }
         // ============================================
         // CSV IMPORT FUNCTIONS - WORK ORDERS
         // ============================================
@@ -3399,3 +3575,4 @@ ${currentImportLog.failedRows > 0 ? '⚠️ Check the error report for details.'
     </script>
 </body>
 </html>
+
